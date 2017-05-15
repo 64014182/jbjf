@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.planOrderComplete">
+	<sql id="splitPageSelect">
+		<![CDATA[ 
+			SELECT
+				so.ids AS soids,
+				poc.*, so.freightage,
+				so.manufacturer,
+				so.orderUnit,
+				so.other,
+				so.salesOrderNo,
+				so.salesPrice,
+				so.storag,
+				st.noTaxPrice,
+				st.goodsAmount,
+				st.taxPrice,
+				st.totalAmount,
+				st.hasDraw
+		]]>
+	</sql>
+	
+	<sql id="splitPageSelectDialog">
+		<![CDATA[ 
+			select
+	        	*
+		]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	FROM
+				b_trading_planordercomplete poc
+			LEFT JOIN b_trading_salesorder so ON (poc.ids = so.pocIds)
+			LEFT JOIN b_trading_salessettlement st ON (poc.ids = st.salesOrderIds)
+			where 1 = 1
+			<% if(!isEmpty(orderItemNo)){ %>
+					and poc.orderItemNo like #'%$orderItemNo$%'#
+			<% } %>
+			
+			<% if(!isEmpty(pName)){ %>
+					and poc.pName like #'%$pName$%'#
+			<% } %>
+			
+			<% if(!isEmpty(grade)){ %>
+					and poc.grade like #'%$grade$%'#
+			<% } %>
+			
+			<% if(!isEmpty(price)){ %>
+					and poc.price like #'%$price$%'#
+			<% } %>
+			
+			<% if(!isEmpty(itemWeight)){ %>
+					and poc.itemWeight like #'%$itemWeight$%'#
+			<% } %>
+			
+			<% if(!isEmpty(pForm)){ %>
+					and poc.pForm like #'%$pForm$%'#
+			<% } %>
+			
+			<% if(!isEmpty(cDate)){ %>
+					and poc.cDate like #'%$cDate$%'#
+			<% } %>
+    	]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="selectByOrderItemIds">
+		<![CDATA[
+			select ids from b_trading_planordercomplete where orderItemNo = ?
+    	]]>
+	</sql>
+</sql-statement>

@@ -1,0 +1,96 @@
+<input type="hidden" name="declareplan.ids"  value="${escapeHtml(declareplan.ids!)}"/>
+<div class="control-group">
+	<label class="control-label">订货单位</label>
+	<div class="controls">
+		<select id="orderUnitName" name="declareplan.orderUnit" class="span6 combox sqlComponent"  sqlNo="orderUnitName"/>	
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">品名</label>
+	<div class="controls">
+		<input type="text" id="pNameId" name="declareplan.pName"
+			value="${escapeHtml(declareplan.pName!)}" class="span8"
+			vType="length"
+			onblur="platform_verify.onblurVali(this);">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">牌号</label>
+	<div class="controls">
+		<input type="text" id="gradeId" name="declareplan.grade"
+			value="${escapeHtml(declareplan.grade!)}" class="span8"
+			vType="length"
+			onblur="platform_verify.onblurVali(this);">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">规格型号</label>
+	<div class="controls">
+		<input type="text" id="specificationId" name="declareplan.specification"
+			value="${escapeHtml(declareplan.specification!)}" class="span8"
+			vType="length"
+			onblur="platform_verify.onblurVali(this);">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">计划年月</label>
+	<div class="controls">
+		<input type="text" id="planDateId" class="span8" name="declareplan.planDate" readonly="readonly" 
+			value='${declareplan.planDate!}' 
+			onblur="platform_verify.onblurVali(this);" vType="length"
+			onClick="WdatePicker({dateFmt: 'yyyy-MM', minDate:'1900-01-01'})">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">重量</label>
+	<div class="controls">
+		<input type="text" id="weightId" name="declareplan.weight"
+			value="${escapeHtml(declareplan.weight!)}" class="span8"
+			vType="length"
+			onblur="platform_verify.onblurVali(this);">
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">生产厂家</label>
+	<div class="controls">
+		<select id="manufacturer" name="declareplan.manufacturer" class="span6 combox sqlComponent"  sqlNo="orderUnitName"/>	
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		common_form.initSqlComponent();
+	});
+	
+	/**
+	 * 用户添加和编辑页面js
+	 */
+
+	var declareplan_form = function() {
+		"use strict";
+
+		var dataVali = function(form, isAdd) {
+
+			var errorCount = platform_verify.formVali(form);
+			if (errorCount != 0) {
+				common_modals.alert("有" + errorCount + "处错误，请修正！");
+				return false;
+			}
+
+			common_ajax.ajaxFormMainPanel("editForm");
+		}
+
+		return {
+			submitValiFunc : dataVali
+		};
+
+	}();
+</script>

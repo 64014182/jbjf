@@ -1,0 +1,173 @@
+<input type="hidden" name="salesOrder.ids" value="${escapeHtml(salesOrder.ids!)}" >
+<input type="hidden" name="salesOrder.pocIds" value="${escapeHtml(poc.ids!)}" >
+<div class="row-fluid">
+	<div class="metro-nav">
+		<div class="metro-nav-block  nav-block-grey">
+			<a href="invoice.html" data-original-title="">
+				<div class="text-center">
+					<i class="icon-eye-open"></i>
+				</div>
+				<div class="status">View Invoice</div>
+			</a>
+		</div>
+		<div class="metro-nav-block nav-block-blue ">
+			<a href="create_invoice.html" data-original-title="">
+				<div class="text-center">
+					<i class="icon-edit"></i>
+				</div>
+				<div class="status">Create Invoice</div>
+			</a>
+		</div>
+		<div class="metro-nav-block  nav-block-red">
+			<a href="invoice_list.html" data-original-title="">
+				<div class="text-center">
+					<i class="icon-th-list"></i>
+				</div>
+				<div class="status">Invoice List</div>
+			</a>
+		</div>
+	</div>
+	<div class="space10"></div>
+</div>
+
+<div class="widget purple">
+	<div class="widget-title">
+		<h4><i class="icon-edit"></i> 销售订单</h4>
+<!-- 		<span class="tools">  -->
+<!-- 			<a href="javascript:;"class="icon-chevron-down"></a>  -->
+<!-- 			<a href="javascript:;"class="icon-remove"></a> -->
+<!-- 		</span> -->
+	</div>
+	<div class="widget-body">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="text-center">
+					<img alt="" src="img/vector-lab.jpg">
+				</div>
+				<hr>
+			</div>
+		</div>
+		<div class="space20"></div>
+		<div class="row-fluid invoice-list">
+			<div class="span4">
+				<h4>BILLING ADDRESS</h4>
+				<p>
+					采购订单项次号： ${poc.orderItemNo!}<br> 
+					产品名称：${poc.pName!}<br>
+					采购合同价： ${poc.price!}<br>
+					重量项次号：${poc.itemWeight!}<br> 
+					
+				</p>
+			</div>
+			<div class="span4">
+				<h4>SHIPPING ADDRESS</h4>
+				<p>
+					规格型号：${poc.thickness!}*${poc.width!}*${poc.length!}<br> 
+					牌号：${poc.grade!}<br> 
+				</p>
+			</div>
+			<div class="span4">
+				<h4>INVOICE INFO</h4>
+				<ul class="unstyled">
+					<li>Invoice Number : <strong>69626</strong></li>
+					<li>Invoice Date : 2013-03-17</li>
+					<li>Due Date : 2013-03-20</li>
+					<li>Invoice Status : Paid</li>
+				</ul>
+			</div>
+		</div>
+		<div class="space20"></div>
+		<div class="space20"></div>
+		<div class="row-fluid">
+		
+		<div class="control-group">
+			<label class="control-label">生产厂家</label>
+			<div class="controls">
+				<select id="manufacturer" name="salesOrder.manufacturer" class="span6 combox sqlComponent"  sqlNo="orderUnitName"/>	
+				<span class="help-inline"></span>
+			</div>
+		</div>
+		
+		<div class="control-group">
+			<label class="control-label">订货单位</label>
+			<div class="controls">
+				<select id="orderUnitName" name="salesOrder.orderUnit" class="span6 combox sqlComponent"  sqlNo="orderUnitName"/>	
+				<span class="help-inline"></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">销售订单号</label>
+			<div class="controls">
+				<input type="text" name="salesOrder.salesOrderNo"  value="${escapeHtml(salesOrder.salesOrderNo!)}"
+					class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" >
+				<span class="help-inline"></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">销售合同价格</label>
+			<div class="controls">
+				<input type="text" name="salesOrder.salesPrice"  value="${escapeHtml(salesOrder.salesPrice!)}"
+					class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" >
+				<span class="help-inline"></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">代垫运输费</label>
+			<div class="controls">
+				<input type="text" name="salesOrder.freightage"  value="${escapeHtml(salesOrder.freightage!)}"
+					class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" >
+				<span class="help-inline"></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">代垫仓储费</label>
+			<div class="controls">
+				<input type="text" name="salesOrder.storag"  value="${escapeHtml(salesOrder.storag!)}"
+					class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" >
+				<span class="help-inline"></span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">其他费用</label>
+			<div class="controls">
+				<input type="text" name="salesOrder.other"  value="${escapeHtml(salesOrder.other!)}"
+					class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" >
+				<span class="help-inline"></span>
+			</div>
+		</div>
+	
+		</div>
+<!-- 		<div class="space20"></div> -->
+<!-- 		<div class="row-fluid"> -->
+<!-- 			<div class="span4 invoice-block pull-right"> -->
+<!-- 				<ul class="unstyled amounts"> -->
+<!-- 					<li><strong>Sub - Total amount :</strong> $6820</li> -->
+<!-- 					<li><strong>Discount :</strong> 10%</li> -->
+<!-- 					<li><strong>VAT :</strong> -----</li> -->
+<!-- 					<li><strong>Grand Total :</strong> $6138</li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+		<div class="space20"></div>
+		<div class="row-fluid text-center">
+			<a class="btn btn-success btn-large hidden-print" onclick="common_ajax.ajaxFormMainPanel('editForm');"> 提交 <i class="icon-check"></i></a>
+			
+<!-- 			<button type="button" class="btn btn-success" onclick="common_ajax.ajaxFormMainPanel('editForm');"> -->
+<!-- 				<i class="icon-ok icon-white"></i>${i18nMap["admin.common.submit"]} -->
+<!-- 			</button> -->
+			
+			
+			
+			
+			 <a class="btn btn-inverse btn-large hidden-print"
+				onclick="javascript:window.print();">取消 <i
+				class="icon-print icon-big"></i></a>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		common_form.initSqlComponent();
+	});
+</script>

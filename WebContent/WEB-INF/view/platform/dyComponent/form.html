@@ -1,0 +1,27 @@
+<div class="control-group">
+	<label class="control-label">SQL语句</label>
+	<div class="controls">
+		<textarea class="span8" rows="10" name="dyComponent.sqlvalue"
+			value="${dyComponent.sqlvalue!}"></textarea>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">组件类型</label>
+	<div class="controls">
+		<input type="text" name="dyComponent.comtype"
+			value="${escapeHtml(dyComponent.comtype!)}" class="span8"
+			maxlength="50" vMin="1" vType="length"
+			onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">索引</label>
+	<div class="controls">
+		<input type="text" name="dyComponent.sqlkey"
+			value="${escapeHtml(dyComponent.sqlkey!)}" class="span8"
+			maxlength="50" vMin="1" vType="length"
+			onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>

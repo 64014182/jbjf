@@ -1,0 +1,42 @@
+
+<div class="control-group">
+	<label class="control-label">包名</label>
+	<div class="controls">
+		<input type="text" name="gcTableConf.packagename" value="${escapeHtml(gcTableConf.packagename!)}" 
+			class="span8"  vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">源目录路径</label>
+	<div class="controls">
+		<input type="text" name="gcTableConf.srcFolder" value="${escapeHtml(gcTableConf.srcFolder!)}" 
+			class="span8"  vMin="2" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位任意字符 ">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">类名</label>
+	<div class="controls">
+		<input type="text" name="gcTableConf.classname" value="${escapeHtml(gcTableConf.classname!)}" 
+			class="span8"  vMin="2" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位任意字符 ">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">表名</label>
+	<div class="controls">
+		<input type="text" name="gcTableConf.tablename" value="${escapeHtml(gcTableConf.tablename!)}" 
+			class="span8"  vMin="2" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位任意字符 ">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">显示名</label>
+	<div class="controls">
+		<input type="text" name="gcTableConf.viewname" value="${escapeHtml(gcTableConf.viewname!)}" 
+			class="span8"  vMin="2" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位任意字符 ">
+		<span class="help-inline"></span>
+	</div>
+</div>

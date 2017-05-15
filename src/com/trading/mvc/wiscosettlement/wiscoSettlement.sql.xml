@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.wiscoSettlement">
+	
+	<sql id="selectPocByOrderNo">
+		SELECT
+			*,so.ids as soids
+		FROM
+			b_trading_planordercomplete poc
+		LEFT JOIN b_trading_salesorder so ON (poc.ids = so.pocIds)
+		WHERE
+			poc.orderItemNo = ?
+	</sql>
+	
+	<!-- 通用查询 -->
+	<sql id="selectIn">
+		<![CDATA[ 
+        	select * from b_trading_wiscosettlement where ids in( ${sqlIn} )
+    	]]>
+	</sql>
+	
+	<sql id="selectPurchase">
+		<![CDATA[ 
+			SELECT
+				wt.*,st.noTaxPrice,st.goodsAmount,st.taxPrice
+			FROM
+				b_trading_wiscosettlement wt LEFT JOIN b_trading_salessettlement st ON wt.ids = st.wiscoSettlementIds
+			WHERE
+				wt.ids IN ( ${sqlIn} );
+    	]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageSelect">
+		<![CDATA[ 
+			SELECT
+				t.*, p.orderItemNo AS salesInvoiceNo,
+				bto.name AS orderUnit,
+				bto.ids AS orderUnitId,
+				btm.ids AS manufacturerId,
+				btm.name AS manufacturer
+    	]]>
+	</sql>
+
+	<sql id="selectLikeWlByInvoice">
+		<![CDATA[
+			SELECT DISTINCT INVOICE 
+			FROM
+				B_TRADING_WISCOSETTLEMENT T
+			WHERE T.INVOICE LIKE ?
+    	]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	FROM
+				b_trading_wiscosettlement t
+			LEFT JOIN b_trading_salesorder p ON LEFT (t.orderItemNo, 8) = p.orderItemNo
+			LEFT JOIN b_trading_manufacturer btm ON p.manufacturer = btm.ids
+			LEFT JOIN b_trading_orderunit bto ON p.orderUnit = bto.ids
+			WHERE
+				1 = 1
+			<% if(!isEmpty(settlementNo)){ %>
+					and t.settlementNo like #'%$settlementNo$%'#
+			<% } %>
+			<% if(!isEmpty(orderItemNo)){ %>
+					and t.orderItemNo like #'%$orderItemNo$%'#
+			<% } %>
+			
+			<% if(!isEmpty(pName)){ %>
+					and t.pName like #'%$pName$%'#
+			<% } %>
+			
+			<% if(!isEmpty(grade)){ %>
+					and t.grade like #'%$grade$%'#
+			<% } %>
+			
+			<% if(!isEmpty(itemWeight)){ %>
+					and t.itemWeight like #'%$itemWeight$%'#
+			<% } %>
+			<% if(!isEmpty(contractMonthStart)){ %>
+					and t.contractMonth >= #'$contractMonthStart$'#
+			<% } %>
+				<% if(!isEmpty(contractMonthEnd)){ %>
+					and t.contractMonth <= #'$contractMonthEnd$'#
+			<% } %>
+			<% if(!isEmpty(saveInvoceDateStart)){ %>
+					and t.saveInvoceDate >= #'$saveInvoceDateStart$'#
+			<% } %>
+				<% if(!isEmpty(saveInvoceDateEnd)){ %>
+					and t.saveInvoceDate <= #'$saveInvoceDateEnd$'#
+			<% } %>
+			<% if(!isEmpty(hasConfirm)){ %>
+					and t.hasConfirm like #'%$hasConfirm$%'#
+			<% } %>
+			<% if(!isEmpty(orderUnit)){ %>
+					and bto.name like #'%$orderUnit$%'#
+			<% } %>
+    	]]>
+    	
+	</sql>
+</sql-statement>

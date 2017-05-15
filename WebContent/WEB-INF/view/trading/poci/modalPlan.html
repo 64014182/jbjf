@@ -1,0 +1,31 @@
+<div id="orderPlanDialogMainContent">
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<table class="table table-striped table-bordered" id="dataTable">
+					<thead>
+						<tr>
+							<th>订单项次号</th>
+							<th>品名</th>
+							<th>牌号</th>
+							<th>项次量</th>
+							<th>项次价格</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% for(entity in entitys){ %>
+						<tr class="odd gradeX">
+							<td>${escapeHtml(entity["orderItemNo"]!)}</td>
+							<td>${escapeHtml(entity["pName"]!)}</td>
+							<td>${escapeHtml(entity["grade"]!)}</td>
+							<td>${escapeHtml(entity["standard"]!)}</td>
+							<td>${escapeHtml(entity["price"]!)}</td>
+						</tr>
+						<% } %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</div>
+	</div>
+</div>

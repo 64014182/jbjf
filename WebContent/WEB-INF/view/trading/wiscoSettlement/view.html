@@ -1,0 +1,129 @@
+<div class="container-fluid">
+
+	<div class="row-fluid">
+		<div class="span12">
+			<ul class="breadcrumb">
+				<li><a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/index/content');">主页</a> <span class="divider">/</span></li>
+				<li><a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/trading/wiscoSettlement');">武钢结算表</a> <span class="divider">/</span></li>
+				<li class="active">查看</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget red">
+				<div class="widget-title">
+					<h4><i class=" icon-key"></i> 查看</h4>
+				</div>
+				<div class="widget-body form">	
+					<form role="form" class="form-horizontal">
+						<div class="control-group">
+							<label class="control-label">单价</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.price!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">代收水运保险费</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.waterTIP!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">开立日期</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.issuanceDate!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">合同月份</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.contractMonth!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">发票号</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.invoice!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">订单项次编号</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.orderItemNo!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">规格</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.specification!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">牌号</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.grade!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">开立原因</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.openCause!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">代收铁运保险费</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.railwayTIP!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">税额</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.tax!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">运费</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.freight!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">人民币货款金额</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.loan!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">代办运输延伸费</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.extensionFreight!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">品种</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.pName!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">结算清单号</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.settlementNo!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">出货重量</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(wiscoSettlement.weight!)}">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

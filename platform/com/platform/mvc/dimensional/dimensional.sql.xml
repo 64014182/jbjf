@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="platform.dimensional">
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	from 
+        		pt_fun_dimensional
+			
+			where 1=1 
+				
+    	]]>
+	</sql>
+	
+</sql-statement>

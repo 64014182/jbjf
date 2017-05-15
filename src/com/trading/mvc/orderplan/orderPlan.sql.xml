@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.orderPlan">
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	from 
+        		b_trading_orderplan
+			where 1=1 
+			
+			<% if(!isEmpty(orderItemNo)){ %>
+					and orderItemNo like #'%$orderItemNo$%'#
+			<% } %>
+			
+			<% if(!isEmpty(pName)){ %>
+					and pName like #'%$pName$%'#
+			<% } %>
+			
+			<% if(!isEmpty(grade)){ %>
+					and grade like #'%$grade$%'#
+			<% } %>
+			
+			<% if(!isEmpty(price)){ %>
+					and price like #'%$price$%'#
+			<% } %>
+			
+			<% if(!isEmpty(itemWeight)){ %>
+					and itemWeight like #'%$itemWeight$%'#
+			<% } %>
+			
+			<% if(!isEmpty(pForm)){ %>
+					and pForm like #'%$pForm$%'#
+			<% } %>
+    	]]>
+	</sql>
+	
+</sql-statement>

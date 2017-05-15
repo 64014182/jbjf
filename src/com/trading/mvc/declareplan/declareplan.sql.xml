@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.declareplan">
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	from 
+        		b_trading_declareplan
+			
+			where 1=1 
+			<% if(!isEmpty(orderUnit)){ %>
+				and orderUnit like #'%$orderUnit$%'#
+			<% } %>	
+			<% if(!isEmpty(pName)){ %>
+				and pName like #'%$pName$%'#
+			<% } %>	
+			<% if(!isEmpty(planDate)){ %>
+				and planDate like #'%$planDate$%'#
+			<% } %>	
+			<% if(!isEmpty(manufacturer)){ %>
+				and manufacturer like #'%$manufacturer$%'#
+			<% } %>	
+			<% if(!isEmpty(grade)){ %>
+				and grade like #'%$grade$%'#
+			<% } %>	
+    	]]>
+	</sql>
+	
+</sql-statement>

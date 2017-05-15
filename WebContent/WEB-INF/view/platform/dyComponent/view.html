@@ -1,0 +1,45 @@
+<div class="container-fluid">
+
+	<div class="row-fluid">
+		<div class="span12">
+			<ul class="breadcrumb">
+				<li><a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/index/content');">主页</a> <span class="divider">/</span></li>
+				<li><a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/dyComponent');">动态组件</a> <span class="divider">/</span></li>
+				<li class="active">查看</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget red">
+				<div class="widget-title">
+					<h4><i class=" icon-key"></i> 查看</h4>
+				</div>
+				<div class="widget-body form">	
+					<form role="form" class="form-horizontal">
+						<div class="control-group">
+							<label class="control-label">SQL语句</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(dyComponent.sqlvalue!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">组件类型</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(dyComponent.comtype!)}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">索引</label>
+							<div class="controls">
+								<input type="text" class="span8" readonly="readonly" value="${escapeHtml(dyComponent.sqlkey!)}">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

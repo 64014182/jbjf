@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.salesSettlement">
+	<!-- 分页查询：from -->
+	<sql id="splitPageSelect">
+		<![CDATA[ 
+			SELECT
+				sales.*,
+				wl.orderItemNo,
+				so.salesOrderNo,
+				wl.pName,
+				wl.grade,
+				wl.specification,
+				wl.weight,
+				wl.invoice,
+				wl.contractMonth,
+				bto.NAME AS orderUnit,
+				bto.ids AS orderUnitId,
+				btm.ids AS manufacturerId,
+				btm.name AS manufacturer
+    	]]>
+	</sql>
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[
+			FROM
+				b_trading_salessettlement sales
+			LEFT JOIN b_trading_salesorder so ON sales.salesOrderIds = so.ids
+			LEFT JOIN b_trading_wiscosettlement wl ON sales.wiscoSettlementIds = wl.ids
+			LEFT JOIN b_trading_manufacturer btm ON so.manufacturer = btm.ids
+			LEFT JOIN b_trading_orderunit bto ON so.orderUnit = bto.ids
+			WHERE
+				1 = 1 
+			<% if(!isEmpty(salesOrderNo)){ %>
+				and salesOrderNo like #'%$salesOrderNo$%'# 
+			<% } %>
+			<% if(!isEmpty(manufacturer)){ %>
+				and btm.name like #'%$manufacturer$%'# 
+			<% } %>
+			<% if(!isEmpty(orderUnit)){ %>
+				and bto.name like #'%$orderUnit$%'# 
+			<% } %>
+			<% if(!isEmpty(pName)){ %>
+				and pName like #'%$pName$%'# 
+			<% } %>
+			<% if(!isEmpty(grade)){ %>
+				and grade like #'%$grade$%'# 
+			<% } %>
+			<% if(!isEmpty(hasDraw)){ %>
+				and hasDraw like #'%$hasDraw$%'# 
+			<% } %>
+			<% if(!isEmpty(invoice)){ %>
+				and wl.invoice like #'%$invoice$%'# 
+			<% } %>
+			<% if(!isEmpty(contractMonth)){ %>
+				and wl.contractMonth like #'%$contractMonth$%'# 
+			<% } %>
+			<% if(!isEmpty(orderItemNo)){ %>
+				and wl.orderItemNo like #'%$orderItemNo$%'# 
+			<% } %>
+			<% if(!isEmpty(saveInvoceDateStart)){ %>
+					and wl.saveInvoceDate >= #'$saveInvoceDateStart$'#
+			<% } %>
+			<% if(!isEmpty(saveInvoceDateEnd)){ %>
+					and wl.saveInvoceDate <= #'$saveInvoceDateEnd$'#
+			<% } %>
+    	]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="selectIn">
+		<![CDATA[
+			SELECT *
+			FROM b_trading_salessettlement sales 
+			LEFT JOIN b_trading_salesorder so ON sales.salesOrderIds = so.ids
+			LEFT JOIN b_trading_wiscosettlement wl ON sales.wiscoSettlementIds = wl.ids 
+			where 1=1 and sales.ids in( ${sqlIn} )
+    	]]>
+	</sql>
+	<!-- 分页查询：from -->
+	<sql id="selectInSum">
+		<![CDATA[
+			SELECT sum(wl.weight) as sumWeight,SUM(sales.goodsAmount) as sumGoodsAmount,SUM(sales.taxPrice) as sumTaxPrice,SUM(sales.totalAmount) as sumTotalAmount ,SUM(wl.freight) as sumFreight
+			FROM b_trading_salessettlement sales 
+			LEFT JOIN b_trading_salesorder so ON sales.salesOrderIds = so.ids
+			LEFT JOIN b_trading_wiscosettlement wl ON sales.wiscoSettlementIds = wl.ids 
+			where 1=1 and sales.ids in( ${sqlIn} )
+    	]]>
+	</sql>
+<!--  	FROM
+				b_trading_salessettlement st
+			LEFT JOIN b_trading_wiscosettlement ws ON st.wiscoSettlementIds = ws.ids
+			LEFT JOIN b_trading_planordercomplete poc ON st.salesOrderIds = poc.ids
+			LEFT JOIN b_trading_salesorder so ON poc.ids = so.pocIds -->
+</sql-statement>

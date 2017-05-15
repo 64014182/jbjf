@@ -1,0 +1,28 @@
+<% for(column in columnList){ %>
+	<%if(column["formtype"] == "input"){%>
+		<div class="control-group">
+			<label class="control-label">${column.viewname}</label>
+			<div class="controls">
+				<input type="text" name="${classNameSmall}.${column.columnname}"  value="${demitpStart}escapeHtml(${classNameSmall}.${column.columnname}!)${demitpEnd}"
+					class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
+				<span class="help-inline"></span>
+			</div>
+		</div>
+	<%}else if(column["formtype"] == "textarea"){%>
+		<div class="control-group">
+			<label class="control-label">${column.viewname}</label>
+			<div class="controls">
+				<textarea class="span8" rows="10" name="${classNameSmall}.${column.columnname}" value="${demitpStart}${classNameSmall}.${column.columnname!}${demitpEnd}"></textarea>
+			</div>
+		</div>
+	<%}else if(column["formtype"] == "select"){%>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">${column.viewname}</label>
+			<div class="col-sm-7">
+				<select id="${column.ids}" name="${classNameSmall}.${column.columnname}" class="combox dynamicSql" sqlNo="${column.ids}"/>
+			</div>
+			<span class="help-inline col-sm-2"> <i class="fa fa-info-circle"></i>  </span>
+		</div>
+	<%}%>
+<% } %>
+	

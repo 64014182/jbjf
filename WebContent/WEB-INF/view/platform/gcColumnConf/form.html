@@ -1,0 +1,88 @@
+<input type="hidden" name="gcColumnConf.ids" value="${gcColumnConf.ids!}" >
+<div class="control-group">
+	<label class="control-label">表名</label>
+	<div class="controls">
+		<input type="text" name="gcColumnConf.tablename" value="${escapeHtml(gcColumnConf.tablename!)}"  readonly="readonly" class="span8" >
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">字段</label>
+	<div class="controls">
+		<input type="text" name="gcColumnConf.columnname" value="${escapeHtml(gcColumnConf.columnname!)}" readonly="readonly" class="span8">
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">显示名</label>
+	<div class="controls">
+		<input type="text" name="gcColumnConf.viewname" value="${escapeHtml(gcColumnConf.viewname!)}" class="span8">
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">列表显示</label>
+	<div class="controls">
+		<select name="gcColumnConf.hasListView" class="combox">
+			<option value="1" ${gcColumnConf.hasListView! == 1 ? "selected='selected'":"" }>是</option>
+			<option value="0" ${gcColumnConf.hasListView! == 0 ? "selected='selected'":"" }>否</option>
+		</select>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">查询框</label>
+	<div class="controls">
+		<select name="gcColumnConf.hasQuery" class="combox">
+			<option value="0" ${gcColumnConf.hasQuery! == 0 ? "selected='selected'":"" }>否</option>
+			<option value="1" ${gcColumnConf.hasQuery! == 1 ? "selected='selected'":"" }>是</option>
+		</select>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">表单类型</label>
+	<div class="controls">
+		<select id="viewtypeselect" name="gcColumnConf.formType" class="combox">
+			<option value="input" ${gcColumnConf.formType! == "input" ? "selected='selected'":"" }>input</option>
+			<option value="textarea" ${gcColumnConf.formType! == "textarea" ? "selected='selected'":"" }>textarea</option>
+			<option value="select" ${gcColumnConf.formType! == "select" ? "selected='selected'":"" }>select</option>
+			<option value="radio" ${gcColumnConf.formType! == "radio" ? "selected='selected'":"" }>radio</option>
+		</select>
+	</div>
+</div>
+
+<div class="control-group" id="datasoruce">
+	<label class="control-label">表单数据源</label>
+	<div class="controls">
+		<input type="text" name="gcColumnConf.formDataSorce" value="${escapeHtml(gcColumnConf.formDataSorce!)}" 
+			class="span8" maxlength="25" vMin="2" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位任意字符 ">
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		initDataSource();
+	});
+	
+	function initDataSource(){
+		controlDsView($('#viewtypeselect').val());
+		
+		$('#viewtypeselect').change(function(){
+			var viewtype = $(this).children('option:selected').val();
+			controlDsView(viewtype);
+		});
+	};
+
+	function controlDsView(value) {
+		if (value != "input" && value != "textarea") {
+			$("#datasoruce").show();
+		} else {
+			$("#datasoruce").hide();
+		}
+	};
+</script>

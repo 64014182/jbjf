@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="${cxt!}/test/assets/bootstrap-table/src/bootstrap-table.css">
+<link rel="stylesheet" href="${cxt!}/test/assets/bootstrap3-editable/css/bootstrap-editable.css">
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<ul class="breadcrumb">
+				<li><a href="javascript:void(0)"
+					onclick="common_ajax.ajaxMainPanel('/platform/index/content');">主页</a>
+					<span class="divider">/</span></li>
+				<li><a href="#">贸易功能</a> <span class="divider">/</span></li>
+				<li class="active">收付款数据管理</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget red">
+				<div class="widget-title">
+					<h4><i class="icon-reorder"></i>列表</h4>
+				</div>
+				<div id="toolbar">
+			        <button type="button" 
+			        		class="btn btn-danger" 
+				        	data-table="dataTable" 
+				        	data-url="/trading/payment/delete" 
+				        	onclick="crudtable.deleteList(this)">
+						<i class="icon-remove icon-white"></i>
+						删除
+					</button> 
+			    </div>
+				<div class="widget-body">
+					<table id="table" 
+					data-search="true"
+					data-advanced-search="true"
+					data-id-table="advancedTable"
+					data-url="http://localhost:8080/JFinalUIBV4/trading/payment/getJosnDatas">
+					
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <script src="${cxt!}/test/assets/jquery.min.js"></script> -->
+<!-- <script src="${cxt!}/test/assets/bootstrap/js/bootstrap.min.js"></script> -->
+<script src="${cxt!}/test/assets/bootstrap-table/src/bootstrap-table.js"></script>
+<script src="${cxt!}/test/assets/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"></script>
+<script src="${cxt!}/test/assets/bootstrap-table/src/extensions/export/bootstrap-table-export.js"></script>
+<script src="http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+<script src="${cxt!}/test/assets/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js"></script>
+<script src="${cxt!}/test/assets/bootstrap3-editable/js/bootstrap-editable.js"></script>
+<script type="text/javascript" src="${cxt!}/jsfile/metrolab/common/crudtable.js"></script>
+<script type="text/javascript" src="${cxt!}/test/assets/bootstrap-table/src/extensions/toolbar/bootstrap-table-toolbar.js"></script>
+
+<script>
+    
+	var columns = [{
+	    checkbox: true,
+	    align: 'center',
+	    valign: 'middle',
+	},{
+	    field: 'ids',
+	    title: '主键'
+	}, {
+	    field: 'abs',
+	    title: 'Item Name',
+	   	editable: {
+	           type: 'text',
+	           title: '用户名',
+	           validate: function (v) {
+	               if (!v) return '用户名不能为空';
+	
+	           }
+	       }
+	}, {
+	    field: 'amount',
+	    title: 'Item Price'
+	}];
+    
+    $(function () {
+    	crudtable.init("table",columns);
+    });
+</script>

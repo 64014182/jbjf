@@ -1,0 +1,160 @@
+
+<form id="splitPage" action="/platform/dyComponent" method="POST" class="form-horizontal">
+
+	<!-- BEGIN PAGE CONTAINER-->
+	<div class="container-fluid">
+
+		<!-- BEGIN PAGE HEADER-->
+		<div class="row-fluid">
+			<div class="span12">
+				<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+				<ul class="breadcrumb">
+					<li>
+						<a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/index/content');">主页</a>
+						<span class="divider">/</span>
+					</li>
+					<li><a href="#">贸易功能</a> <span class="divider">/</span></li>
+					<li class="active">动态组件管理</li>
+				</ul>
+				<!-- END PAGE TITLE & BREADCRUMB-->
+			</div>
+		</div>
+		<!-- END PAGE HEADER-->
+
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget yellow">
+					<div class="widget-title">
+						<h4>
+							<i class="icon-reorder"></i> 查询
+						</h4>
+						<span class="tools"> 
+							<a class="icon-chevron-down" href="javascript:;"></a>
+						</span>
+					</div>
+					<div class="widget-body form switch-form">
+					
+						SQL语句
+						<input class="medium" type="text" name="_query.sqlvalue" value='${escapeHtml(splitPage.queryParam["sqlvalue"])}' maxlength="50">
+						组件类型
+						<input class="medium" type="text" name="_query.comtype" value='${escapeHtml(splitPage.queryParam["comtype"])}' maxlength="50">
+						索引
+						<input class="medium" type="text" name="_query.sqlkey" value='${escapeHtml(splitPage.queryParam["sqlkey"])}' maxlength="50">
+						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
+						<button type="reset" class="btn btn-inverse">清空</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- BEGIN ADVANCED TABLE widget-->
+		<div class="row-fluid">
+			<div class="span12">
+
+				<!-- BEGIN EXAMPLE TABLE widget-->
+				<div class="widget red">
+					<%
+						var edit = authUrl("/platform/dyComponent/edit");
+						var delete = authUrl("/platform/dyComponent/delete");
+						var view = authUrl("/platform/dyComponent/view");
+					%>
+					<div class="widget-title">
+						<h4>
+							<i class="icon-reorder"></i> 列表
+						</h4>
+					</div>
+
+					<div class="widget-body">
+						<span class="tools"> 
+							
+							<button type="button" class="btn btn-small btn-warning" onclick="common_ajax.ajaxMainPanel('/platform/dyComponent/toUrl?toUrl=/platform/dyComponent/add.html');">
+								<i class="icon-plus icon-white"></i>
+								添加
+							</button> 
+							
+							
+							
+							<button type="button" class="btn btn-small btn-danger" data-table="dataTable" data-url="/platform/dyComponent/delete" onclick="common_modals.deleteList(this)">
+								<i class="icon-remove icon-white"></i>
+								删除
+							</button> 
+							
+						</span>
+
+                       	<div class="space15"></div>
+                       	
+						<table class="table table-striped table-bordered" id="dataTable">
+							<thead>
+								<tr>
+									<th style="width: 8px;">
+										<input type="checkbox" class="group-checkable" name="checkAll" onchange="common_common.checkFunc('dataTable', this.checked);" class="flat-grey selectall">
+									</th>
+									
+									<th class="hidden-phone">组件类型</th>
+									<th class="hidden-phone">索引</th>
+									
+									<th class="hidden-phone">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% for(entity in splitPage.list){ %>
+								<tr class="odd gradeX">
+									<td>
+										<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck">
+									</td>
+										<td class="hidden-phone">
+											${escapeHtml(entity["comtype"]!)}
+										</td>
+										<td class="hidden-phone">
+											${escapeHtml(entity["sqlkey"]!)}
+										</td>
+									
+									<td class="hidden-phone">
+										<% if(view == true){ %>
+										<button type="button" class="btn btn-small" onclick="common_ajax.ajaxMainPanel('/platform/dyComponent/view/${entity.ids!}');">
+											<i class="icon-eye-open"></i> 
+											查看 
+										</button> 
+										<% } %>
+										
+										<% if(edit == true){ %>
+										<button type="button" class="btn btn-small btn-inverse" onclick="common_ajax.ajaxMainPanel('/platform/dyComponent/edit/${escapeHtml(entity.ids!)}');">
+											<i class="icon-refresh icon-white"></i>
+											编辑
+										</button> 
+										<% } %>
+										
+										<% if(delete == true){ %>
+										<button type="button" class="btn btn-small btn-danger" onclick="common_modals.deleteOne(this)" data-url="/platform/dyComponent/delete/${entity.ids!}">
+											<i class="icon-remove icon-white"></i>
+											删除
+										</button> 
+										<% } %>
+									</td>
+								</tr>
+								<% } %>
+							</tbody>
+						</table>
+
+						<div id="splitPageDiv" class="pagination">
+							<%include("/platform/common/splitPage.html", {"divId" : "main-content", "formId" : "splitPage", "splitPageDiv" : "splitPageDiv"}){}%>
+						</div>
+						
+					</div>
+				</div>
+				<!-- END EXAMPLE TABLE widget-->
+
+			</div>
+		</div>
+
+		<!-- END ADVANCED TABLE widget-->
+	</div>
+
+</form>
+
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+
+	});
+</script>
+

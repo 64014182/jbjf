@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="platform.iedtd">
+
+	<sql id="getIedtdByIndexKey">
+		<![CDATA[ 
+			SELECT * FROM pt_fun_iedtd where indexkey = ?
+		]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	from 
+        		pt_fun_iedtd
+			where 1=1 
+			<% if(!isEmpty(indexkey)){ %>
+					and indexkey like #'%$indexkey$%'#
+			<% } %>
+    	]]>
+	</sql>
+	
+</sql-statement>

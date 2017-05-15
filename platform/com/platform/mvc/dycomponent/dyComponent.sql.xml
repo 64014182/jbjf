@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="platform.dyComponent">
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	from 
+        		pt_fun_dyComponent
+			
+			where 1=1 
+				
+    	]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="dyComponent">
+		<![CDATA[ 
+        	from 
+        		pt_fun_dyComponent
+			where 1=1 
+			<% if(!isEmpty(name)){ %>
+				and name like #'%$name$%'#
+			<% } %>	
+    	]]>
+	</sql>
+</sql-statement>

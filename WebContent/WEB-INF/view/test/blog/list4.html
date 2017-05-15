@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CRUD Table</title>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap.min.css" />
+<link rel="stylesheet" href="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap-table.css">
+<link rel="stylesheet" href="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap-editable.css">
+
+<script type="text/javascript" src="${cxt!}/ui/metrolab/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap.min.js"></script>
+<script src="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap-table.js"></script>
+<script src="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap-editable.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>Editable</h1>
+		<table id="table" data-toggle="table">
+<!-- 			<thead> -->
+<!-- 				<tr> -->
+<!-- 					<th data-field="id">ID</th> -->
+<!-- 					<th data-field="title" data-editable="true">Item Name</th> -->
+<!-- 				</tr> -->
+<!-- 			</thead> -->
+		</table>
+	</div>
+</body>
+<script type="text/javascript">
+ var API_URL = 'http://localhost:8080/JFinalUIBV4/test/blog/list';
+
+ var $table = $('#table').bootstrapTable({
+ 	url: API_URL,
+    editable:true,//开启编辑模式  
+    clickToSelect: true,  
+    cache: false,  
+    showToggle:true, //显示切换按钮来切换表/卡片视图。  
+    showPaginationSwitch:true, //显示分页切换按钮  
+    pagination: true,  
+    pageList: [10,25,50,100],  
+    pageSize:10,  
+    pageNumber:1,  
+    uniqueId: 'index', //将index列设为唯一索引  
+    striped: true,  
+    search: true,  
+    showRefresh: true,  
+    minimumCountColumns: 2,  
+    smartDisplay:true, 
+ 	columns: [  
+		       [  
+		           {field:"index",title:"ID",align:"center",edit:false,formatter:function(value, row, index){  
+		               return row.index=index ; //返回行号  
+		           }},  
+		           
+		           {field:"title",title:"title",align:"center",edit:{  
+		        	    type:'select',//下拉框  
+		        	    //url:'./index.php?r=dictionary/dictionaryInfo&type='+"run",  
+		        	    source:[{id:1,text:'hello'},{id:2,text:'hi'}],  
+		        	    valueField:'id',  
+		        	    textField:'text',  
+		        	    editable : false,  
+		        	    onSelect:function(val,rec){  
+		        	        console.log(val,rec);  
+		        	    }  
+		        	},sortable:true}  
+		       ]  
+		   ]  
+ })
+     $(function () {
+        $('#table').editable({
+            type: "select",              //编辑框的类型。支持text|textarea|select|date|checklist等
+            source: [{ value: 1, text: "开发部" }, { value: 2, text: "销售部" }, {value:3,text:"行政部"}],
+            title: "选择部门",           //编辑框的标题
+            disabled: false,           //是否禁用编辑
+            emptytext: "空文本",       //空值的默认文本
+            mode: "popup",            //编辑框的模式：支持popup和inline两种模式，默认是popup
+            validate: function (value) { //字段验证
+                if (!$.trim(value)) {
+                    return '不能为空';
+                }
+            }
+        });
+
+    });
+</script>
+</html>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.deliveryDetailed">
+		<sql id="splitPageSelect">
+		<![CDATA[ 
+			SELECT
+			dd.*, 
+			soo.salesOrderNo,
+			soo.salesPrice,
+			bto.name as orderUnit,
+			bto.ids as orderUnitId,
+			btm.ids as manufacturerId,
+			btm.name as manufacturer,
+			poc.price
+    	]]>
+	</sql>
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	FROM
+				b_trading_deliverydetailed dd
+			LEFT JOIN b_trading_salesorder soo ON left(dd.orderItemNo,8) = soo.orderItemNo
+			LEFT JOIN b_trading_planordercomplete poc on dd.orderItemNo = poc.orderItemNo
+			LEFT JOIN b_trading_manufacturer btm on soo.manufacturer = btm.ids
+			LEFT JOIN b_trading_orderunit bto on soo.orderUnit = bto.ids
+			WHERE  1 =1 
+		<% if(!isEmpty(orderItemNo)){ %>
+			and dd.orderItemNo like #'%$orderItemNo$%'#
+		<% } %>
+		<% if(!isEmpty(salesOrderNo)){ %>
+			and soo.salesOrderNo like #'%$salesOrderNo$%'#
+		<% } %>
+		<% if(!isEmpty(contractMonth)){ %>
+			and dd.contractMonth like #'%$contractMonth$%'#
+		<% } %>
+		<% if(!isEmpty(hasSet)){ %>
+			and dd.hasSet like #'%$hasSet$%'#
+		<% } %>
+    	]]>
+	</sql>
+	
+	<!--  -->
+	<sql id="selectInOrderItemNo">
+		<![CDATA[ 
+        	SELECT
+				*
+			FROM
+				b_trading_deliverydetailed
+			WHERE
+				orderItemNo IN (${sqlIn});
+    	]]>
+	</sql>
+	
+	<!--  -->
+	<sql id="updateHasSet">
+		<![CDATA[ 
+        	UPDATE b_trading_deliverydetailed
+			SET hasSet = 1
+			WHERE
+				contractMonth = '${contractMonth}'
+				AND orderItemNo IN (${sqlIn})
+    	]]>
+	</sql>
+	
+	<!--  -->
+	<sql id="procurement">
+		<![CDATA[ 
+        	SELECT
+				dd.orderItemNo,
+				dd.tag,
+				poc.pName,
+				poc.grade,
+				dd.weight,
+				dd.quantity,
+				concat_ws("*",dd.thickness,dd.weight,dd.length) as specification,
+				bto. NAME AS orderUnit,
+				btm. NAME AS manufacturer,
+				dd.privateLine
+			FROM
+				b_trading_deliverydetailed dd
+				LEFT JOIN b_trading_salesorder soo ON LEFT (dd.orderItemNo, 8) = soo.orderItemNo
+				LEFT JOIN b_trading_planordercomplete poc ON dd.orderItemNo = poc.orderItemNo
+				LEFT JOIN b_trading_manufacturer btm ON soo.manufacturer = btm.ids
+				LEFT JOIN b_trading_orderunit bto ON soo.orderUnit = bto.ids
+			WHERE
+				1 = 1 and dd.ids IN ( ${sqlIn} );
+    	]]>
+	</sql>
+	
+	<!--  -->
+	<sql id="procurementSum">
+		<![CDATA[ 
+        	SELECT sum(quantity) as quantitySum,SUM(weight) as weightSum FROM b_trading_deliverydetailed where ids IN ( ${sqlIn} );
+    	]]>
+	</sql>
+</sql-statement>

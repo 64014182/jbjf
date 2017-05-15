@@ -1,0 +1,78 @@
+<input type="hidden" name="retrospect.ids" value="${escapeHtml(retrospect.ids!)}">
+<div class="control-group">
+	<label class="control-label">月份</label>
+	<div class="controls">
+		<input type="text" id="mon" class="Wdate" name="retrospect.mon" readonly="readonly" 
+				value="${escapeHtml(retrospect.mon!)}"
+				onblur="platform_verify.onblurVali(this);" vType="length"
+				onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})">
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">品名</label>
+	<div class="controls">
+		<input type="text" name="retrospect.pName"  value="${escapeHtml(retrospect.pName!)}" class="span8">
+<!-- 		<select id="pName" name="retrospect.pName"  -->
+<!-- 			class="span6 combox sqlComponent" -->
+<!-- 			selectValue="${escapeHtml(retrospect.pName!)}" -->
+<!-- 			sqlNo="pNameMonGroup"/> -->
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">规格型号</label>
+	<div class="controls">
+		<input type="text" name="retrospect.specification"  value="${escapeHtml(retrospect.specification!)}"
+			class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" >
+		
+<!-- 		<select id="specification" name="retrospect.specification"  -->
+<!-- 			class="span6 combox sqlComponent"   -->
+<!-- 			selectValue="${escapeHtml(retrospect.specification!)}" -->
+<!-- 			sqlNo="SpecificationGroup" -->
+<!-- 			/> -->
+			
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">牌号</label>
+	<div class="controls">
+		<input type="text" name="retrospect.grade"  value="${escapeHtml(retrospect.grade!)}"
+			class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" >
+<!-- 		<select id="grade" name="retrospect.grade"  -->
+<!-- 			class="span6 combox sqlComponent" -->
+<!-- 			selectValue="${escapeHtml(retrospect.grade!)}" -->
+<!-- 			sqlNo="GradeGroup"/> -->
+		
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">追溯单价</label>
+	<div class="controls">
+		<input type="text" name="retrospect.price"  value="${escapeHtml(retrospect.price!)}" class="span8">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">追溯单价差额</label>
+	<div class="controls">
+		<input type="text" name="retrospect.gapPrice"  value="${escapeHtml(retrospect.gapPrice!)}"
+			class="span8" vType="length" >
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">追溯文号</label>
+	<div class="controls">
+		<input type="text" name="retrospect.docNo"  value="${escapeHtml(retrospect.docNo!)}"
+			class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" >
+		<span class="help-inline"></span>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		common_form.initSqlComponent();
+	});
+</script>

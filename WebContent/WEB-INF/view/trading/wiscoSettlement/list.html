@@ -1,0 +1,320 @@
+<link href="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/uniform/css/uniform.default.css" />
+
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/clockface/css/clockface.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/css/datepicker.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/compiled/timepicker.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/css/colorpicker.css" />
+<link rel="stylesheet" href="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.css" />
+
+
+
+<form id="splitPage" action="${cxt!}/trading/wiscoSettlement" method="POST" class="form-horizontal">
+
+	<!-- BEGIN PAGE CONTAINER-->
+	<div class="container-fluid">
+
+		<!-- BEGIN PAGE HEADER-->
+		<div class="row-fluid">
+			<div class="span12">
+				<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+				<ul class="breadcrumb">
+					<li>
+						<a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/index/content');">主页</a>
+						<span class="divider">/</span>
+					</li>
+					<li><a href="#">贸易功能</a> <span class="divider">/</span></li>
+					<li class="active">采购结算明细</li>
+				</ul>
+				<!-- END PAGE TITLE & BREADCRUMB-->
+			</div>
+		</div>
+		<!-- END PAGE HEADER-->
+
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget yellow">
+					<div class="widget-title">
+						<h4><i class="icon-reorder"></i> 查询</h4>
+					</div>
+					<div class="widget-body form switch-form">
+						合同月份
+						<!-- 合同开始月份 -->
+						<input type="text" id="contractMonthStart" class="Wdate" name="_query.contractMonthStart" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["contractMonthStart"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyMM', maxDate:'#F{$dp.$D(\'contractMonthEnd\')}'})">
+						至	
+						<!-- 合同结束月份-->
+						<input type="text" id="contractMonthEnd" class="Wdate" name="_query.contractMonthEnd" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["contractMonthEnd"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'#F{$dp.$D(\'contractMonthStart\')}'})">
+							
+						结算清单号
+						<input class="medium" type="text" name="_query.settlementNo" value='${escapeHtml(splitPage.queryParam["settlementNo"])}' >
+						
+						订单项次号
+						<input class="medium" type="text" name="_query.orderItemNo" value='${escapeHtml(splitPage.queryParam["orderItemNo"])}' >
+						
+						订货单位
+						<input class="medium" type="text" name="_query.orderUnit" value='${escapeHtml(splitPage.queryParam["orderUnit"])}' >
+<!-- 						品名 -->
+<!-- 						<input class="medium" type="text" name="_query.pName" value='${escapeHtml(splitPage.queryParam["pName"])}' > -->
+						
+<!-- 						牌号 -->
+<!-- 						<input class="medium" type="text" name="_query.grade" value='${escapeHtml(splitPage.queryParam["grade"])}' > -->
+
+<!-- 						项次量 -->
+<!-- 						<input class="medium" type="text" name="_query.itemWeight" value='${escapeHtml(splitPage.queryParam["itemWeight"])}' > -->
+					
+					
+						是否结算
+						<select name="_query.hasConfirm" class="input-small m-wrap" tabindex="1">
+							<option></option>
+							<option value="1" ${splitPage.queryParam["hasConfirm"]! == "1" ? "selected='selected'":"" }>已结</option>
+							<option value="0" ${splitPage.queryParam["hasConfirm"]! == "0" ? "selected='selected'":"" }>未结</option>
+						</select>
+					</div>
+					<div class="widget-body form switch-form">
+						结算时间
+						<!-- 合同开始月份 -->
+						<input type="text" id="saveInvoceDateStart" class="Wdate" name="_query.saveInvoceDateStart" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["saveInvoceDateStart"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', maxDate:'#F{$dp.$D(\'saveInvoceDateEnd\')}'})">
+						至
+						<!-- 合同结束月份-->
+						<input type="text" id="saveInvoceDateEnd" class="Wdate" name="_query.saveInvoceDateEnd" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["saveInvoceDateEnd"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveInvoceDateStart\')}'})">
+                   		发票号
+<!--                          <select  -->
+<!--                          	id="invoceMulitSelect" -->
+<!--                          	name="_query.invoices"  -->
+<!--                          	data-placeholder="选择发票号"  -->
+<!--                          	class="chzn-select "  -->
+<!--                          	multiple="multiple"  -->
+<!--                          	tabindex="6" -->
+<!--                          	invoices="${escapeHtml(splitPage.queryParam['invoices'])}"> -->
+<!--                          </select> -->
+						<input id="tags_1" type="text" name="_query.invoices" class="tags" value='${escapeHtml(splitPage.queryParam["invoices"])}'/>
+						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
+						<button type="reset" class="btn btn-inverse">清空</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- BEGIN ADVANCED TABLE widget-->
+		<div class="row-fluid">
+			<div class="span12">
+
+				<!-- BEGIN EXAMPLE TABLE widget-->
+				<div class="widget red">
+					<%
+						var edit = authUrl("/trading/wiscoSettlement/edit");
+						var delete = authUrl("/trading/wiscoSettlement/delete");
+						var view = authUrl("/trading/wiscoSettlement/view");
+						var excelIn = authUrl("/platform/iedtd/saveExcelData");
+					%>
+					<div class="widget-title">
+						<h4>
+							<i class="icon-reorder"></i> 列表
+						</h4>
+					</div>
+
+					<div class="widget-body">
+						<span class="tools"> 
+							<% if(excelIn == true){ %>
+							<button type="button" class="btn btn-success" 
+								onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoWiscoSettlement&action=/trading/wiscoSettlement/excelIn');">
+								<i class="icon-edit"></i>
+								Excel导入
+							</button> 
+							<button type="button" class="btn btn-danger" 
+								onclick='platform_windows.openSelectTable("${cxt!}/trading/wiscoSettlement/summary", "dataTable");'>
+								<i class="icon-share"></i>
+								Excel导出
+							</button>
+							<% } %>
+<!-- 							<input class="medium" type="text" name="_query.settlementNo" value='${escapeHtml(splitPage.queryParam["settlementNo"])}' > -->
+<!-- 							<button type="button" class="btn btn-small btn-info" -->
+<!-- 									data-table="dataTable"  -->
+<!-- 									data-url="${cxt!}/trading/wiscoSettlement/settFromDialog?csrfToken=${csrfToken!}" -->
+<!-- 									onclick="common_modals.seltt(this,'${escapeHtml(splitPage.queryParam['settlementNo'])}')"> -->
+<!-- 								<i class="icon-lock icon-white"></i>结算 -->
+<!-- 							</button>  -->
+						</span>
+
+                       	<div class="space15"></div>
+                       	
+						<table class="table table-striped table-bordered" id="dataTable">
+							<thead>
+								<tr>
+									<th style="width: 8px;">
+										<input type="checkbox" class="group-checkable" name="checkAll" onchange="common_common.checkFunc('dataTable', this.checked);" class="flat-grey selectall">
+									</th>
+									<th class="hidden-phone">结算信息</th>
+									<th class="hidden-phone">货物信息</th>
+									<th class="hidden-phone"></th>
+									<th class="hidden-phone">费用</th>
+<!-- 									<th class="hidden-phone">操作</th> -->
+								</tr>
+							</thead>
+							<tbody>
+								<% for(entity in splitPage.list){ %>
+								<tr class="odd gradeX">
+									<td>
+										<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck">
+									</td>
+<!-- 										<td> -->
+<!-- 											<% if(entity["hasconfirm"] == "0"){ %> -->
+<!-- 												<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck"> -->
+<!-- 											<% }else{ %> -->
+<!-- 												<span class="label label-success"> -->
+<!-- 													已经结算 -->
+<!-- 												</span> -->
+<!-- 											<% } %> -->
+<!-- 										</td> -->
+										
+										<td class="hidden-phone">
+											<% if(entity["hasconfirm"] == "0"){ %>
+												结算清单号: <a href="#" 
+															data-table="dataTable" 
+															data-url="${cxt!}/trading/wiscoSettlement/settFromDialog?csrfToken=${csrfToken!}"
+															onclick="common_modals.seltt(this,'${escapeHtml(entity['settlementNo']!)}')">
+															${escapeHtml(entity["settlementNo"]!)}
+															</a><br>
+											<% }else{ %>
+												结算清单号: <span class="label label-success">${escapeHtml(entity["settlementNo"]!)}</span><br>
+											<% } %>
+											订单项次编号: ${escapeHtml(entity["orderItemNo"]!)}<br>
+											开立日期: ${escapeHtml(entity["issuanceDate"]!)} 	&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+											合同月份: ${escapeHtml(entity["contractMonth"]!)}<br>
+											订货单位: <span class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</span><br>
+										</td>
+										
+										<td class="hidden-phone">
+											品种：${escapeHtml(entity["pName"]!)}<br>
+											牌号：${escapeHtml(entity["grade"]!)}<br>
+											规格：${escapeHtml(entity["specification"]!)}<br>
+											实结重量：${escapeHtml(entity["weight"]!)}<br>
+										</td>
+										
+										<td class="hidden-phone">
+											结算价：${escapeHtml(entity["price"]!)}<br>
+											货款金额：${escapeHtml(entity["loan"]!)}<br>
+											税额：${escapeHtml(entity["tax"]!)}<br>
+											发票号：<a href="#" 
+												data-table="dataTable" 
+												data-url="${cxt!}/trading/wiscoSettlement/settFromDialog?csrfToken=${csrfToken!}"
+												onclick="common_modals.seltt(this,'${escapeHtml(entity['settlementNo']!)}',${escapeHtml(entity['invoice']!)})">
+												${escapeHtml(entity["invoice"]!)}
+											</a>
+											
+										</td>
+										
+										<td class="hidden-phone">
+											运费：${escapeHtml(entity["freight"]!)}<br>
+											代收铁运保险费：${escapeHtml(entity["railwayTIP"]!)}<br>
+											代收水运保险费：${escapeHtml(entity["waterTIP"]!)}<br>
+											代办运输延伸费：${escapeHtml(entity["extensionFreight"]!)}<br> 
+										</td>
+									
+<!-- 									<td class="hidden-phone"> -->
+<!-- 										<% if(entity["hasconfirm"] == "0"){ %> -->
+<!-- 											<button type="button" class="btn btn-small"  -->
+<!-- 												onclick="common_modals.planOrderCompleteDialog('${escapeHtml(entity.ids!)}')"> -->
+<!--  												onclick="common_ajax.ajaxMainPanel('/trading/salesSettlement/saveSalesSetl?planOrderItemNo=${escapeHtml(entity.orderItemNo!)}&woSettIds=${escapeHtml(entity.ids!)}')"  -->
+<!-- 												确认结算 -->
+<!-- 											</button> -->
+<!-- 										<% }else{ %> -->
+<!-- 											<span class="label label-success"> -->
+<!-- 												已经结算 -->
+<!-- 											</span> -->
+<!-- 										<% } %> -->
+<!-- 									</td> -->
+<!-- 								</tr> -->
+								<% } %>
+							</tbody>
+						</table>
+
+						<div id="splitPageDiv" class="pagination">
+							<%include("/platform/common/splitPage.html", {"divId" : "main-content", "formId" : "splitPage", "splitPageDiv" : "splitPageDiv"}){}%>
+						</div>
+						
+					</div>
+				</div>
+				<!-- END EXAMPLE TABLE widget-->
+			</div>
+		</div>
+		<!-- END ADVANCED TABLE widget-->
+	</div>
+</form>
+
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/uniform/jquery.uniform.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/clockface/js/clockface.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/date.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+<script src="${cxt!}/ui/metrolab/js/form-component.js"></script>
+<script type="text/javascript">
+	$(function() {
+		//initMuliSelect();
+	});
+	
+// 	function initMuliSelect(){
+// 		var $select = $("#invoceMulitSelect");
+// 		var invoices = $select.attr('invoices');
+// 		if(typeof(invoices)!="undefined"){
+// 			var invoiceArr = invoices.split(",");
+// 	 		for(var i=0;i<invoiceArr.length;i++){
+// 	 			var value = invoiceArr[i];
+// 	 			var option = "<option  value='"+ value +"'>"  + value + "</option>";
+// 	   			$select.append(option);
+// 	 		}
+// 	 		$select.trigger("liszt:updated");
+// 		}
+
+// 		addKeyUp();
+// 	}
+	
+// 	function addKeyUp(){
+// 		$("li input").keyup(function(that){
+// 	    	var searchText = that.target.value;
+// 	    	if(searchText.length > 4){
+// 	    		var url = "/trading/wiscoSettlement/searchInvoice";
+// 		    	var data = { "invoiceText" : searchText};
+// 		    	common_ajax.ajaxFunc(url, data,"json",createSelectOption,true);
+// 	    	}
+// 	  	});
+// 	}
+	
+// 	function createSelectOption(result){
+// 		var $select = $("#invoceMulitSelect");
+// 		//$select.empty();
+// 		for(var i=0;i<result.length;i++){
+// 			var value = result[i].invoice;
+// 			var option = "<option value='"+ value +"'>"  + value + "</option>";
+//   			$select.append(option);
+// 		};
+// 		$select.trigger("liszt:updated");
+// 	}
+</script>

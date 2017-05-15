@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.poci">
+	<sql id="splitPageSelect">
+		<![CDATA[ 
+			SELECT
+				poci.*, so.ids AS soids,
+				bto.name as orderUnit,
+				bto.ids as orderUnitId,
+				btm.ids as manufacturerId,
+				btm.name as manufacturer,
+				so.salesOrderNo,
+				so.salesPrice,
+				so.freightage,
+				so.storag,
+				so.other,
+				so.pocIds,
+				so.orderItemNo
+		]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	FROM
+				b_trading_poci poci
+			 LEFT JOIN b_trading_salesorder so ON poci.invoceNo = so.orderItemNo
+			 LEFT JOIN b_trading_manufacturer btm on so.manufacturer = btm.ids
+			 LEFT JOIN b_trading_orderunit bto on so.orderUnit = bto.ids
+			where 1=1 
+			<% if(!isEmpty(invoceNo)){ %>
+				and invoceNo like #'%$invoceNo$%'# 
+			<% } %>
+			<% if(!isEmpty(cDate)){ %>
+				and cDate like #'%$cDate$%'# 
+			<% } %>
+    	]]>
+	</sql>
+	
+</sql-statement>

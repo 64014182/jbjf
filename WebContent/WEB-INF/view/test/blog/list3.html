@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRUD Table</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap-table.css">
+<!--     <link rel="stylesheet" href="${cxt!}//assets/examples.css"> -->
+    <style>
+        .update {
+            color: #333;
+            margin-right: 5px;
+        }
+        .remove {
+            color: red;
+            margin-left: 5px;
+        }
+        .alert {
+            padding: 0 14px;
+            margin-bottom: 0;
+            display: inline-block;
+        }
+    </style>
+   	<script type="text/javascript" src="${cxt!}/ui/metrolab/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="${cxt!}/ui/metrolab/assets/bootstrap-table/bootstrap-table.js"></script>
+<!--     <script src="../ga.js"></script> -->
+</head>
+<body>
+    <div class="container">
+        <h1>CRUD Table</h1>
+        <p class="toolbar">
+            <a class="create btn btn-default" href="javascript:">Create Item</a>
+            <span class="alert"></span>
+        </p>
+        <table id="table"
+               data-show-refresh="true"
+               data-show-columns="true"
+               data-search="true"
+               data-query-params="queryParams"
+               data-toolbar=".toolbar">
+            <thead>
+            <tr>
+                <th data-field="ids">ids</th>
+                <th data-field="title">title</th>
+                <th data-field="forks_count">Forks</th>
+                <th data-field="description">Description</th>
+                <th data-field="action"
+                    data-align="center"
+                    data-formatter="actionFormatter"
+                    data-events="actionEvents">Action</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+<script>
+
+    var API_URL = 'http://localhost:8080/JFinalUIBV4/test/blog/list';
+
+    var $table = $('#table').bootstrapTable({
+    	url: API_URL,
+    	editable:true,//开启编辑模式  
+    	
+    }),
+        $modal = $('#modal').modal({show: false}),
+        $alert = $('.alert').hide();
+
+    $(function () {
+        // create event
+        $('.create').click(function () {
+            showModal($(this).text());
+        });
+
+        $modal.find('.submit').click(function () {
+            var row = {};
+
+            $modal.find('input[name]').each(function () {
+                row[$(this).attr('name')] = $(this).val();
+            });
+
+            $.ajax({
+                url: API_URL + ($modal.data('id') || ''),
+                type: $modal.data('id') ? 'put' : 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(row),
+                success: function () {
+                    $modal.modal('hide');
+                    $table.bootstrapTable('refresh');
+                    showAlert(($modal.data('id') ? 'Update' : 'Create') + ' item successful!', 'success');
+                },
+                error: function () {
+                    $modal.modal('hide');
+                    showAlert(($modal.data('id') ? 'Update' : 'Create') + ' item error!', 'danger');
+                }
+            });
+        });
+    });
+
+    function queryParams(params) {
+        return {};
+    }
+
+    function actionFormatter(value) {
+        return [
+            '<a class="update" href="javascript:" title="Update Item"><i class="glyphicon glyphicon-edit"></i></a>',
+            '<a class="remove" href="javascript:" title="Delete Item"><i class="glyphicon glyphicon-remove-circle"></i></a>',
+        ].join('');
+    }
+
+    // update and delete events
+    window.actionEvents = {
+        'click .update': function (e, value, row) {
+            showModal($(this).attr('title'), row);
+        },
+        'click .remove': function (e, value, row) {
+            if (confirm('Are you sure to delete this item?')) {
+                $.ajax({
+                    url: API_URL + row.id,
+                    type: 'delete',
+                    success: function () {
+                        $table.bootstrapTable('refresh');
+                        showAlert('Delete item successful!', 'success');
+                    },
+                    error: function () {
+                        showAlert('Delete item error!', 'danger');
+                    }
+                })
+            }
+        }
+    };
+
+    function showModal(title, row) {
+        row = row || {
+            id: '',
+            name: '',
+            stargazers_count: 0,
+            forks_count: 0,
+            description: ''
+        }; // default row value
+
+        $modal.data('id', row.id);
+        $modal.find('.modal-title').text(title);
+        for (var name in row) {
+            $modal.find('input[name="' + name + '"]').val(row[name]);
+        }
+        $modal.modal('show');
+    }
+
+    function showAlert(title, type) {
+        $alert.attr('class', 'alert alert-' + type || 'success')
+              .html('<i class="glyphicon glyphicon-check"></i> ' + title).show();
+        setTimeout(function () {
+            $alert.hide();
+        }, 3000);
+    }
+</script>
+</body>
+</html>

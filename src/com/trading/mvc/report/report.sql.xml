@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.report">
+	<!-- 发货未结算查询 -->
+	<sql id="fhnSelect">
+		<![CDATA[ 
+        	SELECT
+				t1.orderItemNo,
+				t2.pName,
+				t2.grade,
+				t2.specification,
+				t1.contractMonth,
+				t2.manufacturer,
+				t2.orderUnit,
+				t1.dsum,
+				t2.ssum,
+				abs(t1.dsum - t2.ssum) AS dssum,
+				t2.price,
+				FORMAT(round(FORMAT(abs((t1.dsum - t2.ssum)),3)*replace(t2.price,',','')),0)as noPirce
+    	]]>
+	</sql>
+	
+	<sql id="fhnFrom">
+		<![CDATA[ 
+			FROM
+				(
+					SELECT
+						orderItemNo,contractMonth,
+						round(SUM(weight), 3) AS dsum
+					FROM
+						b_trading_deliverydetailed
+					where 1 =1 
+					<% if(!isEmpty(orderItemNo)){ %>
+						and orderItemNo like #'%$orderItemNo$%'# 
+					<% } %>
+					GROUP BY
+						orderItemNo
+				) AS t1
+			LEFT JOIN (
+				SELECT
+					t.orderItemNo,pName,grade,specification,btm.name AS manufacturer,bto.name AS orderUnit,
+					round(SUM(weight), 3) AS ssum,price
+				FROM
+					b_trading_wiscosettlement t
+				LEFT JOIN b_trading_salesorder p ON LEFT (t.orderItemNo, 8) = p.orderItemNo
+				LEFT JOIN b_trading_manufacturer btm ON p.manufacturer = btm.ids
+				LEFT JOIN b_trading_orderunit bto ON p.orderUnit = bto.ids
+				where 1 =1 
+				<% if(!isEmpty(orderItemNo)){ %>
+					and t.orderItemNo like #'%$orderItemNo$%'# 
+				<% } %>
+				<% if(!isEmpty(orderUnit)){ %>
+					and bto.name like #'%$orderUnit$%'# 
+				<% } %>
+				GROUP BY
+					t.orderItemNo
+			) AS t2 ON t1.orderItemNo = T2.orderItemNo
+			WHERE
+				1 = 1
+			AND t1.dsum < t2.ssum
+			<% if(!isEmpty(contractMonth)){ %>
+				and t1.contractMonth like #'%$contractMonth$%'# 
+			<% } %>
+			
+    	]]>
+	</sql>
+	
+	<!-- 追溯数据查询 -->
+	<sql id="retSelect">
+		<![CDATA[ 
+        	SELECT
+				dd.*, soo.salesOrderNo,
+				soo.salesPrice,
+				bto. NAME AS orderUnit,
+				bto.ids AS orderUnitId,
+				btm.ids AS manufacturerId,
+				btm. NAME AS manufacturer,
+				round(SUM(dd.weight), 3) as sumWeight,
+				round(SUM(dd.gapPrice), 3) as sumGapPrice,
+				round(SUM(dd.dvPrice), 3) as sumDvPrice,
+				poc.pName,
+				poc.grade,
+				poc.thickness,
+				poc.width,
+				poc.length
+    	]]>
+	</sql>
+	
+	<sql id="retFrom">
+		<![CDATA[ 
+			FROM
+				b_trading_deliverydetailed dd
+			LEFT JOIN b_trading_salesorder soo ON LEFT (dd.orderItemNo, 8) = soo.orderItemNo
+			LEFT JOIN b_trading_planordercomplete poc ON dd.orderItemNo = poc.orderItemNo
+			LEFT JOIN b_trading_manufacturer btm ON soo.manufacturer = btm.ids
+			LEFT JOIN b_trading_orderunit bto ON soo.orderUnit = bto.ids
+			WHERE
+				1 = 1
+			<% if(!isEmpty(orderItemNo)){ %>
+				and dd.orderItemNo like #'%$orderItemNo$%'# 
+			<% } %>
+			<% if(!isEmpty(orderUnit)){ %>
+				and bto.name like #'%$orderUnit$%'# 
+			<% } %>
+			<% if(!isEmpty(manufacturer)){ %>
+				and btm.name like #'%$manufacturer$%'# 
+			<% } %>
+			<% if(!isEmpty(orderItemNo)){ %>
+				and dd.orderItemNo like #'%$orderItemNo$%'# 
+			<% } %>
+			<% if(!isEmpty(contractMonth)){ %>
+				and dd.contractMonth like #'%$contractMonth$%'# 
+			<% } %>
+			GROUP BY dd.orderItemNo
+    	]]>
+	</sql>
+	
+	<sql id="paymentSelect">
+		<![CDATA[ 
+			SELECT
+				btp.*, bto. NAME
+		]]>
+	</sql>
+	<!-- 分页查询：from -->
+	<sql id="paymentFrom">
+		<![CDATA[ 
+        	FROM
+				b_trading_payment btp
+			LEFT JOIN b_trading_orderunit bto ON btp.unit = bto.ids
+				ORDER BY sTime ASC
+    	]]>
+	</sql>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</sql-statement>

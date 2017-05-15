@@ -1,0 +1,52 @@
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<ul class="breadcrumb">
+				<li><a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/index/content');">${i18nMap["admin.common.mainPage"]}</a> <span class="divider">/</span></li>
+				<li><a href="#">测试</a><span class="divider">/</span></li>
+				<li><a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/trading/orderPlan/backOff');">博客管理</a> <span class="divider">/</span></li>
+				<li class="active">添加博客</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget red">
+			
+				<div class="widget-title">
+					<h4><i class=" icon-key"></i>添加</h4>
+				</div>
+				
+				<div class="widget-body form">
+					<form id="editForm" action="${cxt!}/platform/gcTableConf/saveOperator" method="POST" class="form-horizontal">
+						<input type="hidden" name="csrfToken" value="${csrfToken!}">
+						
+						<div class="control-group">
+							<label class="control-label">选择模块</label>
+							<div class="controls">
+								<input type="hidden" id="moduleId" name="moduleids" value="${escapeHtml(operator.moduleids!)}"/>
+								<input type="text" id="moduleName" name="modulenames" value="${escapeHtml(operator.modulenames!)}" />
+								<input type="hidden" id="tableName" name="tableName" value="${tableName!}" />
+								
+								<span class="help-inline"> 
+									<a href="javascript:void(0)" class="btn btn-primary" 
+										onclick="common_modals.moduleRadioDiaLog('moduleId', 'moduleName', '${escapeHtml(operator.moduleids!)}')">${i18nMap["admin.common.choice"]}</a>
+								</span>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<div class="controls">
+								<button type="button" class="btn btn-success" onclick="common_ajax.ajaxFormMainPanel('editForm');">
+									<i class="icon-ok icon-white"></i>提交
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>

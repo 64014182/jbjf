@@ -1,0 +1,3 @@
+删除系统时先要删除下面的pt_operator和pt_module，否则为角色分配权限会报错
+DELETE  from  `pt_operator`  where moduleids in(SELECT ids FROM `pt_module` t where t.systemsids = 'd3a5c976c4c24751b6b00ec775692683')
+DELETE  from  `pt_module`  where systemsids in('d3a5c976c4c24751b6b00ec775692683')

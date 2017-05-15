@@ -1,0 +1,39 @@
+<div class="container-fluid">
+
+	<div class="row-fluid">
+		<div class="span12">
+			<ul class="breadcrumb">
+				<li><a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/index/content');">主页</a> <span class="divider">/</span></li>
+<!-- 				<li><a href="#">测试</a><span class="divider">/</span></li> -->
+				<li><a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/${basePath}/${classNameSmall}');">${cviewname}</a> <span class="divider">/</span></li>
+				<li class="active">编辑</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="widget red">
+				<div class="widget-title"><h4><i class=" icon-key"></i>修改</h4></div>
+				<div class="widget-body form">
+					<form id="editForm" action="${demitpStart}cxt!${demitpEnd}/${basePath}/${classNameSmall}/update" method="POST" class="form-horizontal">
+						<input type="hidden" name="csrfToken" value="${csrfToken!}">
+						
+						${demitStart} include("/${basePath}/${classNameSmall}/form.html"){} ${demitEnd}
+
+						<div class="control-group">
+							<div class="controls">
+								${demitStart} if(authUrl("/${basePath}/${classNameSmall}/update")){ ${demitEnd}
+								<button type="button" class="btn btn-success" onclick="platform_verify.formValiSubmit(this.form);">
+									<i class="icon-ok icon-white"></i>确定
+								</button>
+								${demitStart}} ${demitEnd}	
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

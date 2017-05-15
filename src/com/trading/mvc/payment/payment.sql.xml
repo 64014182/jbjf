@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="trading.payment">
+	<sql id="splitPageSelect">
+		<![CDATA[ 
+			SELECT
+				btp.*, bto. NAME
+		]]>
+	</sql>
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	FROM
+				b_trading_payment btp
+			LEFT JOIN b_trading_orderunit bto ON btp.unit = bto.ids
+				ORDER BY sTime ASC
+    	]]>
+	</sql>
+
+</sql-statement>

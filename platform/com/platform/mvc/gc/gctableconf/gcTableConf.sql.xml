@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="platform.gcTableConf">
+	<sql id="queryByTablename">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				pt_fun_gc_tableconf
+			WHERE 1 = 1
+			<% if(!isEmpty(tablename)){ %>
+					and tablename = #'$tablename$'#
+			<% } %>
+    	]]>
+	</sql>
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	from 
+        		pt_fun_gc_tableconf
+			
+			where 1=1 
+				
+    	]]>
+	</sql>
+	<sql id="showTables">
+		<![CDATA[ 
+        	SELECT
+				table_name
+			FROM
+				information_schema. TABLES
+			WHERE
+				table_schema = 'trading'
+			<% if(!isEmpty(name)){ %>
+					and table_name like #'%$name$%'#
+			<% } %>
+    	]]>
+	</sql>
+	<sql id="showColumns">
+		<![CDATA[ 
+        	SELECT
+				column_name,column_type,character_maximum_length,column_comment,table_name
+			FROM
+				information_schema. COLUMNS
+			WHERE 1 = 1
+				and table_name = #'$tablename$'#
+				and TABLE_SCHEMA = 'trading'
+    	]]>
+	</sql>
+	
+	<sql id="queryGcColumnsByTablename">
+		<![CDATA[ 
+        	SELECT
+				*
+			FROM
+				pt_fun_gc_columnconf
+			WHERE 1 = 1
+				and tablename = #'$tablename$'#
+    	]]>
+	</sql>
+	
+	
+</sql-statement>

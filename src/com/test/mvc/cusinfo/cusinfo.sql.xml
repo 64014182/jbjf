@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sql-statement namespace="test.cusinfo">
+	
+	<!-- 分页查询：from -->
+	<sql id="splitPageFrom">
+		<![CDATA[ 
+        	from 
+        		qintai_cusinfo
+			
+			where 1=1 
+				
+    	]]>
+	</sql>
+	
+</sql-statement>

@@ -1,0 +1,254 @@
+<link href="${cxt!}/ui/metrolab/assets/bootstrap-table/2/bootstrap-editable.css" rel="stylesheet" />
+<link href="${cxt!}/ui/metrolab/assets/select2/select2.css" rel="stylesheet" />
+<link href="${cxt!}/ui/metrolab/assets/select2/select2-bootstrap.css" rel="stylesheet" />
+<script src="${cxt!}/ui/metrolab/assets/bootstrap-table/2/bootstrap-editable.js"></script>
+<script src="${cxt!}/ui/metrolab/assets/bootstrap-table/2/bootstrap-table.js"></script>
+<script src="${cxt!}/ui/metrolab/assets/select2/select2.full.js"></script>
+<script src="${cxt!}/ui/metrolab/assets/select2/zh-CN.js"></script>
+<form id="splitPage" action="${cxt!}/trading/poci" method="POST" class="form-horizontal">
+
+	<!-- BEGIN PAGE CONTAINER-->
+	<div class="container-fluid">
+
+		<!-- BEGIN PAGE HEADER-->
+		<div class="row-fluid">
+			<div class="span12">
+				<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+				<ul class="breadcrumb">
+					<li>
+						<a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/index/content');">主页</a>
+						<span class="divider">/</span>
+					</li>
+					<li><a href="#">贸易功能</a> <span class="divider">/</span></li>
+					<li class="active">销售合同确认</li>
+				</ul>
+				<!-- END PAGE TITLE & BREADCRUMB-->
+			</div>
+		</div>
+		<!-- END PAGE HEADER-->
+
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="widget yellow">
+					<div class="widget-title">
+						<h4>
+							<i class="icon-reorder"></i> 查询
+						</h4>
+						<span class="tools"> 
+							<a class="icon-chevron-down" href="javascript:;"></a>
+						</span>
+					</div>
+					<div class="widget-body form switch-form">
+						合同月份
+						<input type="text" id="mon" class="Wdate" name="_query.cDate" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["cDate"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})">
+							
+						合同编号
+						<input class="medium" type="text" name="_query.invoceNo" value='${escapeHtml(splitPage.queryParam["invoceNo"])}' maxlength="50">
+						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
+						<button type="reset" class="btn btn-inverse">清空</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- BEGIN ADVANCED TABLE widget-->
+		<div class="row-fluid">
+			<div class="span12">
+
+				<!-- BEGIN EXAMPLE TABLE widget-->
+				<div class="widget red">
+					<%
+						var edit = authUrl("/trading/poci/edit");
+						var delete = authUrl("/trading/poci/delete");
+						var view = authUrl("/trading/poci/view");
+					%>
+					<div class="widget-title">
+						<h4>
+							<i class="icon-reorder"></i> 列表
+						</h4>
+					</div>
+
+					<div class="widget-body">
+						<span class="tools"> 
+							<button type="button" class="btn btn-small btn-warning" onclick="common_ajax.ajaxMainPanel('/trading/poci/toUrl?toUrl=/trading/poci/add.html');">
+								<i class="icon-plus icon-white"></i>
+								添加
+							</button> 
+							<button type="button" class="btn btn-small btn-danger" data-table="dataTable" data-url="/trading/poci/delete" onclick="common_modals.deleteList(this)">
+								<i class="icon-remove icon-white"></i>
+								删除
+							</button> 
+						</span>
+
+                       	<div class="space15"></div>
+                       	
+						<table class="table table-striped table-bordered" id="dataTable">
+							<thead>
+								<tr>
+									<th style="width: 8px;">
+										<input type="checkbox" class="group-checkable" name="checkAll" onchange="common_common.checkFunc('dataTable', this.checked);" class="flat-grey selectall">
+									</th>
+									
+									<th class="hidden-phone">合同编号</th>
+									<th class="hidden-phone">月份</th>
+									<th class="hidden-phone">生产厂家</th>
+									<th class="hidden-phone">订货单位</th>
+									<th class="hidden-phone">销售订单号</th>
+									<th class="hidden-phone">加价</th>
+									<th class="hidden-phone">代垫运输费</th>
+									<th class="hidden-phone">代垫仓储费</th>
+									<th class="hidden-phone">其他费用</th>
+									<th class="hidden-phone">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% for(entity in splitPage.list){ %>
+									<tr class="odd gradeX">
+										<td>
+											<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck">
+										</td>
+										
+										<td>
+											<a href="#" 
+												data-table="dataTable" 
+												data-url="${cxt!}/trading/poci/modalPlan?csrfToken=${csrfToken!}"
+												data-param='{ "cNo": "${escapeHtml(entity["invoceNo"]!)}", "ids": "roleIds" }'
+												modal-title="合同项次明细"
+												onclick="common_modals.modal(this)">
+												${escapeHtml(entity["invoceNo"]!)}
+											</a>
+										</td>
+										
+										<td>${escapeHtml(entity["cDate"]!)}</td>
+										<td>
+											<a href="#" class="myeditable select" data-type="select" data-name="manufacturer"
+												data-pk="1" data-value="${entity.manufacturerId!}"
+												data-source="${cxt!}/platform/dyComponent/ajaxDyComponent/manufacturer"
+												data-original-title="生产厂家">${entity.manufacturer!}</a>
+										</td>	
+										<td>
+											<a href="#" class="myeditable select" data-type="select" data-name="orderUnit" 
+												data-pk="1" data-value="${entity.orderUnitId!}"
+												data-source="${cxt!}/platform/dyComponent/ajaxDyComponent/orderunit"
+												data-original-title="订货单位">${entity.orderUnit!}</a>
+										</td>	
+										<td><a href="#" class="myeditable" data-type="text" data-name="salesOrderNo" data-original-title="销售订单号">${entity.salesOrderNo!}</a></td>
+										<td><a href="#" class="myeditable" data-type="text" data-name="salesPrice" data-original-title="销售合同价">${entity.salesPrice!}</a></td>
+										<td><a href="#" class="myeditable" data-type="text" data-name="freightage" data-original-title="代垫运输费">${entity.freightage!}</a></td>
+										<td><a href="#" class="myeditable" data-type="text" data-name="storag" data-original-title="代垫仓储费">${entity.storag!}</a></td>
+										<td><a href="#" class="myeditable" data-type="text" data-name="other" data-original-title="其他费用">${entity.other!}</a></td>						
+										
+										<td>
+											<a href="javascript:void(0)" 
+												id="${entity.ids!}" 
+												cNo="${entity.invoceNo!}" 
+												soIds="${entity.soids!}"
+												class="btn btn-mini btn-primary orderSave">保存
+											</a>
+										</td>
+										
+									</tr>
+								<% } %>
+							</tbody>
+						</table>
+
+						<div id="splitPageDiv" class="pagination">
+							<%include("/platform/common/splitPage.html", {"divId" : "main-content", "formId" : "splitPage", "splitPageDiv" : "splitPageDiv"}){}%>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<script type="text/javascript">
+	$(function() {
+		$('.myeditable').editable({});
+		function detailFormatter(index, row) {
+			var html = [];
+			$.each(row, function(key, value) {
+				html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+			});
+			return html.join('');
+		}
+		;
+		$('#new_username').editable('option', 'validate', function(v) {
+			if (!v)
+				return 'Required field!';
+		});
+
+		$('.myeditable').on('save.newuser', function() {
+			var that = this;
+			setTimeout(function() {
+				$(that).parent().next().find('a.myeditable').editable('show')
+			}, 200);
+		});
+
+		$('.orderSave').click(
+				function() {
+					var that = this;
+					
+					var ids = $(this).attr("id");
+					var cNo = $(this).attr("cNo");
+					var soIds = $(this).attr("soIds");
+					
+					var salesOrder = new Object();
+					salesOrder['pocIds'] = ids;
+					salesOrder['ids'] = soIds;
+					salesOrder['orderItemNo'] = cNo;
+					$(that).closest('tr').find('.myeditable,select2').each(
+							function() {
+								var field = $(this).attr('data-name');
+								var value = $(this).text();
+								salesOrder[field] = value;
+							});
+					$(that).closest('tr').find('.select').each(
+							function() {
+ 								var field = $(this).attr('data-name');
+								var value = $(this).editable('getValue');
+								//alert(value[field]);
+ 								salesOrder[field] = value[field];
+							});
+					console.log(JSON.stringify(salesOrder));
+					$.ajax({
+						type : "POST",
+						url : "${cxt!}/trading/salesOrder/generateSalesOrder",
+						contentType : "application/json; charset=utf-8",
+						data : JSON.stringify(salesOrder),
+						dataType : "json",
+						success : function(message) {
+							$('#' + ids).attr("soIds",message['message']);
+							toastr.success("保存成功！");
+						},
+						error : function(message) {
+							toastr.error("保存失败！");
+						}
+					});
+				});
+	});
+
+	$(function() {
+		$.ajax({
+					type : "POST",
+					url : "${cxt!}/platform/dyComponent/ajaxDyComponent/manufacturer",
+					contentType : "application/json; charset=utf-8",
+					dataType : "json",
+					success : function(message) {
+						dataList = message;
+						$('.select2').editable({
+							source : dataList,
+							select2 : {}
+						});
+					},
+					error : function(message) {
+						toastr.error("保存失败！");
+					}
+				});
+	});
+</script>
+
