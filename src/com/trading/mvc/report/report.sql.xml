@@ -127,7 +127,12 @@
         	FROM
 				b_trading_payment btp
 			LEFT JOIN b_trading_orderunit bto ON btp.unit = bto.ids
-				ORDER BY sTime ASC
+				WHERE 1 = 1
+			<% if(!isEmpty(unit)){ %>
+				and btp.unit like #'%$unit$%'# 
+			<% } %>
+			ORDER BY sTime ASC
+			
     	]]>
 	</sql>
 	

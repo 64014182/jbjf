@@ -3,15 +3,20 @@ package com.trading.mvc.deliverydetailed;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Service;
+import com.platform.dto.SplitPage;
 import com.platform.mvc.base.BaseService;
 import com.platform.mvc.iedtd.Iedtd;
 import com.platform.tools.ToolDateTime;
@@ -63,7 +68,7 @@ public class DeliveryDetailedService extends BaseService {
 		// 保存数据
 		Db.batch(insertSql, excelData, 100);
 	}
-
+	
 	public String exportExcel(String ids,String tempfile,String genrFileName) throws Exception {
 		String sqlIn = sqlIn(ids);
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -88,6 +93,25 @@ public class DeliveryDetailedService extends BaseService {
 		data.put("sum", sum);
 		ToolFreemarkParse.parse(BaseHandler.class.getResource("/com/platform/tools/code/tpl/excel/").getPath(), tempfile, generalFilePath, data);
 		return generalFilePath;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void pagin(String dataSource, SplitPage splitPage, String selectSqlId, String fromSqlId,String[]tag) {
+		String selectSql = getSqlByBeetl(selectSqlId, splitPage.getQueryParam());
+
+		Map<String, Object> map = getFromSql(splitPage, fromSqlId);
+		String fromSql = (String) map.get("sql");
+		LinkedList<Object> paramValue = (LinkedList<Object>) map.get("paramValue");
+		
+		if (null != tag && tag.length > 0 && StringUtils.isNotEmpty(tag[0])) {
+			fromSql = fromSql + "and dd.tag IN ( " + sqlIn(tag[0]) + " ) ";
+		}
+		// 分页封装
+		Page<?> page = Db.use(dataSource).paginate(splitPage.getPageNumber(), splitPage.getPageSize(), selectSql, null,fromSql, paramValue.toArray());
+		splitPage.setTotalPage(page.getTotalPage());
+		splitPage.setTotalRow(page.getTotalRow());
+		splitPage.setList(page.getList());
+		splitPage.compute();
 	}
 
 }

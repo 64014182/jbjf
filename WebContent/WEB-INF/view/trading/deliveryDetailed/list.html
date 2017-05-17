@@ -1,3 +1,16 @@
+<link href="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/uniform/css/uniform.default.css" />
+
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/clockface/css/clockface.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/css/datepicker.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/compiled/timepicker.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/css/colorpicker.css" />
+<link rel="stylesheet" href="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.css" />
+
 <form id="splitPage" action="${cxt!}/trading/deliveryDetailed" method="POST" class="form-horizontal">
 	<div class="container-fluid">
 		<div class="row-fluid">
@@ -24,6 +37,7 @@
 							<a class="icon-chevron-down" href="javascript:;"></a>
 						</span>
 					</div>
+					<input id="tags_2" type="text" name="_query.tag" class="tags" value='${escapeHtml(splitPage.queryParam["tag"])}'/>
 					<div class="widget-body form switch-form">
 						订单项次编号
 						<input class="medium" type="text" name="_query.orderItemNo" value='${escapeHtml(splitPage.queryParam["orderItemNo"])}' maxlength="50">
@@ -37,11 +51,13 @@
 							<option value="1" ${splitPage.queryParam["hasSet"]! == "1" ? "selected='selected'":"" }>已结</option>
 							<option value="0" ${splitPage.queryParam["hasSet"]! == "0" ? "selected='selected'":"" }>未结</option>
 						</select>
-						合同月份
-						<input type="text" id="mon" class="Wdate" name="_query.contractMonth" readonly="readonly" 
-							value='${escapeHtml(splitPage.queryParam["contractMonth"])}'
-							onblur="platform_verify.onblurVali(this);" 
-							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})">
+						
+						
+<!-- 						合同月份 -->
+<!-- 						<input type="text" id="mon" class="Wdate" name="_query.contractMonth" readonly="readonly"  -->
+<!-- 							value='${escapeHtml(splitPage.queryParam["contractMonth"])}' -->
+<!-- 							onblur="platform_verify.onblurVali(this);"  -->
+<!-- 							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})"> -->
 						
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
@@ -86,6 +102,12 @@
 								onclick='platform_windows.openSelectTable("${cxt!}/trading/deliveryDetailed/outToExcel", "dataTable");'>
 								<i class="icon-share"></i>
 								出库导出
+							</button>
+							
+							<button type="button" class="btn btn-danger" 
+								onclick='platform_windows.openSelectTable("${cxt!}/trading/deliveryDetailed/pPut", "dataTable");'>
+								<i class="icon-share"></i>
+								收货单导出
 							</button>
 						</span>
 
@@ -197,9 +219,22 @@
 			</div>
 		</div>
 	</div>
-
 </form>
-
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/uniform/jquery.uniform.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/clockface/js/clockface.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/date.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.pack.js"></script>
+<script src="${cxt!}/ui/metrolab/js/form-component.js"></script>
 <script type="text/javascript">
 	$(function() {
 	});

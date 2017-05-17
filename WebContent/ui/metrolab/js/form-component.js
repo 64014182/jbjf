@@ -21,17 +21,17 @@ var Script = function () {
 
         $('#tags_1').tagsInput({width:'auto'});
         $('#tags_2').tagsInput({
-            width: '250',
-            defaultText:'添加发票号', //默认文字
-            onChange: function(elem, elem_tags)
-            {
-                var languages = ['php','ruby','javascript'];
-                $('.tag', elem_tags).each(function()
-                {
-                    if($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
-                        $(this).css('background-color', 'yellow');
-                });
-            }
+            width: 'auto',//默认文字
+            defaultText:'添加标签号' 
+//            onChange: function(elem, elem_tags)
+//            {
+//                var languages = ['php','ruby','javascript'];
+//                $('.tag', elem_tags).each(function()
+//                {
+//                    if($(this).text().search(new RegExp('\\b(' + languages.join('|') + ')\\b')) >= 0)
+//                        $(this).css('background-color', 'yellow');
+//                });
+//            }
         });
 
         // Uncomment this line to see the callback functions in action

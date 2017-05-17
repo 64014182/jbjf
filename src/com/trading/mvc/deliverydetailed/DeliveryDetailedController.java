@@ -8,7 +8,6 @@ import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
-import com.platform.tools.ToolDateTime;
 
 /**
  * XXX 管理	
@@ -35,8 +34,10 @@ public class DeliveryDetailedController extends BaseController {
 	 * 列表
 	 */
 	public void index() {
-		setCurDateToQueryParam("contractMonth", ToolDateTime.pattern_yymm);
-		paging(ConstantInit.db_dataSource_main, splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom);
+//		setCurDateToQueryParam("contractMonth", ToolDateTime.pattern_yymm);
+		String[] tags = getParaMap().get("_query.tag");
+		deliveryDetailedService.pagin(ConstantInit.db_dataSource_main, splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom,tags);
+		//paging(ConstantInit.db_dataSource_main, splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom);
 		render("/trading/deliveryDetailed/list.html");
 	}
 	
@@ -124,6 +125,16 @@ public class DeliveryDetailedController extends BaseController {
 	 */
 	public void outToExcel() throws Exception{
 		String filePath = deliveryDetailedService.exportExcel(ids,"out.xml","采购出库单");
+		renderFile(new File(filePath));
+	}
+	
+	/**
+	 * /trading/deliveryDetailed/pPut
+	 * 入库导出
+	 * @throws Exception
+	 */
+	public void pPut() throws Exception{
+		String filePath = deliveryDetailedService.exportExcel(ids,"pOut.xml","出货单导入");
 		renderFile(new File(filePath));
 	}
 }

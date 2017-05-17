@@ -274,7 +274,6 @@ public class WiscoSettlementService extends BaseService {
 			sumLoad = sumLoad.add(bdLoad);
 			sumTax = sumTax.add(bdTax);
 			sumTaxLoad = sumTaxLoad.add(bdTaxLoad);
-			sumTaxLoad = sumTaxLoad.add(bdTaxLoad);
 			sumFreight = sumFreight.add(bdFreight);
 			sumTaxLoadFreight = sumTaxLoadFreight.add(taxLoadFreight);
 		}

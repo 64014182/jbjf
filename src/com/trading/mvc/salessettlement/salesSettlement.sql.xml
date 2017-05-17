@@ -80,7 +80,7 @@
 	<!-- 分页查询：from -->
 	<sql id="selectInSum">
 		<![CDATA[
-			SELECT sum(wl.weight) as sumWeight,SUM(sales.goodsAmount) as sumGoodsAmount,SUM(sales.taxPrice) as sumTaxPrice,SUM(sales.totalAmount) as sumTotalAmount ,SUM(wl.freight) as sumFreight
+			SELECT FORMAT(sum(wl.weight),3) as sumWeight,FORMAT(SUM(sales.goodsAmount),3) as sumGoodsAmount,FORMAT(SUM(sales.taxPrice),3) as sumTaxPrice,FORMAT(SUM(sales.totalAmount),3) as sumTotalAmount ,FORMAT(SUM(wl.freight),3) as sumFreight
 			FROM b_trading_salessettlement sales 
 			LEFT JOIN b_trading_salesorder so ON sales.salesOrderIds = so.ids
 			LEFT JOIN b_trading_wiscosettlement wl ON sales.wiscoSettlementIds = wl.ids 

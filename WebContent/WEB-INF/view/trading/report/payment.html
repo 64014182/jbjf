@@ -27,8 +27,8 @@
 					</div>
 					<div class="widget-body form switch-form">
 						订货单位
-						<select id="paymentunit" name="payment.unit" class="combox sqlComponent" 
-							selectValue="${escapeHtml(payment.unit!)}" sqlNo="orderUnitName"/>	
+							<select id="paymentunit" name="_query.unit" class="combox sqlComponent" 
+								selectValue="${escapeHtml(_query.unit!)}" sqlNo="orderUnitName"/>
 							
 						查询时间
 						<!-- 合同开始月份 -->
@@ -73,11 +73,11 @@
 							<tbody>
 								<% for(entity in splitPage.list){ %>
 								<tr class="odd gradeX">
+									<td>${escapeHtml(entity["sTime"]!)}</td>
 									<td>${escapeHtml(entity["name"]!)}</td>
 									<td>${escapeHtml(entity["amount"]!)}</td>
-									<td>${escapeHtml(entity["method"]!)}</td>
-									<td>${escapeHtml(entity["abs"]!)}</td>
-									<td>${escapeHtml(entity["sTime"]!)}</td>
+									<td></td>
+									<td></td>
 									<td></td>
 									<td></td>
 								</tr>
