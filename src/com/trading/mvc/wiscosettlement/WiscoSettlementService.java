@@ -199,7 +199,7 @@ public class WiscoSettlementService extends BaseService {
 	 */
 	private BigDecimal calcuSalesPrice(BigDecimal itemPrice, BigDecimal salesAddPrice) {
 		BigDecimal bdBit = getBit();
-		BigDecimal itemSalesprice = itemPrice.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP).add(salesAddPrice).setScale(2, BigDecimal.ROUND_HALF_UP);;
+		BigDecimal itemSalesprice = itemPrice.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP).add(salesAddPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
 		return itemSalesprice;
 	}
 

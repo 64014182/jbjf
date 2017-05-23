@@ -37,7 +37,7 @@ public class TestGenerateCode extends TestBase {
 	public static String[][] tableArr = {
 		//{"数据源名称", "表名称", "主键列名称", "生成类名称"}
 //		{"ConstantInit.db_dataSource_main", "test_blog", "ids", "Blog"}
-		{null, "b_trading_payment", null, "Payment"},
+		{null, "pt_deploywait", null, "DeployWait"},
 //		{null, "b_trading_orderunit", null, "OrderUnit"},
 		//{null, "pt_fun_gc_columnconf", null, "GcColumnConf"}
 //		{null, "pt_department", null, "Department"},
@@ -64,15 +64,15 @@ public class TestGenerateCode extends TestBase {
 	};
 	
 	/**
-	 * 生成的包和类所在的源码根目录，比如src或者是weiXin
+	 * 生成的包和类所在的源码根目录，比如src或者是weiXin/platform
 	 */
-	public static final String srcFolder = "src";
+	public static final String srcFolder = "platform";
 
 	/**
 	 * 生成的文件存放的包，公共基础包
 	 * 描述：比如platform所在的包就是com.platform，test所在的包就是com.test
 	 */
-	public static final String packageBase = "com.trading.mvc";
+	public static final String packageBase = "com.platform.mvc";
 
 	/**
 	 * controller基础路径，例如
@@ -83,7 +83,7 @@ public class TestGenerateCode extends TestBase {
 	 * /platform/user/add.jsp 中的 platform
 	 * /test/blog/list.jsp 中的 test
 	 */
-	public static final String basePath = "trading";
+	public static final String basePath = "platform";
 
 	/**
 	 * 表所在的数据源名称
@@ -137,7 +137,7 @@ public class TestGenerateCode extends TestBase {
 			List<ColumnDto> colunmList = handler.getColunm(tableName);
 			
 			// 1.生成sql文件
-			//handler.sql(classNameSmall, tableName); 
+			handler.sql(classNameSmall, tableName); 
 			
 			// 2.生成model
 			handler.model(className, classNameSmall, dataSource, tableName, pkName, colunmList); 

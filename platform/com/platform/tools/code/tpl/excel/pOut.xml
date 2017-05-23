@@ -34,7 +34,7 @@
   </Style>
  </Styles>
  <Worksheet ss:Name="收货单导入">
-  <Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="${entitys?size + 1}" x:FullColumns="1"
+  <Table ss:ExpandedColumnCount="12" ss:ExpandedRowCount="${entitys?size + 1}" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="13.5">
    <Column ss:Width="83.25"/>
    <Column ss:Width="66"/>
@@ -55,6 +55,7 @@
     <Cell><Data ss:Type="String">重量单位</Data></Cell>
     <Cell><Data ss:Type="String">计量方式</Data></Cell>
     <Cell><Data ss:Type="String">入库车船号</Data></Cell>
+	<Cell><Data ss:Type="String">销售单价</Data></Cell>
    </Row>
    <#list entitys as entity>
    <Row ss:Height="14.25">
@@ -64,11 +65,12 @@
     <Cell><ss:Data ss:Type="String">${entity.grade}</ss:Data></Cell>
     <Cell><Data ss:Type="String">${entity.manufacturer}</Data></Cell>
     <Cell><Data ss:Type="Number">${entity.quantity}</Data></Cell>
-    <Cell><Data ss:Type="Number">9${entity.weight}</Data></Cell>
+    <Cell><Data ss:Type="Number">${entity.weight}</Data></Cell>
     <Cell><Data ss:Type="String">件</Data></Cell>
     <Cell><Data ss:Type="String">吨</Data></Cell>
     <Cell><Data ss:Type="String">理计</Data></Cell>
     <Cell><Data ss:Type="String"></Data></Cell>
+	<Cell><Data ss:Type="String">${entity.salesPrice}</Data></Cell>
    </Row>
    </#list>
   </Table>

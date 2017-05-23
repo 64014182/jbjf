@@ -1,12 +1,19 @@
 package com.trading.mvc.manufacturer;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.jfinal.aop.Before;
+import com.jfinal.log.Log;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
+import com.platform.dto.ZtreeNode;
 import com.platform.mvc.base.BaseController;
 import com.platform.mvc.base.BaseModel;
-
-import com.jfinal.log.Log;
-import com.jfinal.aop.Before;
 
 /**
  * XXX 管理	
@@ -81,4 +88,38 @@ public class ManufacturerController extends BaseController {
 		forwardAction("/trading/manufacturer/backOff");
 	}
 	
+	public void test(){
+		System.out.println(getRequest().getContextPath());
+		render("/trading/manufacturer/test.html");
+	}
+	
+	public void treeData() {
+		if (StringUtils.isEmpty(ids)) {
+			String filepath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+			ids = filepath.replace("/classes/", "");
+		}
+		File file = new File(ids);
+		File[] files = file.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return true;
+			}
+		});
+
+		List<ZtreeNode> nodeList = new ArrayList<ZtreeNode>();
+		ZtreeNode node = null;
+
+		for (File f : files) {
+			node = new ZtreeNode();
+			node.setId(ids + "/" +f.getName());
+			node.setName(f.getName());
+			if(f.isFile()){
+				node.setIsParent(false);
+			}else{
+				node.setIsParent(true);
+			}
+			nodeList.add(node);
+		}
+		renderJson(nodeList);
+	}
 }

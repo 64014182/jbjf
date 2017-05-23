@@ -1,6 +1,7 @@
 package com.trading.mvc.deliverydetailed;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -75,7 +76,17 @@ public class DeliveryDetailedService extends BaseService {
 		param.put("sqlIn", sqlIn);
 		String sql = getSqlByBeetl("trading.deliveryDetailed.procurement", param);
 		List<Record> list = Db.find(sql);
-		
+		for (Record r : list) {
+			String price = r.getStr("price");
+			String salesPrice = r.getStr("salesPrice");
+			
+			BigDecimal bdsalesPrice = new BigDecimal(salesPrice.replaceAll(",", ""));
+			BigDecimal bdprice = new BigDecimal(price.replaceAll(",", ""));
+			
+			BigDecimal bdBit = new BigDecimal(1.17d);
+			BigDecimal itemSalesprice = bdprice.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP).add(bdsalesPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
+			r.set("salesPrice", itemSalesprice.toString());
+		}
 		String sumSql = getSqlByBeetl("trading.deliveryDetailed.procurementSum", param);
 		Record sum = Db.findFirst(sumSql);
 		

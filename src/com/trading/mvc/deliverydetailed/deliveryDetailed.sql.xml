@@ -72,10 +72,12 @@
 				poc.grade,
 				dd.weight,
 				dd.quantity,
-				concat_ws("*",dd.thickness,dd.weight,dd.length) as specification,
+				concat_ws("*",dd.thickness,dd.width,dd.length) as specification,
 				bto. NAME AS orderUnit,
 				btm. NAME AS manufacturer,
-				dd.privateLine
+				dd.privateLine,
+				poc.price,
+				soo.salesPrice
 			FROM
 				b_trading_deliverydetailed dd
 				LEFT JOIN b_trading_salesorder soo ON LEFT (dd.orderItemNo, 8) = soo.orderItemNo

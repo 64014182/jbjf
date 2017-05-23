@@ -135,11 +135,39 @@
 												data-source="${cxt!}/platform/dyComponent/ajaxDyComponent/orderunit"
 												data-original-title="订货单位">${entity.orderUnit!}</a>
 										</td>	
-										<td><a href="#" class="myeditable" data-type="text" data-name="salesOrderNo" data-original-title="销售订单号">${entity.salesOrderNo!}</a></td>
-										<td><a href="#" class="myeditable" data-type="text" data-name="salesPrice" data-original-title="销售合同价">${entity.salesPrice!}</a></td>
-										<td><a href="#" class="myeditable" data-type="text" data-name="freightage" data-original-title="代垫运输费">${entity.freightage!}</a></td>
-										<td><a href="#" class="myeditable" data-type="text" data-name="storag" data-original-title="代垫仓储费">${entity.storag!}</a></td>
-										<td><a href="#" class="myeditable" data-type="text" data-name="other" data-original-title="其他费用">${entity.other!}</a></td>						
+										<td>
+											<% if(entity["salesOrderNo"] == null){ %>
+												<a href="#" class="myeditable" data-type="text" data-name="salesOrderNo" data-original-title="销售订单号">0</a>
+											<% }else{ %>
+												<a href="#" class="myeditable" data-type="text" data-name="salesOrderNo" data-original-title="销售订单号">${entity.salesOrderNo!}</a>
+											<% } %>
+										</td>
+										
+										<td><a href="#" class="myeditable" data-type="text" data-name="salesPrice" data-original-title="加价">${entity.salesPrice!}</a></td>
+										
+										<td>
+											<% if(entity["freightage"] == null){ %>
+												<a href="#" class="myeditable" data-type="text" data-name="freightage" data-original-title="代垫运输费">0</a>
+											<% }else{ %>
+												<a href="#" class="myeditable" data-type="text" data-name="freightage" data-original-title="代垫运输费">${entity.freightage!}</a>
+											<% } %>
+										</td>
+									
+										<td>
+											<% if(entity["storag"] == null){ %>
+												<a href="#" class="myeditable" data-type="text" data-name="storag" data-original-title="代垫运输费">0</a>
+											<% }else{ %>
+												<a href="#" class="myeditable" data-type="text" data-name="storag" data-original-title="代垫仓储费">${entity.storag!}</a>
+											<% } %>
+										</td>
+										
+										<td>
+											<% if(entity["other"] == null){ %>
+												<a href="#" class="myeditable" data-type="text" data-name="other" data-original-title="其他费用">0</a>
+											<% }else{ %>
+												<a href="#" class="myeditable" data-type="text" data-name="other" data-original-title="其他费用">${entity.other!}</a>
+											<% } %>
+										</td>						
 										
 										<td>
 											<a href="javascript:void(0)" 
