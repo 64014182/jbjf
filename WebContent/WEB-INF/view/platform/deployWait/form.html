@@ -1,0 +1,19 @@
+<input type="hidden" name="deployWait.ids" value="${escapeHtml(deployWait.ids!)}" >
+
+<div class="control-group">
+	<label class="control-label">文件位置</label>
+	<div class="controls">
+		<input type="text" name="deployWait.filepath"  value="${escapeHtml(deployWait.filepath!)}"
+			class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<!-- 		<div class="control-group"> -->
+<!-- 			<label class="control-label">提交时间</label> -->
+<!-- 			<div class="controls"> -->
+<!-- 				<input type="text" name="deployWait.savedate"  value="${escapeHtml(deployWait.savedate!)}" -->
+<!-- 					class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字"> -->
+<!-- 				<span class="help-inline"></span> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+	
