@@ -95,16 +95,9 @@
 							
 							<button type="button" class="btn btn-warning" onclick="common_ajax.ajaxMainPanel('/trading/salesSettlement/toUrl?toUrl=/trading/salesSettlement/add.html');">
 								<i class="icon-plus icon-white"></i>
-								添加
+								添加发票
 							</button> 
 							
-<!-- 							<button type="button" class="btn btn-small btn-danger"  -->
-<!-- 									data-table="dataTable"  -->
-<!-- 									data-url="/trading/salesSettlement/delete"  -->
-<!-- 									onclick="common_modals.deleteList(this)"> -->
-<!-- 								<i class="icon-remove icon-white"></i> -->
-<!-- 								删除 -->
-<!-- 							</button>  -->
 							<button type="button" class="btn btn-danger" 
 								onclick='platform_windows.openSelectTable("${cxt!}/trading/salesSettlement/summary", "dataTable");'>
 								<i class="icon-share"></i>
@@ -144,7 +137,7 @@
 									<th>发票号</th>
 									<th>月份</th>
 									<th>是否开票</th>
-<!-- 								<th>操作</th> -->
+									<th>操作</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -175,6 +168,14 @@
 											已经开票
 										<% } %>
 									</td>
+									<td>
+										<% if(entity["salesOrderNo"] == null){ %>
+											<button type="button" class="btn btn-small btn-inverse" onclick="common_ajax.ajaxMainPanel('/trading/salesSettlement/edit/${escapeHtml(entity.ids!)}');">
+												<i class="icon-refresh icon-white"></i>
+												编辑
+											</button> 
+										<% } %>
+									</td>
 								</tr>
 								<% } %>
 							</tbody>
@@ -183,15 +184,10 @@
 						<div id="splitPageDiv" class="pagination">
 							<%include("/platform/common/splitPage.html", {"divId" : "main-content", "formId" : "splitPage", "splitPageDiv" : "splitPageDiv"}){}%>
 						</div>
-						
 					</div>
 				</div>
-				<!-- END EXAMPLE TABLE widget-->
-
 			</div>
 		</div>
-
-		<!-- END ADVANCED TABLE widget-->
 	</div>
 
 </form>

@@ -51,7 +51,9 @@ public class WiscoSettlementController extends BaseController {
 	 */
 	@Before(WiscoSettlementValidator.class)
 	public void save() {
-		getModel(WiscoSettlement.class).save();
+		String unitName = getPara("unitName");
+		WiscoSettlement ws = getModel(WiscoSettlement.class);
+		wiscoSettlementService.save(ws,unitName);
 		forwardAction("/trading/wiscoSettlement/backOff");
 	}
 	

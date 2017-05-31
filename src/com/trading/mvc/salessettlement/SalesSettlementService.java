@@ -2,6 +2,7 @@ package com.trading.mvc.salessettlement;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,6 +22,9 @@ import com.platform.mvc.base.BaseService;
 import com.platform.tools.ToolDateTime;
 import com.platform.tools.ToolFreemarkParse;
 import com.platform.tools.code.handler.BaseHandler;
+import com.trading.mvc.orderunit.OrderUnit;
+import com.trading.mvc.salesorder.SalesOrder;
+import com.trading.mvc.wiscosettlement.WiscoSettlement;
 
 @Service(name = SalesSettlementService.serviceName)
 public class SalesSettlementService extends BaseService {
@@ -92,4 +96,44 @@ public class SalesSettlementService extends BaseService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void save2(String SalesSettlementIds, String orderUnit, String noTaxPrice) {
+		SalesSettlement ss = SalesSettlement.dao.findById(SalesSettlementIds);
+		
+		WiscoSettlement ws = WiscoSettlement.dao.findById(ss.getWiscoSettlementIds());
+		
+		OrderUnit ou = setOrderUnit(orderUnit);
+		SalesOrder so = SalesOrder.dao.findById(ss.getSalesOrderIds());
+		so.setOrderUnit(ou.getIds());
+		so.update();
+		
+		String sWeight = ws.get("weight");
+		BigDecimal bWeight = getBigDecimal(sWeight);
+		BigDecimal bNoTaxPrice = getBigDecimal(noTaxPrice);
+		BigDecimal ga = bWeight.multiply(bNoTaxPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
+		ss.setGoodsAmount(ga.toString());
+		
+		BigDecimal bb = getBigDecimal("0.17");
+		BigDecimal bTaxPrice = ga.multiply(bb).setScale(2, BigDecimal.ROUND_HALF_UP);
+		ss.setTaxPrice(bTaxPrice.toString());
+		ss.setNoTaxPrice(noTaxPrice);
+		BigDecimal bTotalAmount = bTaxPrice.add(ga);
+		ss.setTotalAmount(bTotalAmount.toString());
+		ss.update();
+	}
+	
+	private OrderUnit setOrderUnit(String unitName) {
+		OrderUnit o = OrderUnit.dao.findFirstByColumnValue("name", unitName);
+		if (null == o) {
+			o = new OrderUnit();
+			o.setName(unitName);
+			o.save();
+		}
+		return o;
+	}
+	
+	private BigDecimal getBigDecimal(String numStr) {
+		return new BigDecimal(numStr.replaceAll(",", ""));
+	}
+	
 }

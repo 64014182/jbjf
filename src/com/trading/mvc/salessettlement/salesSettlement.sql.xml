@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <sql-statement namespace="trading.salesSettlement">
+	<sql id="findbyid">
+			SELECT
+					sales.*,
+					wl.orderItemNo,
+					so.salesOrderNo,
+					wl.pName,
+					wl.grade,
+					wl.specification,
+					wl.weight,
+					wl.invoice,
+					wl.contractMonth,
+					bto.NAME AS orderUnit,
+					bto.ids AS orderUnitId,
+					btm.ids AS manufacturerId,
+					btm.name AS manufacturer
+				FROM
+					b_trading_salessettlement sales
+				LEFT JOIN b_trading_salesorder so ON sales.salesOrderIds = so.ids
+				LEFT JOIN b_trading_wiscosettlement wl ON sales.wiscoSettlementIds = wl.ids
+				LEFT JOIN b_trading_manufacturer btm ON so.manufacturer = btm.ids
+				LEFT JOIN b_trading_orderunit bto ON so.orderUnit = bto.ids
+				WHERE
+				1 = 1  and sales.ids = ?
+	</sql>
 	<!-- 分页查询：from -->
 	<sql id="splitPageSelect">
 		<![CDATA[ 

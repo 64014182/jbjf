@@ -131,6 +131,14 @@
 
 					<div class="widget-body">
 						<span class="tools"> 
+							<button type="button" class="btn btn-warning" onclick="common_ajax.ajaxMainPanel('/trading/wiscoSettlement/toUrl?toUrl=/trading/wiscoSettlement/add.html');">
+								<i class="icon-plus icon-white"></i>
+								添加
+							</button>
+							<button type="button" class="btn btn-primary" data-table="dataTable" data-url="/trading/wiscoSettlement/delete" onclick="common_modals.deleteList(this)">
+								<i class="icon-remove icon-white"></i>
+								删除
+							</button> 
 							<% if(excelIn == true){ %>
 							<button type="button" class="btn btn-success" 
 								onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoWiscoSettlement&action=/trading/wiscoSettlement/excelIn');">
@@ -211,13 +219,21 @@
 											结算价：${escapeHtml(entity["price"]!)}<br>
 											货款金额：${escapeHtml(entity["loan"]!)}<br>
 											税额：${escapeHtml(entity["tax"]!)}<br>
-											发票号：<a href="#" 
+											
+											<% if(entity["settlementNo"] == null){ %>
+												${escapeHtml(entity["invoice"]!)}
+												<button type="button" class="btn btn-small btn-primary" onclick="common_ajax.ajaxMainPanel('/trading/wiscoSettlement/edit/${escapeHtml(entity.ids!)}');">
+													<i class="icon-refresh icon-white"></i>
+													编辑
+												</button> 
+											<% }else { %>
+												发票号：<a href="#" 
 												data-table="dataTable" 
 												data-url="${cxt!}/trading/wiscoSettlement/settFromDialog?csrfToken=${csrfToken!}"
 												onclick="common_modals.seltt(this,'${escapeHtml(entity['settlementNo']!)}',${escapeHtml(entity['invoice']!)})">
 												${escapeHtml(entity["invoice"]!)}
+											<% } %>
 											</a>
-											
 										</td>
 										
 										<td class="hidden-phone">

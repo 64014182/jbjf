@@ -56,7 +56,7 @@
 		<![CDATA[ 
         	FROM
 				b_trading_wiscosettlement t
-			LEFT JOIN b_trading_salesorder p ON LEFT (t.orderItemNo, 8) = p.orderItemNo
+			LEFT JOIN b_trading_salesorder p ON substr(t.orderItemNo,1, LENGTH(t.orderItemNo)-3) = p.orderItemNo
 			LEFT JOIN b_trading_manufacturer btm ON p.manufacturer = btm.ids
 			LEFT JOIN b_trading_orderunit bto ON p.orderUnit = bto.ids
 			WHERE

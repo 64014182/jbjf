@@ -25,6 +25,8 @@ import com.platform.tools.ToolDateTime;
 import com.platform.tools.ToolExcel;
 import com.platform.tools.ToolFreemarkParse;
 import com.platform.tools.code.handler.BaseHandler;
+import com.trading.mvc.manufacturer.Manufacturer;
+import com.trading.mvc.poci.Poci;
 import com.trading.mvc.salesorder.SalesOrder;
 import com.trading.mvc.salessettlement.SalesSettlement;
 
@@ -300,4 +302,83 @@ public class WiscoSettlementService extends BaseService {
 		ToolFreemarkParse.parse(BaseHandler.class.getResource("/com/platform/tools/code/tpl/excel/").getPath(), "purchase.xml", generalFilePath, data);
 		return generalFilePath;
 	}
+
+	public void save(WiscoSettlement ws,String unitName) {
+		String loanStr = ws.getStr("loan");
+		String weightStr = ws.getStr("weight");
+		
+		BigDecimal bdLoan = getBigDecimal(loanStr);
+		BigDecimal bdWeight = getBigDecimal(weightStr);
+		
+		BigDecimal price = bdLoan.divide(bdWeight,2, BigDecimal.ROUND_HALF_UP);
+		ws.setPrice(price.toString());
+		
+		BigDecimal bdBit = new BigDecimal(0.17d);
+		BigDecimal bdTax = bdLoan.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP);
+		ws.setTax(bdTax.toString());
+		ws.setFreight("0");
+		ws.setWaterTIP("0");
+		ws.setWaterTIP("0");
+		ws.setExtensionFreight("0");
+		ws.setHasConfirm("1");
+		ws.setSaveInvoceDate(ToolDateTime.getSqlTimestamp(ToolDateTime.getDate()));
+		
+		
+		String orderItemNo = ws.get("orderItemNo");
+		Poci poci = setPoci(orderItemNo, ws.getStr("contractMonth"));
+		
+		Manufacturer m = setManufacturer(unitName);
+		SalesOrder so = setSalesOrder(poci,m);
+		ws.save();
+		
+		setSalesSettlement(ws.getIds(),so.getIds(),ws.getInvoice());
+	}
+
+	private void setSalesSettlement(String wiscoSettlementIds,String salesOrderIds,String invoice) {
+		SalesSettlement ss = new SalesSettlement();
+		ss.setWiscoSettlementIds(wiscoSettlementIds);
+		ss.setSalesOrderIds(salesOrderIds);
+		ss.setInvoiceNo(invoice);
+		ss.save();
+	}
+
+	private Poci setPoci(String orderItemNo, String contractMonth) {
+		String invoiceNo = orderItemNo.substring(0, orderItemNo.length() - 3);
+		Poci p = Poci.dao.findFirstByColumnValue("invoceNo", invoiceNo);
+		if (p == null) {
+			p = new Poci();
+			p.setInvoceNo(invoiceNo);
+			p.setCDate(contractMonth);
+			p.save();
+		}
+		return p;
+	}
+	
+	private Manufacturer setManufacturer(String unitName) {
+		Manufacturer m = Manufacturer.dao.findFirstByColumnValue("name", unitName);
+		if (null == m) {
+			m = new Manufacturer();
+			m.setName(unitName);
+			m.save();
+		}
+		return m;
+	}
+	
+	private SalesOrder setSalesOrder(Poci p, Manufacturer m) {
+		String invoceNo = p.getStr("invoceNo");
+		SalesOrder so = SalesOrder.dao.findFirstByColumnValue("orderItemNo", invoceNo);
+		if (so != null) {
+			return so;
+		}
+		so = new SalesOrder();
+		so.setSalesPrice("0");
+		so.setFreightage("0");
+		so.setStorag("0");
+		so.setPocIds(p.getIds());
+		so.setSalesPrice("0");
+		so.setOrderItemNo(invoceNo);
+		so.setManufacturer(m.getIds());
+		so.save();
+		return so;
+	} 
 }

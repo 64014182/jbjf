@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import com.jfinal.aop.Before;
 import com.jfinal.log.Log;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
@@ -62,8 +64,9 @@ public class SalesSettlementController extends BaseController {
 	 * 准备更新
 	 */
 	public void edit() {
-		SalesSettlement salesSettlement = SalesSettlement.dao.findById(getPara());
-		setAttr("salesSettlement", salesSettlement);
+//		SalesSettlement salesSettlement = SalesSettlement.dao.findById(getPara());
+		Record r = Db.findFirst(getSqlMy("trading.salesSettlement.findbyid"), getPara());
+		setAttr("salesSettlement", r);
 		render("/trading/salesSettlement/update.html");
 	}
 	
@@ -75,7 +78,19 @@ public class SalesSettlementController extends BaseController {
 		getModel(SalesSettlement.class).update();
 		forwardAction("/trading/salesSettlement/backOff");
 	}
-
+	
+	/**
+	 * 更新
+	 */
+	@Before(SalesSettlementValidator.class)
+	public void update2() {
+		String orderUnit = getPara("orderUnit");
+		String noTaxPrice = getPara("noTaxPrice");
+		SalesSettlement ss = getModel(SalesSettlement.class);
+		salesSettlementService.save2(ss.getIds(), orderUnit, noTaxPrice);
+		forwardAction("/trading/salesSettlement/backOff");
+	}
+	
 	/**
 	 * 查看
 	 */
