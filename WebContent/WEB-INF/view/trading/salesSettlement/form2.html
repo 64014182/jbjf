@@ -1,0 +1,33 @@
+<input type="hidden" name="salesSettlement.ids" value="${escapeHtml(salesSettlement.ids!)}" >
+<div class="control-group">
+	<label class="control-label">销售订单号</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.salesOrderIds"  value="${escapeHtml(salesSettlement.salesOrderIds!)}"
+			class="span8" maxlength="50" vMin="1" vType="length" readonly="readonly">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">生产厂家</label>
+	<div class="controls">
+		<input type="text" name="manufacturer"  value="${escapeHtml(salesSettlement.manufacturer!)}"
+			class="span8" maxlength="50" vMin="1" vType="length" readonly="readonly"
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">订货单位名称</label>
+	<div class="controls">
+		<input type="text" name="orderUnit"  value="${escapeHtml(salesSettlement.orderUnit!)}"
+			class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">销售不含税价</label>
+	<div class="controls">
+		<input type="text" name="noTaxPrice"  value="${escapeHtml(salesSettlement.noTaxPrice!)}"
+			class="span8" maxlength="50" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);">
+		<span class="help-inline"></span>
+	</div>
+</div>
