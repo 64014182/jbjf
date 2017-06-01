@@ -76,6 +76,9 @@
 			<% if(!isEmpty(invoice)){ %>
 				and wl.invoice like #'%$invoice$%'# 
 			<% } %>
+			<% if(!isEmpty(flag)){ %>
+				and sales.flag like #'%$flag$%'# 
+			<% } %>
 			<% if(!isEmpty(contractMonth)){ %>
 				and wl.contractMonth like #'%$contractMonth$%'# 
 			<% } %>
@@ -111,9 +114,17 @@
 			where 1=1 and sales.ids in( ${sqlIn} )
     	]]>
 	</sql>
-<!--  	FROM
-				b_trading_salessettlement st
-			LEFT JOIN b_trading_wiscosettlement ws ON st.wiscoSettlementIds = ws.ids
-			LEFT JOIN b_trading_planordercomplete poc ON st.salesOrderIds = poc.ids
-			LEFT JOIN b_trading_salesorder so ON poc.ids = so.pocIds -->
+	
+	<!-- 分页查询：from -->
+	<sql id="updateFlagByIds">
+		<![CDATA[
+			update b_trading_salessettlement set flag = ?,hasDraw = ? where ids in(${sqlIn})
+    	]]>
+	</sql>
+	
+	<sql id="countFlagNo">
+		<![CDATA[
+			SELECT COUNT(*) as count FROM b_trading_salessettlement where flag = ?
+    	]]>
+	</sql>
 </sql-statement>

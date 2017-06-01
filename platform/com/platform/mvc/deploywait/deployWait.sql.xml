@@ -13,4 +13,9 @@
     	]]>
 	</sql>
 	
+	<sql id="findSqlIn">
+		<![CDATA[ 
+        	select * from pt_deploywait where ids in( ${sqlIn} )
+    	]]>
+	</sql>
 </sql-statement>

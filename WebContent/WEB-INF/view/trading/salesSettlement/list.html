@@ -35,14 +35,11 @@
 						</h4>
 					</div>
 					<div class="widget-body form switch-form">
-                        <input id="tags_1" type="text" name="_query.invoices" class="tags" value='${escapeHtml(splitPage.queryParam["invoices"])}'/>
-					</div>
-					<div class="widget-body form switch-form">
-<!-- 						发票号 -->
-<!-- 						<input class="medium" type="text" name="_query.invoice" value='${escapeHtml(splitPage.queryParam["invoice"])}' > -->
+						发票号
+						<input class="medium" type="text" name="_query.invoice" value='${escapeHtml(splitPage.queryParam["invoice"])}' >
 						
-						销售订单号
-						<input class="medium" type="text" name="_query.salesOrderNo" value='${escapeHtml(splitPage.queryParam["salesOrderNo"])}' >
+						编号
+						<input class="medium" type="text" name="_query.flag" value='${escapeHtml(splitPage.queryParam["flag"])}' >
 						
 						订货单位
 						<input class="medium" type="text" name="_query.orderUnit" value='${escapeHtml(splitPage.queryParam["orderUnit"])}' >
@@ -61,14 +58,14 @@
 							value='${escapeHtml(splitPage.queryParam["saveInvoceDateEnd"])}'
 							onblur="platform_verify.onblurVali(this);" 
 							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveInvoceDateStart\')}'})">
-<!-- 						品名 -->
-<!-- 						<input class="medium" type="text" name="_query.pName" value='${escapeHtml(splitPage.queryParam["pName"])}' > -->
+
+						是否结算
+						<select name="_query.hasDraw" class="input-small m-wrap" tabindex="1">
+							<option></option>
+							<option value="1" ${splitPage.queryParam["hasDraw"]! == "1" ? "selected='selected'":"" }>已结</option>
+							<option value="0" ${splitPage.queryParam["hasDraw"]! == "0" ? "selected='selected'":"" }>未结</option>
+						</select>
 						
-<!-- 						牌号 -->
-<!-- 						<input class="medium" type="text" name="_query.grade" value='${escapeHtml(splitPage.queryParam["grade"])}' > -->
-						
-<!-- 						是否开票 -->
-<!--                         <input type="checkbox" class="checkbox" name="_query.hasDraw" value='${escapeHtml(splitPage.queryParam["hasDraw"])}'/> -->
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
 					</div>
@@ -95,8 +92,14 @@
 							
 							<button type="button" class="btn btn-warning" onclick="common_ajax.ajaxMainPanel('/trading/salesSettlement/toUrl?toUrl=/trading/salesSettlement/add.html');">
 								<i class="icon-plus icon-white"></i>
-								添加发票
+								贴息
 							</button> 
+							
+							<button type="button" class="btn btn-primary" 
+								onclick='platform_windows.openSelectTable("${cxt!}/trading/salesSettlement/updateFlag", "dataTable");'>
+								<i class="icon-share"></i>
+								开票
+							</button>
 							
 							<button type="button" class="btn btn-danger" 
 								onclick='platform_windows.openSelectTable("${cxt!}/trading/salesSettlement/summary", "dataTable");'>
@@ -120,23 +123,12 @@
 									<th style="width: 8px;">
 										<input type="checkbox" class="group-checkable" name="checkAll" onchange="common_common.checkFunc('dataTable', this.checked);" class="flat-grey selectall">
 									</th>
-									<th>销售订单号</th>
-									<th>订单项次号</th>
+									<th></th>
 									<th>订货单位名称</th>
-									<th>品名</th>
-									<th>牌号</th>
-									<th>规格型号</th>
 									<th>生产厂家</th>
-									<th>出货重量</th>
-									<th>销售合同价格</th>
-									
-									<th>销售不含税价</th>
-									<th>货款金额</th>
-									<th>税款金额</th>
-									<th>总金额</th>
-									<th>发票号</th>
-									<th>月份</th>
-									<th>是否开票</th>
+									<th></th>
+									<th></th>
+									<th></th>
 									<th>操作</th>
 								</tr>
 							</thead>
@@ -146,27 +138,39 @@
 									<td>
 										<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck">
 									</td>
-									<td>${escapeHtml(entity["salesOrderNo"]!)}</td>
-									<td>${escapeHtml(entity["orderItemNo"]!)}</td>
-									<td><span class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</span></td>
-									<td>${escapeHtml(entity["pName"]!)}</td>
-									<td>${escapeHtml(entity["grade"]!)}</td>
-									<td>${escapeHtml(entity["specification"]!)}</td>
-									<td>${escapeHtml(entity["manufacturer"]!)}</td>
-									<td>${escapeHtml(entity["weight"]!)}</td>
-									<td>${escapeHtml(entity["invoicePrice"]!)}</td>
-									<td>${escapeHtml(entity["noTaxPrice"]!)}</td>
-									<td>${escapeHtml(entity["goodsAmount"]!)}</td>
-									<td>${escapeHtml(entity["taxPrice"]!)}</td>
-									<td>${escapeHtml(entity["totalAmount"]!)}</td>
-									<td>${escapeHtml(entity["invoice"]!)}</td>
-									<td>${escapeHtml(entity["contractMonth"]!)}</td>
+									
 									<td>
-										<% if(entity["hasDraw"] == "0"){ %>
-											未开票
-										<% }else if(entity["hasDraw"] == "1"){ %>
-											已经开票
-										<% } %>
+										销售订单号:${escapeHtml(entity["salesOrderNo"]!)}<br>
+										订单项次号:${escapeHtml(entity["orderItemNo"]!)}<br>
+									</td>
+									
+									<td><span class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</span></td>
+									<td>${escapeHtml(entity["manufacturer"]!)}</td>
+									
+									<td>
+									品名:${escapeHtml(entity["pName"]!)}<br>
+									牌号:${escapeHtml(entity["grade"]!)}<br>
+									规格型号:${escapeHtml(entity["specification"]!)}<br>
+									出货重量:${escapeHtml(entity["weight"]!)}<br>
+									</td>
+									
+									<td>
+										销售合同价格：${escapeHtml(entity["invoicePrice"]!)}<br>
+										销售不含税价：${escapeHtml(entity["noTaxPrice"]!)}<br>
+										货款金额：${escapeHtml(entity["goodsAmount"]!)}<br>
+										税款金额：${escapeHtml(entity["taxPrice"]!)}<br>
+										总金额：${escapeHtml(entity["totalAmount"]!)}<br>
+									</td>
+									<td>
+										发票号:${escapeHtml(entity["invoice"]!)}<br>
+										月份:${escapeHtml(entity["contractMonth"]!)}<br>
+										编号:${escapeHtml(entity["flag"]!)}<br>
+										是否开票：
+											<% if(entity["hasDraw"] == "0"){ %>
+												<span class="label label-warning">否</span>
+											<% }else if(entity["hasDraw"] == "1"){ %>
+												<span class="label label-success">是</span>
+											<% } %>
 									</td>
 									<td>
 										<% if(entity["salesOrderNo"] == null){ %>

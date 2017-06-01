@@ -40,8 +40,7 @@ public class SalesSettlementController extends BaseController {
 	 * 列表
 	 */
 	public void index() {
-		String[] invoiceArray = getParaMap().get("_query.invoices");
-		salesSettlementService.pagin(ConstantInit.db_dataSource_main, splitPage, SalesSettlement.sqlId_splitPageSelect, SalesSettlement.sqlId_splitPageFrom,invoiceArray);
+		paging(ConstantInit.db_dataSource_main, splitPage, SalesSettlement.sqlId_splitPageSelect, SalesSettlement.sqlId_splitPageFrom);
 		render("/trading/salesSettlement/list.html");
 	}
 	
@@ -110,13 +109,25 @@ public class SalesSettlementController extends BaseController {
 	
 	/**
 	 * /trading/salesSettlement/summary
-	 * 销售统计
+	 * 销售结算表管理 Excel导出
 	 * @throws TemplateException 
 	 * @throws IOException 
 	 */
 	public void summary() throws Exception {
 		String orderUnit = getPara("orderUnit");
 		String filePath = salesSettlementService.exportExcel(ids, orderUnit);
+		renderFile(new File(filePath));
+	}
+	
+	/**
+	 * /trading/salesSettlement/summary
+	 * 销售结算表管理 Excel导出
+	 * @throws TemplateException 
+	 * @throws IOException 
+	 */
+	public void updateFlag() throws Exception {
+		String orderUnit = getPara("orderUnit");
+		String filePath = salesSettlementService.updateFlag(ids, orderUnit);
 		renderFile(new File(filePath));
 	}
 }

@@ -88,12 +88,11 @@ public class SalesSettlementService extends BaseService {
 	}
 
 	public static void main(String []args){
-		System.out.println(BaseHandler.class.getResource("/com/platform/tools/code/tpl/excel/").getPath());
+		System.out.println("C"+ToolDateTime.getCurrent("yyyyMMdd"));
 	}
 
 	public void paging(String dbDatasourceMain, SplitPage splitPage, String sqlidSplitpageselect,
 			String sqlidSplitpagefrom, String[] invoiceArray) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -135,5 +134,21 @@ public class SalesSettlementService extends BaseService {
 	private BigDecimal getBigDecimal(String numStr) {
 		return new BigDecimal(numStr.replaceAll(",", ""));
 	}
-	
+
+	public String updateFlag(String ids, String orderUnit) throws Exception {
+		String flagNo = "C" + ToolDateTime.getCurrent("yyyyMMdd");
+		Record r = Db.findFirst(getSqlMy("trading.salesSettlement.countFlagNo"), flagNo);
+		String countNo = "0";
+		if (null != r) {
+			countNo = String.valueOf(r.get("count"));
+		}
+		flagNo = flagNo + countNo;
+
+		String sqlIn = sqlIn(ids);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("sqlIn", sqlIn);
+		String updateSql = getSqlByBeetl("trading.salesSettlement.updateFlagByIds", param);
+		Db.update(updateSql, flagNo, "1");
+		return exportExcel(ids, orderUnit);
+	}
 }

@@ -1,15 +1,8 @@
 package com.platform.mvc.deploywait;
 
-import com.platform.annotation.Controller;
-import com.platform.constant.ConstantInit;
-import com.platform.dto.ZtreeNode;
-import com.platform.mvc.base.BaseController;
-import com.platform.mvc.base.BaseModel;
-import com.platform.tools.ToolDateTime;
-import com.jfinal.log.Log;
-
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +11,14 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.jfinal.aop.Before;
+import com.jfinal.log.Log;
+import com.jfinal.upload.UploadFile;
+import com.platform.annotation.Controller;
+import com.platform.constant.ConstantInit;
+import com.platform.dto.ZtreeNode;
+import com.platform.mvc.base.BaseController;
+import com.platform.mvc.base.BaseModel;
+import com.platform.tools.ToolDateTime;
 
 /**
  * XXX 管理	
@@ -149,5 +150,16 @@ public class DeployWaitController extends BaseController {
 			nodeList.add(node);
 		}
 		renderJson(nodeList);
+	}
+	
+	public void publish() throws Exception{
+		deployWaitService.publish(ids,getCxt());
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void getUploadFile() throws IOException {
+		String floderPath = getRequest().getRealPath("");
+		List<UploadFile> files = getFiles();
+		deployWaitService.replace(floderPath,files);
 	}
 }

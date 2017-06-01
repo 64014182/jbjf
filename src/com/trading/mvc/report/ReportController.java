@@ -18,7 +18,7 @@ public class ReportController extends BaseController {
 	 */
 	public void fhn() {
 		paging(splitPage, "trading.report.fhnSelect", "trading.report.fhnFrom");
-		render("/trading/report/fhn.html");
+		render("/trading/report/fhn.html"); 
 	}
 	
 	/**
