@@ -1,8 +1,13 @@
 var Script = function () {
-
+	common_form.initSqlComponent();
     //chosen select
-    $(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
-
+    $(".chzn-select").chosen({
+		no_results_text: "未匹配到", 
+		search_contains: true,
+		disable_search_threshold: 10
+    }); 
+    
+    $(".chzn-select-deselect").chosen({allow_single_deselect:true});
 
     //tag input
 

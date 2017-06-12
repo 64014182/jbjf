@@ -106,6 +106,13 @@ public class WiscoSettlementService extends BaseService {
 		}
 	}
 	
+	/**
+	 * 保存销售结算
+	 * @param settlementNo
+	 * @param invoiceNo
+	 * @param ssl
+	 * @throws Exception
+	 */
 	public void saveSalesSetl(String settlementNo, String invoiceNo, SalesSettlement ssl) throws Exception {
 		List<WiscoSettlement> wsList = WiscoSettlement.dao.findByColumnValue("settlementNo", settlementNo);	
 		Timestamp currentDate = ToolDateTime.getSqlTimestamp(ToolDateTime.getDate());
@@ -151,9 +158,8 @@ public class WiscoSettlementService extends BaseService {
 		// 税款金额=总金额-货款金额
 		BigDecimal taxPrice = totalAmount.subtract(goodsAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
 
-		ssl.setSalesOrderIds(so.getIds());
+		ssl.setWsAndSo(ws,so);
 		ssl.setInvoicePrice(salesPrice.toString());
-		ssl.setWiscoSettlementIds(ws.getIds());
 		ssl.setNoTaxPrice(noTaxPrice.toString());
 		ssl.setTotalAmount(totalAmount.toString());
 		ssl.setGoodsAmount(goodsAmount.toString());
@@ -307,15 +313,15 @@ public class WiscoSettlementService extends BaseService {
 		String loanStr = ws.getStr("loan");
 		String weightStr = ws.getStr("weight");
 		
-		BigDecimal bdLoan = getBigDecimal(loanStr);
-		BigDecimal bdWeight = getBigDecimal(weightStr);
+		BigDecimal bdLoan = getBigDecimal(loanStr);// 货款金额
+		BigDecimal bdWeight = getBigDecimal(weightStr);// 重量
 		
-		BigDecimal price = bdLoan.divide(bdWeight,2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal price = bdLoan.divide(bdWeight,2, BigDecimal.ROUND_HALF_UP);  //单价  货款除重量
 		ws.setPrice(price.toString());
 		
-		BigDecimal bdBit = new BigDecimal(0.17d);
+		BigDecimal bdBit = new BigDecimal(0.17d);                
 		BigDecimal bdTax = bdLoan.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP);
-		ws.setTax(bdTax.toString());
+		ws.setTax(bdTax.toString());     //税额  		货款金额 * 0.17
 		ws.setFreight("0");
 		ws.setWaterTIP("0");
 		ws.setWaterTIP("0");
@@ -323,15 +329,32 @@ public class WiscoSettlementService extends BaseService {
 		ws.setHasConfirm("1");
 		ws.setSaveInvoceDate(ToolDateTime.getSqlTimestamp(ToolDateTime.getDate()));
 		
-		
 		String orderItemNo = ws.get("orderItemNo");
+		
+		orderItemNo = getOrderItemNo(ws.getStr("contractMonth"));
+		
 		Poci poci = setPoci(orderItemNo, ws.getStr("contractMonth"));
 		
-		Manufacturer m = setManufacturer(unitName);
+		Manufacturer m = Manufacturer.dao.findById(unitName);
 		SalesOrder so = setSalesOrder(poci,m);
 		ws.save();
 		
 		setSalesSettlement(ws.getIds(),so.getIds(),ws.getInvoice());
+	}
+
+	private String getOrderItemNo(String orderItemNo) {
+		orderItemNo = "W" + orderItemNo;
+		String sql = "SELECT COUNT(*) as count FROM b_trading_wiscosettlement where orderItemNo = ?";
+		Record r = Db.findFirst(sql, orderItemNo);
+		String countNo = "0";
+		if (null != r) {
+			countNo = String.valueOf(r.get("count"));
+		}
+		if (countNo.length() <= 1) {
+			countNo += "0" + countNo;
+		}
+		orderItemNo += countNo;
+		return orderItemNo;
 	}
 
 	private void setSalesSettlement(String wiscoSettlementIds,String salesOrderIds,String invoice) {
@@ -354,15 +377,15 @@ public class WiscoSettlementService extends BaseService {
 		return p;
 	}
 	
-	private Manufacturer setManufacturer(String unitName) {
-		Manufacturer m = Manufacturer.dao.findFirstByColumnValue("name", unitName);
-		if (null == m) {
-			m = new Manufacturer();
-			m.setName(unitName);
-			m.save();
-		}
-		return m;
-	}
+//	private Manufacturer setManufacturer(String unitName) {
+//		Manufacturer m = Manufacturer.dao.findFirstByColumnValue("name", unitName);
+//		if (null == m) {
+//			m = new Manufacturer();
+//			m.setName(unitName);
+//			m.save();
+//		}
+//		return m;
+//	}
 	
 	private SalesOrder setSalesOrder(Poci p, Manufacturer m) {
 		String invoceNo = p.getStr("invoceNo");

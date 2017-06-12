@@ -1,15 +1,5 @@
-<link href="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/uniform/css/uniform.default.css" />
 
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.css" />
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.css" />
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/clockface/css/clockface.css" />
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/css/datepicker.css" />
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/compiled/timepicker.css" />
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/css/colorpicker.css" />
-<link rel="stylesheet" href="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css" />
-<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-table-expandable/bootstrap-table-expandable.css" />
 <form id="splitPage" action="${cxt!}/trading/salesSettlement" method="POST" class="form-horizontal">
 
 	<div class="container-fluid">
@@ -36,7 +26,7 @@
 					</div>
 					<div class="widget-body form switch-form">
 						发票号
-						<input class="medium" type="text" name="_query.invoice" value='${escapeHtml(splitPage.queryParam["invoice"])}' >
+						<input class="medium" maxlength="8" type="text" name="_query.invoiceNo" value='${escapeHtml(splitPage.queryParam["invoiceNo"])}' >
 						
 						编号
 						<input class="medium" type="text" name="_query.flag" value='${escapeHtml(splitPage.queryParam["flag"])}' >
@@ -46,20 +36,20 @@
 						
 						订单项次号
 						<input class="medium" type="text" name="_query.orderItemNo" value='${escapeHtml(splitPage.queryParam["orderItemNo"])}' >
-						结算时间
-						<!-- 合同开始月份 -->
-						<input type="text" id="saveInvoceDateStart" class="Wdate" name="_query.saveInvoceDateStart" readonly="readonly" 
-							value='${escapeHtml(splitPage.queryParam["saveInvoceDateStart"])}'
-							onblur="platform_verify.onblurVali(this);" 
-							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', maxDate:'#F{$dp.$D(\'saveInvoceDateEnd\')}'})">
-						至
-						<!-- 合同结束月份-->
-						<input type="text" id="saveInvoceDateEnd" class="Wdate" name="_query.saveInvoceDateEnd" readonly="readonly" 
-							value='${escapeHtml(splitPage.queryParam["saveInvoceDateEnd"])}'
-							onblur="platform_verify.onblurVali(this);" 
-							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveInvoceDateStart\')}'})">
+<!-- 						结算时间 -->
+<!-- 						合同开始月份 -->
+<!-- 						<input type="text" id="saveInvoceDateStart" class="Wdate" name="_query.saveInvoceDateStart" readonly="readonly"  -->
+<!-- 							value='${escapeHtml(splitPage.queryParam["saveInvoceDateStart"])}' -->
+<!-- 							onblur="platform_verify.onblurVali(this);"  -->
+<!-- 							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', maxDate:'#F{$dp.$D(\'saveInvoceDateEnd\')}'})"> -->
+<!-- 						至 -->
+<!-- 						合同结束月份 -->
+<!-- 						<input type="text" id="saveInvoceDateEnd" class="Wdate" name="_query.saveInvoceDateEnd" readonly="readonly"  -->
+<!-- 							value='${escapeHtml(splitPage.queryParam["saveInvoceDateEnd"])}' -->
+<!-- 							onblur="platform_verify.onblurVali(this);"  -->
+<!-- 							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveInvoceDateStart\')}'})"> -->
 
-						是否结算
+						是否开票
 						<select name="_query.hasDraw" class="input-small m-wrap" tabindex="1">
 							<option></option>
 							<option value="1" ${splitPage.queryParam["hasDraw"]! == "1" ? "selected='selected'":"" }>已结</option>
@@ -89,6 +79,10 @@
 
 					<div class="widget-body">
 						<span class="tools"> 
+							<button type="button" class="btn btn-warning" onclick="common_ajax.ajaxMainPanel('/trading/salesSettlement/toUrl?toUrl=/trading/salesSettlement/add1.html');">
+								<i class="icon-plus icon-white"></i>
+								添加发票
+							</button> 
 							
 							<button type="button" class="btn btn-warning" onclick="common_ajax.ajaxMainPanel('/trading/salesSettlement/toUrl?toUrl=/trading/salesSettlement/add.html');">
 								<i class="icon-plus icon-white"></i>
@@ -106,29 +100,25 @@
 								<i class="icon-share"></i>
 								Excel导出
 							</button>
-<!-- 							<button type="button" class="btn btn-small btn-danger" -->
-<!-- 									data-table="dataTable"  -->
-<!-- 									data-url="${cxt!}/trading/salesSettlement/summary" -->
-<!-- 									onclick="common_modals.salesSettlementSummary(this)"> -->
-<!-- 								<i class="icon-remove icon-white"></i> -->
-<!-- 								导出EXCEL -->
-<!-- 							</button>  -->
 						</span>
 
                        	<div class="space15"></div>
-                       	
-						<table class="table table-striped table-bordered" id="dataTable">
+						<table class="table table-hover table-expandable" id="dataTable">
 							<thead>
 								<tr>
 									<th style="width: 8px;">
 										<input type="checkbox" class="group-checkable" name="checkAll" onchange="common_common.checkFunc('dataTable', this.checked);" class="flat-grey selectall">
 									</th>
-									<th></th>
-									<th>订货单位名称</th>
-									<th>生产厂家</th>
-									<th></th>
-									<th></th>
-									<th></th>
+									<th>销售订单号</th>
+									<th>订单项次号</th>
+									<th>品名</th>
+									<th>牌号</th>
+									<th>规格型号</th>
+									<th>出货重量</th>
+									<th>发票号</th>
+									<th>编号</th>
+									<th>是否开票</th>
+									<th>月份</th>
 									<th>操作</th>
 								</tr>
 							</thead>
@@ -138,47 +128,43 @@
 									<td>
 										<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck">
 									</td>
-									
+									<td>${escapeHtml(entity["salesOrderNo"]!)}</td>
+									<td>${escapeHtml(entity["orderItemNo"]!)}</td>
+									<td>${escapeHtml(entity["pName"]!)}</td>
+									<td>${escapeHtml(entity["grade"]!)}</td>
+									<td>${escapeHtml(entity["specification"]!)}</td>
+									<td>${escapeHtml(entity["weight"]!)}</td>
+									<td>${escapeHtml(entity["invoiceNo"]!)}</td>
+									<td>${escapeHtml(entity["flag"]!)}</td>
 									<td>
-										销售订单号:${escapeHtml(entity["salesOrderNo"]!)}<br>
-										订单项次号:${escapeHtml(entity["orderItemNo"]!)}<br>
-									</td>
-									
-									<td><span class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</span></td>
-									<td>${escapeHtml(entity["manufacturer"]!)}</td>
-									
-									<td>
-									品名:${escapeHtml(entity["pName"]!)}<br>
-									牌号:${escapeHtml(entity["grade"]!)}<br>
-									规格型号:${escapeHtml(entity["specification"]!)}<br>
-									出货重量:${escapeHtml(entity["weight"]!)}<br>
-									</td>
-									
-									<td>
-										销售合同价格：${escapeHtml(entity["invoicePrice"]!)}<br>
-										销售不含税价：${escapeHtml(entity["noTaxPrice"]!)}<br>
-										货款金额：${escapeHtml(entity["goodsAmount"]!)}<br>
-										税款金额：${escapeHtml(entity["taxPrice"]!)}<br>
-										总金额：${escapeHtml(entity["totalAmount"]!)}<br>
-									</td>
-									<td>
-										发票号:${escapeHtml(entity["invoice"]!)}<br>
-										月份:${escapeHtml(entity["contractMonth"]!)}<br>
-										编号:${escapeHtml(entity["flag"]!)}<br>
-										是否开票：
-											<% if(entity["hasDraw"] == "0"){ %>
-												<span class="label label-warning">否</span>
-											<% }else if(entity["hasDraw"] == "1"){ %>
-												<span class="label label-success">是</span>
-											<% } %>
-									</td>
-									<td>
-										<% if(entity["salesOrderNo"] == null){ %>
-											<button type="button" class="btn btn-small btn-inverse" onclick="common_ajax.ajaxMainPanel('/trading/salesSettlement/edit/${escapeHtml(entity.ids!)}');">
-												<i class="icon-refresh icon-white"></i>
-												编辑
-											</button> 
+										<% if(entity["hasDraw"] == "0"){ %>
+											<span class="label label-warning">否</span>
+										<% }else if(entity["hasDraw"] == "1"){ %>
+											<span class="label label-success">是</span>
 										<% } %>
+									</td>
+									<td>${escapeHtml(entity["contractMonth"]!)}</td>
+									<td>
+										<% if(entity["orderItemNo"] == null){ %>
+											<a href="javascript:;" class="icon-edit" title="编辑"
+											onclick="common_ajax.ajaxMainPanel('/trading/salesSettlement/edit/${entity.ids!}');"></a>
+										
+											<a href="javascript:;" class="icon-trash" title="删除" 
+												onclick="common_modals.deleteOne(this)" 
+												data-url="/trading/salesSettlement/delete/${entity.ids!}?csrfToken=${csrfToken!}"></a>
+										<% } %>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="12">
+<!-- 										<h4>Additional information</h4> -->
+											<li>订货单位：<span class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</span></li>
+											<li>生产厂家：${escapeHtml(entity["manufacturer"]!)}</li>
+											<li>销售合同价格：${escapeHtml(entity["invoicePrice"]!)}</li>
+											<li>销售不含税价：${escapeHtml(entity["noTaxPrice"]!)}</li>
+											<li>货款金额：${escapeHtml(entity["goodsAmount"]!)}</li>
+											<li>税款金额：${escapeHtml(entity["taxPrice"]!)}</li>
+											<li>总金额：${escapeHtml(entity["totalAmount"]!)}</li>
 									</td>
 								</tr>
 								<% } %>
@@ -195,26 +181,12 @@
 	</div>
 
 </form>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/uniform/jquery.uniform.min.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/clockface/js/clockface.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.min.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/date.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
-<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.pack.js"></script>
 
 
-<script src="${cxt!}/ui/metrolab/js/form-component.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-table-expandable/bootstrap-table-expandable.js"></script>
+
 <script type="text/javascript">
 	jQuery(document).ready(function() {
-
 	});
 </script>
 

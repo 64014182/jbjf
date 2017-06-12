@@ -36,11 +36,15 @@ public class SalesSettlementController extends BaseController {
 	
 	private SalesSettlementService salesSettlementService;
 	private WiscoSettlementService wiscoSettlementService;
+	
+	
+	
+	
 	/**
 	 * 列表
 	 */
 	public void index() {
-		paging(ConstantInit.db_dataSource_main, splitPage, SalesSettlement.sqlId_splitPageSelect, SalesSettlement.sqlId_splitPageFrom);
+		paging(ConstantInit.db_dataSource_main, splitPage, "trading.salesSettlement.splitPageSelect", SalesSettlement.sqlId_splitPageFrom);
 		render("/trading/salesSettlement/list.html");
 	}
 	
@@ -120,8 +124,8 @@ public class SalesSettlementController extends BaseController {
 	}
 	
 	/**
-	 * /trading/salesSettlement/summary
-	 * 销售结算表管理 Excel导出
+	 * /trading/salesSettlement/updateFlag
+	 * 销售结算表管理 开发票并导出
 	 * @throws TemplateException 
 	 * @throws IOException 
 	 */

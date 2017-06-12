@@ -263,7 +263,7 @@
    <Row ss:AutoFitHeight="0" ss:Height="23.25">
     <Cell ss:MergeAcross="9" ss:StyleID="m1680838157368"><Data ss:Type="String">单位：${orderUnit}</Data></Cell>
     <Cell ss:MergeAcross="6" ss:StyleID="m1680838157388"><Data ss:Type="String">编号：</Data></Cell>
-    <Cell ss:MergeAcross="1" ss:StyleID="m1680838157408"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:MergeAcross="1" ss:StyleID="m1680838157408"><Data ss:Type="String">${flag!}</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0" ss:Height="27.75">
     <Cell ss:StyleID="s67"><Data ss:Type="String">序号</Data></Cell>

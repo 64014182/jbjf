@@ -79,10 +79,13 @@ public class SalesSettlementService extends BaseService {
 
 		// 导出EXCEL
 		Map<String, Object> data = new HashMap<String, Object>();
+		
+		String flag = list.get(0).getStr("flag");
 		data.put("entitys", list);
 		sum.set("sumWeight", sum.get("sumWeight").toString());
 		data.put("sum", sum);
 		data.put("orderUnit", orderUnit);
+		data.put("flag", flag);
 		ToolFreemarkParse.parse(BaseHandler.class.getResource("/com/platform/tools/code/tpl/excel/").getPath(), "salesSettlement.xml", generalFilePath, data);
 		return generalFilePath;
 	}
@@ -135,6 +138,13 @@ public class SalesSettlementService extends BaseService {
 		return new BigDecimal(numStr.replaceAll(",", ""));
 	}
 
+	/**
+	 * 开发票并导出
+	 * @param ids
+	 * @param orderUnit
+	 * @return
+	 * @throws Exception
+	 */
 	public String updateFlag(String ids, String orderUnit) throws Exception {
 		String flagNo = "C" + ToolDateTime.getCurrent("yyyyMMdd");
 		Record r = Db.findFirst(getSqlMy("trading.salesSettlement.countFlagNo"), flagNo);
@@ -151,4 +161,6 @@ public class SalesSettlementService extends BaseService {
 		Db.update(updateSql, flagNo, "1");
 		return exportExcel(ids, orderUnit);
 	}
+	
+	
 }

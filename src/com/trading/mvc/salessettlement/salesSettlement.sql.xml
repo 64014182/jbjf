@@ -3,45 +3,20 @@
 <sql-statement namespace="trading.salesSettlement">
 	<sql id="findbyid">
 			SELECT
-					sales.*,
-					wl.orderItemNo,
-					so.salesOrderNo,
-					wl.pName,
-					wl.grade,
-					wl.specification,
-					wl.weight,
-					wl.invoice,
-					wl.contractMonth,
-					bto.NAME AS orderUnit,
-					bto.ids AS orderUnitId,
-					btm.ids AS manufacturerId,
-					btm.name AS manufacturer
-				FROM
-					b_trading_salessettlement sales
-				LEFT JOIN b_trading_salesorder so ON sales.salesOrderIds = so.ids
-				LEFT JOIN b_trading_wiscosettlement wl ON sales.wiscoSettlementIds = wl.ids
-				LEFT JOIN b_trading_manufacturer btm ON so.manufacturer = btm.ids
-				LEFT JOIN b_trading_orderunit bto ON so.orderUnit = bto.ids
-				WHERE
+				sales.*, btm.name AS manufacturer,
+				bto.name AS orderUnit
+			FROM b_trading_salessettlement sales 
+				LEFT JOIN b_trading_manufacturer btm ON sales.manufacturerId = btm.ids
+				LEFT JOIN b_trading_orderunit bto ON sales.orderUnitId = bto.ids
+			WHERE
 				1 = 1  and sales.ids = ?
 	</sql>
 	<!-- 分页查询：from -->
 	<sql id="splitPageSelect">
 		<![CDATA[ 
 			SELECT
-				sales.*,
-				wl.orderItemNo,
-				so.salesOrderNo,
-				wl.pName,
-				wl.grade,
-				wl.specification,
-				wl.weight,
-				wl.invoice,
-				wl.contractMonth,
-				bto.NAME AS orderUnit,
-				bto.ids AS orderUnitId,
-				btm.ids AS manufacturerId,
-				btm.name AS manufacturer
+				sales.*, btm.name AS manufacturer,
+				bto.name AS orderUnit
     	]]>
 	</sql>
 	<!-- 分页查询：from -->
@@ -49,14 +24,12 @@
 		<![CDATA[
 			FROM
 				b_trading_salessettlement sales
-			LEFT JOIN b_trading_salesorder so ON sales.salesOrderIds = so.ids
-			LEFT JOIN b_trading_wiscosettlement wl ON sales.wiscoSettlementIds = wl.ids
-			LEFT JOIN b_trading_manufacturer btm ON so.manufacturer = btm.ids
-			LEFT JOIN b_trading_orderunit bto ON so.orderUnit = bto.ids
+			LEFT JOIN b_trading_manufacturer btm ON sales.manufacturerId = btm.ids
+			LEFT JOIN b_trading_orderunit bto ON sales.orderUnitId = bto.ids
 			WHERE
-				1 = 1 
+				1 = 1
 			<% if(!isEmpty(salesOrderNo)){ %>
-				and salesOrderNo like #'%$salesOrderNo$%'# 
+				sales salesOrderNo like #'%$salesOrderNo$%'# 
 			<% } %>
 			<% if(!isEmpty(manufacturer)){ %>
 				and btm.name like #'%$manufacturer$%'# 
@@ -73,24 +46,19 @@
 			<% if(!isEmpty(hasDraw)){ %>
 				and hasDraw like #'%$hasDraw$%'# 
 			<% } %>
-			<% if(!isEmpty(invoice)){ %>
-				and wl.invoice like #'%$invoice$%'# 
+			<% if(!isEmpty(invoiceNo)){ %>
+				and sales.invoiceNo like #'%$invoiceNo$%'# 
 			<% } %>
 			<% if(!isEmpty(flag)){ %>
 				and sales.flag like #'%$flag$%'# 
 			<% } %>
 			<% if(!isEmpty(contractMonth)){ %>
-				and wl.contractMonth like #'%$contractMonth$%'# 
+				and sales.contractMonth like #'%$contractMonth$%'# 
 			<% } %>
 			<% if(!isEmpty(orderItemNo)){ %>
-				and wl.orderItemNo like #'%$orderItemNo$%'# 
+				and sales.orderItemNo like #'%$orderItemNo$%'# 
 			<% } %>
-			<% if(!isEmpty(saveInvoceDateStart)){ %>
-					and wl.saveInvoceDate >= #'$saveInvoceDateStart$'#
-			<% } %>
-			<% if(!isEmpty(saveInvoceDateEnd)){ %>
-					and wl.saveInvoceDate <= #'$saveInvoceDateEnd$'#
-			<% } %>
+		
     	]]>
 	</sql>
 	

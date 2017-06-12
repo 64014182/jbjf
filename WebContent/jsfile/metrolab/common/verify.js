@@ -475,7 +475,7 @@ var platform_verify = function() {
 	var formValiSubmit = function(formNode){
 		var errorCount = formVali(formNode);
 		if(errorCount != 0){
-			//toastr.error('有'+errorCount+'处错误，请修正！');
+			toastr.error('有'+errorCount+'处错误，请修正！');
 			//alert('有'+errorCount+'处错误，请修正！');
 		}else{
 			common_ajax.ajaxFormMainPanel(formNode.id);

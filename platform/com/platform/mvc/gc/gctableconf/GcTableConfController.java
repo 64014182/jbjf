@@ -120,6 +120,12 @@ public class GcTableConfController extends BaseController {
 		renderJson("生成界面成功！  " + path);
 	}
 	
+	public void genForm() {
+		String tableName = getPara();
+		setAttr("tableName", tableName);
+		render("/platform/gcTableConf/genForm.html");
+	}
+	
 	public void generateOperatorPage() {
 		String tableName = getPara();
 		setAttr("tableName", tableName);

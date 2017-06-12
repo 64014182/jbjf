@@ -29,15 +29,14 @@
 						<div class="control-group">
 							<div class="controls">
 								<% if(authUrl("/trading/wiscoSettlement/save")){ %>
-								<button type="button" class="btn btn-success" onclick="common_ajax.ajaxFormMainPanel('editForm');">
+								<button type="button" class="btn btn-success" onclick="platform_verify.formValiSubmit(this.form);">
 									<i class="icon-ok icon-white"></i>提交
 								</button>
+								
 								<%} %>	
 							</div>
 						</div>
-
 					</form>
-
 				</div>
 			</div>
 		</div>

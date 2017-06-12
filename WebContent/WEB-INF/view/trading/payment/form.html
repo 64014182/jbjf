@@ -2,11 +2,8 @@
 <div class="control-group">
 	<label class="control-label">收货单位</label>
 	<div class="controls">
-		<select id="paymentunit" name="payment.unit" class="span8 combox sqlComponent" 
-			selectValue="${escapeHtml(payment.unit!)}" sqlNo="orderUnitName"/>	
-<!-- 		<input type="text" name="payment.unit" -->
-<!-- 			value="${escapeHtml(payment.unit!)}" class="span8" maxlength="50" -->
-<!-- 			vMin="1" vType="length"> <span class="help-inline"></span> -->
+		<select id="paymentunit" name="payment.unit" class="span8 chzn-select combox sqlComponent" tabindex="1"
+			selectValue="${escapeHtml(payment.unit!)}" sqlNo="orderUnitName"/>
 	</div>
 </div>
 <div class="control-group">
@@ -34,8 +31,5 @@
 			vMin="1" vType="length"> <span class="help-inline"></span>
 	</div>
 </div>
-<script type="text/javascript">
-	jQuery(document).ready(function() {
-		common_form.initSqlComponent();
-	});
-</script>
+<script src="${cxt!}/ui/metrolab/js/common-scripts.js"></script>
+<script src="${cxt!}/ui/metrolab/js/form-component.js"></script>
