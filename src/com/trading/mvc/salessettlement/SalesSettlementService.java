@@ -147,7 +147,8 @@ public class SalesSettlementService extends BaseService {
 	 */
 	public String updateFlag(String ids, String orderUnit) throws Exception {
 		String flagNo = "C" + ToolDateTime.getCurrent("yyyyMMdd");
-		Record r = Db.findFirst(getSqlMy("trading.salesSettlement.countFlagNo"), flagNo);
+		String sql = "SELECT COUNT(*) AS count FROM b_trading_salessettlement WHERE 1 = 1 AND flag LIKE '%" + flagNo + "%'";
+		Record r = Db.findFirst(sql);
 		String countNo = "0";
 		if (null != r) {
 			countNo = String.valueOf(r.get("count"));
@@ -160,7 +161,6 @@ public class SalesSettlementService extends BaseService {
 		String updateSql = getSqlByBeetl("trading.salesSettlement.updateFlagByIds", param);
 		Db.update(updateSql, flagNo, "1");
 		return exportExcel(ids, orderUnit);
+		
 	}
-	
-	
 }

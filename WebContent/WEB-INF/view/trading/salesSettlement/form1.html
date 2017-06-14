@@ -1,0 +1,100 @@
+<!-- 添加发票表单 -->
+<input type="hidden" name="salesSettlement.ids"  value="${escapeHtml(salesSettlement.ids!)}"/>
+<div class="control-group">
+	<label class="control-label">发票号</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.invoiceNo" value="${escapeHtml(salesSettlement.invoiceNo!)}"
+			class="span8" maxlength="8" vMin="8" vType="numberZ" onblur="platform_verify.onblurVali(this);" placeholder="8位数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">品名</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.pName" value="${escapeHtml(salesSettlement.pName!)}" 
+		>
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">订单项次编号</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.orderItemNo" value="${escapeHtml(salesSettlement.orderItemNo!)}" 
+		class="span8" placeholder="11位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">牌号</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.grade" value="${escapeHtml(salesSettlement.grade!)}" 
+			class="span8"  placeholder="1-20位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">规格</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.specification"  value="${escapeHtml(salesSettlement.specification!)}" class="span8" placeholder="1-50位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">重量</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.weight" value="${escapeHtml(salesSettlement.weight!)}" 
+			class="span8" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-20位数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label">货款金额</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.goodsAmount"  value="${escapeHtml(salesSettlement.goodsAmount!)}"
+			class="span8"  vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">税款金额</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.taxPrice"  value="${escapeHtml(salesSettlement.taxPrice!)}"
+			class="span8"  vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">总金额</label>
+	<div class="controls">
+		<input type="text" name="salesSettlement.totalAmount"  value="${escapeHtml(salesSettlement.totalAmount!)}"
+			class="span8"  vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<!-- <div class="control-group"> -->
+<!-- 	<label class="control-label">开立日期</label> -->
+<!-- 	<div class="controls"> -->
+<!-- 		<input type="text" id="mon" class="Wdate" name="salesSettlement.issuanceDate" readonly="readonly"  -->
+<!-- 				value="${escapeHtml(salesSettlement.issuanceDate!)}" -->
+<!-- 				onblur="platform_verify.onblurVali(this);" vType="length" -->
+<!-- 				onClick="WdatePicker({dateFmt: 'yyyy-MM-dd', minDate:'1900-01-01'})"> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- <div class="control-group"> -->
+<!-- 	<label class="control-label">合同月份</label> -->
+<!-- 	<div class="controls"> -->
+<!-- 		<input type="text" name="salesSettlement.contractMonth"  value="${escapeHtml(salesSettlement.contractMonth!)}" -->
+<!-- 			class="span8"  placeholder="1-50位字母数字"> -->
+<!-- 		<span class="help-inline"></span> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<div class="control-group">
+	<label class="control-label">订货单位</label>
+	<div class="controls">
+		<select id="paymentunit" name="salesSettlement.orderUnitId" class="span8 chzn-select combox sqlComponent" tabindex="1"
+			selectValue="${escapeHtml(salesSettlement.orderUnitId!)}" sqlNo="orderUnitName"/>
+	</div>
+</div>
+<script src="${cxt!}/ui/metrolab/js/common-scripts.js"></script>
+<script src="${cxt!}/ui/metrolab/js/form-component.js"></script>

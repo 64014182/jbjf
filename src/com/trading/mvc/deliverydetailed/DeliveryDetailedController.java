@@ -107,6 +107,10 @@ public class DeliveryDetailedController extends BaseController {
 		
 		System.out.println(b);
 	}
+
+	public void updateState() throws Exception {
+		deliveryDetailedService.updateState(DeliveryDetailed.table_name, getPara() == null ? ids : getPara());
+	}
 	
 	/**
 	 * trading/deliveryDetailed/procurementToExcel

@@ -92,7 +92,13 @@
 	
 	<sql id="countFlagNo">
 		<![CDATA[
-			SELECT COUNT(*) as count FROM b_trading_salessettlement where flag = ?
+			SELECT COUNT(*) as count 
+			FROM 
+			b_trading_salessettlement 
+			where 1=1
+			<% if(!isEmpty(flagNo)){ %>
+				and flag like #'%$flagNo$%'# 
+			<% } %>
     	]]>
 	</sql>
 </sql-statement>

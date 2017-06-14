@@ -25,6 +25,12 @@
 						</h4>
 					</div>
 					<div class="widget-body form switch-form">
+						合同月份
+						<input type="text" id="contractMonth" class="Wdate" name="_query.contractMonth" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["contractMonth"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})">
+					
 						发票号
 						<input class="medium" maxlength="8" type="text" name="_query.invoiceNo" value='${escapeHtml(splitPage.queryParam["invoiceNo"])}' >
 						

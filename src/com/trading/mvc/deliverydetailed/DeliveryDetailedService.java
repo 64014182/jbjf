@@ -18,6 +18,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Service;
 import com.platform.dto.SplitPage;
+import com.platform.mvc.base.BaseModel;
 import com.platform.mvc.base.BaseService;
 import com.platform.mvc.iedtd.Iedtd;
 import com.platform.tools.ToolDateTime;
@@ -123,6 +124,18 @@ public class DeliveryDetailedService extends BaseService {
 		splitPage.setTotalRow(page.getTotalRow());
 		splitPage.setList(page.getList());
 		splitPage.compute();
+	}
+
+	public void updateState(String table, String ids) {
+		String sqlIn = sqlIn(ids);
+
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("table", table);
+		param.put("sqlIn", sqlIn);
+
+		String sql = getSqlByBeetl(BaseModel.sqlId_deleteIn, param);
+
+		Db.use().update(sql);
 	}
 
 }
