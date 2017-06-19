@@ -19,6 +19,13 @@
     	]]>
 	</sql>
 	
+	<!-- 通用查询 -->
+	<sql id="selectDeliverydetailedIn">
+		<![CDATA[ 
+        	select * from b_trading_deliverydetailed where ids in( ${sqlIn} )
+    	]]>
+	</sql>
+	
 	<sql id="selectPurchase">
 		<![CDATA[ 
 			SELECT

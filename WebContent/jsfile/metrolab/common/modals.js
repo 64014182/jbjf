@@ -374,6 +374,42 @@ var common_modals = function() {
 		}
 	}
 	
+	/**
+	 * 追溯
+	 */
+	var trace = function(url,tableId){
+		if(tableId != undefined && tableId != null){
+			if(url.indexOf("?") == -1){
+				url = url + "?localePram=" + localePram;
+			}else{
+				url = url + "&localePram=" + localePram;
+			}
+			var ids = "";
+			$("#" + tableId + " input[name='checkIds']").each(function(index){
+				if($(this)[0].checked == true){
+					ids += $(this).val() + ",";
+				}
+		    });
+			if (ids == "") {
+				toastr.error("必须选择至少一条记录！");
+				return;
+			}
+			url+="&ids=" + encodeURI(encodeURI(ids));
+			myDialog = dialog({
+				align: 'bottom',
+				title: "追溯",
+			    icon: 'succeed',
+			});
+			$.ajax({
+			    url: url,
+			    success: function (data) {
+			        myDialog.content(data);// 填充对话框内容
+			    },
+			});
+			myDialog.showModal(document.getElementById('header'));
+		}
+	}
+	
 	var modal = function(button){
 		var table = $(button).attr("data-table");
 		var url = $(button).attr("data-url");
@@ -487,6 +523,7 @@ var common_modals = function() {
 		salesSettlementSummary:salesSettlementSummary,
 		modal:modal,
 		closeDialog:closeDialog,
+		trace:trace,
 	};
 	
 }(); 

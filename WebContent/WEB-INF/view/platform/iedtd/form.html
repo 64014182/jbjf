@@ -1,15 +1,22 @@
 <div class="control-group">
-	<label class="control-label">索引字</label>
+	<label class="control-label">名称</label>
 	<div class="controls">
-		<input type="text" name="iedtd.indexkey" value="${escapeHtml(iedtd.indexkey!)}" 
-			class="span8" maxlength="64" vMin="1" vType="length" onblur="platform_verify.onblurVali(this);" placeholder="1-64位字母数字">
+		<input type="text" name="iedtd.name" value="${escapeHtml(iedtd.name!)}"  class="span8" >
 		<span class="help-inline"></span>
 	</div>
 </div>
 
+<div class="control-group">
+	<label class="control-label">索引字</label>
 	<div class="controls">
-		<textarea class="span8 " rows="10" name="iedtd.intoDbSQL">${escapeHtml(iedtd.intoDbSQL!)}</textarea>
+		<input type="text" name="iedtd.indexkey" value="${escapeHtml(iedtd.indexkey!)}" class="span8">
+		<span class="help-inline"></span>
 	</div>
+</div>
+
+<div class="controls">
+	<textarea class="span8 " rows="10" name="iedtd.intoDbSQL">${escapeHtml(iedtd.intoDbSQL!)}</textarea>
+</div>
 
 <!-- <div class="control-group"> -->
 <!--     <label class="control-label">Excel文件</label> -->

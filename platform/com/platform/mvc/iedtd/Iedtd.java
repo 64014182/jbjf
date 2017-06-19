@@ -45,6 +45,12 @@ public class Iedtd extends BaseModel<Iedtd> {
 	public static final String column_intoDbSQL = "intoDbSQL";
 	
 	/**
+	 * 字段描述：插入表的SQL语句 : 插入表的SQL语句 
+	 * 字段类型：varchar(8192)  长度：8192
+	 */
+	public static final String column_name = "name";
+	
+	/**
 	 * 字段描述：EXCEL列数，逗号分隔 : EXCEL列数，逗号分隔 
 	 * 字段类型：varchar(1024)  长度：1024
 	 */
@@ -61,6 +67,7 @@ public class Iedtd extends BaseModel<Iedtd> {
 	private String indexkey;
 	private String intoDbSQL;
 	private String excelDataColNo;
+	private String name;
 	
 	public void setIds(String ids){
 		set(column_ids, ids);
@@ -86,5 +93,10 @@ public class Iedtd extends BaseModel<Iedtd> {
 	public String getExcelDataColNo() {
 		return get(column_excelDataColNo);
 	}
-	
+	public void setName(String name){
+		set(column_name, name);
+	}
+	public String getName() {
+		return get(column_name);
+	}
 }

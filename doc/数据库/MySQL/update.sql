@@ -17,13 +17,15 @@ ALTER TABLE b_trading_salessettlement add salesOrderNo varchar(256) COMMENT '销
 ALTER TABLE b_trading_deliverydetailed add state varchar(1) COMMENT '状态 0-未入库 1-已入库 2-已出库';
 ALTER TABLE b_trading_deliverydetailed add inNo varchar(128) COMMENT '入库号';
 ALTER TABLE b_trading_deliverydetailed add outNo varchar(128) COMMENT '出库号';
-
-SELECT ids FROM `pt_module` where `names` = '销售结算';
+ALTER TABLE b_trading_deliverydetailed add traceRange varchar(128) COMMENT '追溯幅度';
+ALTER TABLE b_trading_deliverydetailed add pricetax varchar(128) COMMENT '价税合计';
+ALTER TABLE b_trading_deliverydetailed add traceInvoceNo varchar(128) COMMENT '追溯发票号';
 
 权限添加
 添加发票 /trading/salesSettlement/add1.html
 开发票  /trading/salesSettlement/summary
-
+出库   /trading/deliveryDetailed/out
+入库   /trading/deliveryDetailed/in
 
 
 

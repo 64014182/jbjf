@@ -123,13 +123,13 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	public static final String column_privateLine = "privateLine";
 	
 	/**
-	 * 字段描述：追溯单价差额 
+	 * 字段描述：追溯金额 
 	 * 字段类型：varchar(1024)  长度：1024
 	 */
 	public static final String column_gapPrice = "gapPrice";
 	
 	/**
-	 * 字段描述：追溯单价 
+	 * 字段描述：追溯税额 
 	 * 字段类型：varchar(1024)  长度：1024
 	 */
 	public static final String column_dvPrice = "dvPrice";
@@ -164,6 +164,18 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	 */
 	public static final String column_outNo = "outNo";
 	
+	/**
+	 * 字段描述：追溯幅度 
+	 * 字段类型：varchar(128)  长度：128
+	 */
+	public static final String column_traceRange = "traceRange";
+	
+	/**
+	 * 字段描述：价税合计 
+	 * 字段类型：varchar(128)  长度：128
+	 */
+	public static final String column_pricetax = "pricetax";
+	
 	
 	/**
 	 * sqlId : trading.deliveryDetailed.splitPageFrom
@@ -171,6 +183,11 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	 */
 	public static final String sqlId_splitPageFrom = "trading.deliveryDetailed.splitPageFrom";
 
+	/**
+	 * sqlId : trading.deliveryDetailed.splitPageFrom
+	 * 描述：分页from
+	 */
+	public static final String sqlId_splitPageSelect = "trading.deliveryDetailed.splitPageSelect";
 	private String ids;
 	private String orderItemNo;
 	private String contractMonth;
@@ -194,6 +211,8 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	private String state;
 	private String inNo;
 	private String outNo;
+	private String traceRange;
+	private String pricetax;
 	
 	public void setIds(String ids){
 		set(column_ids, ids);
@@ -332,6 +351,18 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	}
 	public String getOutNo() {
 		return get(column_outNo);
+	}
+	public void setTraceRange(String traceRange){
+		set(column_traceRange, traceRange);
+	}
+	public String getTraceRange() {
+		return get(column_traceRange);
+	}
+	public void setPricetax(String pricetax){
+		set(column_pricetax, pricetax);
+	}
+	public String getPricetax() {
+		return get(column_pricetax);
 	}
 	
 }

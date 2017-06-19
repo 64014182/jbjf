@@ -33,8 +33,17 @@
 		<% if(!isEmpty(contractMonth)){ %>
 			and dd.contractMonth like #'%$contractMonth$%'#
 		<% } %>
+		<% if(!isEmpty(tag)){ %>
+			and dd.tag like #'%$tag$%'#
+		<% } %>
 		<% if(!isEmpty(hasSet)){ %>
 			and dd.hasSet like #'%$hasSet$%'#
+		<% } %>
+		<% if(!isEmpty(orderUnit)){ %>
+			and bto.name like #'%$orderUnit$%'#
+		<% } %>
+		<% if(!isEmpty(state)){ %>
+			and dd.state like #'%$state$%'#
 		<% } %>
     	]]>
 	</sql>
@@ -93,6 +102,20 @@
 	<sql id="procurementSum">
 		<![CDATA[ 
         	SELECT sum(quantity) as quantitySum,SUM(weight) as weightSum FROM b_trading_deliverydetailed where ids IN ( ${sqlIn} );
+    	]]>
+	</sql>
+	
+	<!-- 通用更新 -->
+	<sql id="updateStateIn">
+		<![CDATA[ 
+        	update ${table} set state = ? , inNo = ? where ids in( ${sqlIn} )
+    	]]>
+	</sql>
+	
+	<!-- 通用更新 -->
+	<sql id="updateStateOut">
+		<![CDATA[ 
+        	update ${table} set state = ? , outNo = ? where ids in( ${sqlIn} )
     	]]>
 	</sql>
 </sql-statement>

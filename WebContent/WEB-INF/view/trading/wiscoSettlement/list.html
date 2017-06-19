@@ -145,6 +145,11 @@
 								<i class="icon-edit"></i>
 								Excel导入
 							</button> 
+							<button type="button" class="btn btn-success" 
+								onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoWiscoSettlement2&action=/trading/wiscoSettlement/excelIn');">
+								<i class="icon-edit"></i>
+								非武钢Excel导入
+							</button> 
 							<button type="button" class="btn btn-danger" 
 								onclick='platform_windows.openSelectTable("${cxt!}/trading/wiscoSettlement/summary", "dataTable");'>
 								<i class="icon-share"></i>
@@ -188,17 +193,17 @@
 									<td>
 										<% if(entity["hasconfirm"] == "0"){ %>
 											<a href="#" 
-														data-table="dataTable" 
-														data-url="${cxt!}/trading/wiscoSettlement/settFromDialog?csrfToken=${csrfToken!}"
-														onclick="common_modals.seltt(this,'${escapeHtml(entity['settlementNo']!)}')">
-														${escapeHtml(entity["settlementNo"]!)}
-														</a>
+												data-table="dataTable" 
+												data-url="${cxt!}/trading/wiscoSettlement/settFromDialog?csrfToken=${csrfToken!}"
+												onclick="common_modals.seltt(this,'${escapeHtml(entity['settlementNo']!)}')">
+												${escapeHtml(entity["settlementNo"]!)}
+											</a>
 										<% }else{ %>
 											<span class="label label-success">${escapeHtml(entity["settlementNo"]!)}</span>
 										<% } %>
 									</td>
 									<td>${escapeHtml(entity["orderItemNo"]!)}</td>
-									<td>${escapeHtml(entity["orderUnit"]!)}</td>
+									<td class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</td>
 									<td>${escapeHtml(entity["pName"]!)}</td>
 									<td>${escapeHtml(entity["weight"]!)}</td>
 									<td>${escapeHtml(entity["price"]!)}</td>

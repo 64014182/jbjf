@@ -103,12 +103,34 @@ public class WiscoSettlementController extends BaseController {
 		render("/trading/wiscoSettlement/settFromDialog.html");
 	}
 	
+	/**
+	 * 追溯弹出框
+	 * @throws Exception
+	 */
+	public void traceDialog() {
+		setAttr("selIds", ids);
+		render("/trading/wiscoSettlement/traceDialog.html");
+	}
+	
+	/**
+	 * 追溯
+	 */
+	public void trace(){
+		String selIds = getPara("selIds");				//所选结算明细
+		String invoiceNo = getPara("invoiceNo");		//追溯发票号
+		String traceRange = getPara("traceRange");		//追溯幅度
+		String docNo = getPara("docNo");
+		
+		wiscoSettlementService.saveTrace(selIds,invoiceNo,traceRange,docNo);
+		redirect("/trading/wiscoSettlement");
+	}
+	
 	public void excelIn() throws Exception{
 		UploadFile uploadFile = getFile();
 		String indexKey = getPara("indexKey");
 		int countRecords = wiscoSettlementService.saveExcelDatas(uploadFile,indexKey);
 		setAttr("countRecords", countRecords);
-		redirect("/trading/wiscoSettlement");
+		redirect("/trading/deliveryDetailed/");
 	}
 	
 	public void saveSalesSetl()  {

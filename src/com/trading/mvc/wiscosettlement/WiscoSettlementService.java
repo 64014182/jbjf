@@ -25,6 +25,7 @@ import com.platform.tools.ToolDateTime;
 import com.platform.tools.ToolExcel;
 import com.platform.tools.ToolFreemarkParse;
 import com.platform.tools.code.handler.BaseHandler;
+import com.trading.mvc.deliverydetailed.DeliveryDetailed;
 import com.trading.mvc.manufacturer.Manufacturer;
 import com.trading.mvc.poci.Poci;
 import com.trading.mvc.salesorder.SalesOrder;
@@ -226,7 +227,7 @@ public class WiscoSettlementService extends BaseService {
 	}
 	
 	private BigDecimal getBit() {
-		return new BigDecimal(1.17d);
+		return new BigDecimal("1.17");
 	}
 
 	public void saveSalesSettleOther(SalesSettlement ss){
@@ -403,5 +404,69 @@ public class WiscoSettlementService extends BaseService {
 		so.setManufacturer(m.getIds());
 		so.save();
 		return so;
-	} 
+	}
+
+	/**
+	 * 追溯
+	 * @param selIds
+	 * @param invoiceNo
+	 * @param traceRange
+	 */
+	public void saveTrace(String selIds, String invoiceNo, String traceRange,String docNo) {
+		String sqlIn = sqlIn(selIds);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("sqlIn", sqlIn);
+		String sql = getSqlByBeetl("trading.wiscoSettlement.selectDeliverydetailedIn", param);
+		
+		List<DeliveryDetailed> list = DeliveryDetailed.dao.find(sql);
+		BigDecimal bTraceRange = getBigDecimal(traceRange);
+		
+		//总重量
+		BigDecimal totalWeight = new BigDecimal(0l); 
+		//总金额
+		BigDecimal totalGapPrice = new BigDecimal(0l);
+		//总税额
+		BigDecimal totalPrice = new BigDecimal(0l);
+		//总价税合计
+		BigDecimal totalPriceTax = new BigDecimal(0l);
+		String timeStamp = ToolDateTime.getCurrent("yyMMddHHmmss");
+		
+		for (DeliveryDetailed dd : list) {
+			String weight = dd.getWeight();
+			BigDecimal bWeight = getBigDecimal(weight);
+			totalWeight = totalWeight.add(bWeight);
+			
+			//追溯金额 = 追溯幅度 * 重量 / 1.17
+			BigDecimal gapPrice = bTraceRange.multiply(bWeight).divide(getBit(), 2, BigDecimal.ROUND_HALF_UP);  
+			dd.setGapPrice(gapPrice.toString());
+			totalGapPrice = totalGapPrice.add(gapPrice);
+			
+			//追溯税额 = 追溯金额 * 0.17
+			BigDecimal dvPrice = gapPrice.multiply(new BigDecimal("0.17")).setScale(2, BigDecimal.ROUND_HALF_UP);;   
+			dd.setDvPrice(dvPrice.toString());
+			totalPrice = totalPrice.add(dvPrice);
+			
+			//价税合计 = 追溯金额 + 税额
+			BigDecimal bPriceTax = gapPrice.add(dvPrice);					
+			dd.setPricetax(bPriceTax.toString());
+			totalPriceTax = totalPriceTax.add(bPriceTax);
+			
+			dd.setHasSet("1");
+			dd.setTraceRange(traceRange);
+			dd.setDocNo(docNo);
+			dd.update();
+		}
+		
+		WiscoSettlement ws = new WiscoSettlement();
+		ws.setSettlementNo("ZS" + timeStamp);
+		ws.setWeight(totalWeight.toString());
+		ws.setLoan(totalGapPrice.toString());
+		ws.setTax(totalPrice.toString());
+		ws.setInvoice(invoiceNo);
+		ws.save();
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(new BigDecimal("1.17"));
+	}
 }

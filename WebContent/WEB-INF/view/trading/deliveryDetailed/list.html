@@ -45,6 +45,12 @@
 						订单项次编号
 						<input class="medium" type="text" name="_query.orderItemNo" value='${escapeHtml(splitPage.queryParam["orderItemNo"])}' maxlength="50">
 						
+						标签
+						<input class="medium" type="text" name="_query.tag" value='${escapeHtml(splitPage.queryParam["tag"])}' maxlength="50">
+					
+						订货单位
+						<input class="medium" type="text" name="_query.orderUnit" value='${escapeHtml(splitPage.queryParam["orderUnit"])}' maxlength="50">
+						
 						销售订单号
 						<input class="medium" type="text" name="_query.salesOrderNo" value='${escapeHtml(splitPage.queryParam["salesOrderNo"])}' maxlength="50">
 						
@@ -55,6 +61,13 @@
 							<option value="0" ${splitPage.queryParam["hasSet"]! == "0" ? "selected='selected'":"" }>未结</option>
 						</select>
 						
+						库存
+						<select name="_query.state" class="input-small m-wrap" tabindex="1">
+							<option></option>
+							<option value="0" ${splitPage.queryParam["state"]! == "0" ? "selected='selected'":"" }>未入库</option>
+							<option value="1" ${splitPage.queryParam["state"]! == "1" ? "selected='selected'":"" }>入库</option>
+							<option value="2" ${splitPage.queryParam["state"]! == "2" ? "selected='selected'":"" }>出库</option>
+						</select>
 						
 						合同月份
 						<input type="text" id="mon" class="Wdate" name="_query.contractMonth" readonly="readonly" 
@@ -95,14 +108,17 @@
 							</button> 
 							<% } %>
 							
-							<button type="button" class="btn btn-info" 
-								onclick='platform_windows.openSelectTable("${cxt!}/trading/deliveryDetailed/pPut", "dataTable");'>
+							<button type="button" class="btn btn-success" onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoDeliveryDetailed2&action=/trading/deliveryDetailed/excelInport');">
+								<i class="icon-edit"></i>
+								非武钢Excel导入
+							</button> 
+							
+							<button type="button" class="btn btn-info" data-table="dataTable" data-url="/trading/deliveryDetailed/in?csrfToken=${csrfToken!}" onclick="common_modals.deleteList(this)">	
 								<i class="icon-download-alt"></i>
 								入库
 							</button>
 							
-							<button type="button" class="btn btn-inverse" 
-								onclick='platform_windows.openSelectTable("${cxt!}/trading/deliveryDetailed/pPut", "dataTable");'>
+							<button type="button" class="btn btn-info" data-table="dataTable" data-url="/trading/deliveryDetailed/out?csrfToken=${csrfToken!}" onclick="common_modals.deleteList(this)">
 								<i class="icon-external-link"></i>
 								出库
 							</button>
@@ -124,6 +140,12 @@
 								<i class="icon-share"></i>
 								收货单导出
 							</button>
+							
+							<button type="button" class="btn btn-info"
+								onclick="common_modals.trace('${cxt!}/trading/wiscoSettlement/traceDialog','dataTable')">
+								<i class="icon-retweet"></i>
+								追溯
+							</button>
 						</span>
 
                        	<div class="space15"></div>
@@ -144,7 +166,10 @@
 									<th>订货单位</th>
 									<th>订货价格</th>
 									<th>销售加价</th>
-									<th>追溯结算</th>
+<!-- 									<th>追溯结算</th> -->
+<!-- 									<th>入库号</th> -->
+									<th>结算</th>
+									<th>库</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -170,16 +195,36 @@
 											<span class="label label-success">是</span>
 										<% } %>
 									</td>
+<!-- 									<td>${entity.ids!}</td> -->
+<!-- 									<td>${escapeHtml(entity["outNo"]!)}</td> -->
+									<td>
+										<% if(entity["state"] == null){ %>
+											<span class="label label-default">未入库</span>
+										<% }else if(entity["state"] == "1"){ %>
+											<span class="label label-success">入库</span>
+										<% }else if(entity["state"] == "2"){ %>
+											<span class="label label-warning">出库</span>
+										<% } %>
+									</td>
 								</tr>
 								<tr>
-									<td colspan="12">
+									<td colspan="14">
+									追溯幅度:${escapeHtml(entity["traceRange"]!)}&nbsp&nbsp&nbsp
+									追溯税额：${escapeHtml(entity["dvPrice"]!)}&nbsp&nbsp&nbsp
+									追溯金额：${escapeHtml(entity["gapPrice"]!)}&nbsp&nbsp&nbsp
+									价税合计：${escapeHtml(entity["pricetax"]!)}&nbsp&nbsp&nbsp
+									追溯文号：${escapeHtml(entity["docNo"]!)}&nbsp&nbsp&nbsp
+									追溯发票号：${escapeHtml(entity["traceInvoceNo"]!)}&nbsp&nbsp&nbsp
+									<br>
+									
+									入库号：${escapeHtml(entity["inNo"]!)}&nbsp&nbsp&nbsp
+									出库号：${escapeHtml(entity["outNo"]!)}&nbsp&nbsp&nbsp
+									<br>
+									
 									运费：${escapeHtml(entity["freight"]!)}&nbsp&nbsp&nbsp
 									代收铁运保险费：${escapeHtml(entity["railwayTIP"]!)}&nbsp&nbsp&nbsp
 									代收水运保险费：${escapeHtml(entity["waterTIP"]!)}&nbsp&nbsp&nbsp
 									代办运输延伸费：${escapeHtml(entity["extensionFreight"]!)}&nbsp&nbsp&nbsp
-									追溯价格：${escapeHtml(entity["dvPrice"]!)}&nbsp&nbsp&nbsp
-									追溯单价差额：${escapeHtml(entity["gapPrice"]!)}&nbsp&nbsp&nbsp
-									追溯文号：${escapeHtml(entity["docNo"]!)}&nbsp&nbsp&nbsp
 									到站(港口)名称：${escapeHtml(entity["destination"]!)}&nbsp&nbsp&nbsp
 									专用线：${escapeHtml(entity["privateLine"]!)}&nbsp&nbsp&nbsp
 									</td>

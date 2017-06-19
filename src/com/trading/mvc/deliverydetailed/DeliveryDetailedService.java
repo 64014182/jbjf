@@ -18,7 +18,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Service;
 import com.platform.dto.SplitPage;
-import com.platform.mvc.base.BaseModel;
 import com.platform.mvc.base.BaseService;
 import com.platform.mvc.iedtd.Iedtd;
 import com.platform.tools.ToolDateTime;
@@ -40,8 +39,7 @@ public class DeliveryDetailedService extends BaseService {
 		String insertSql = iedtd.getIntoDbSQL();
 
 		// 读取EXCEL文件数据
-		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), "Sheet1", 3, true,
-				ToolExcel.getColNo(columnsNo));
+		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), "Sheet1", 3, true,ToolExcel.getColNo(columnsNo));
 
 //		// 添加价格 生产厂家 等数据到EXCLE行
 //		String[] lows = null;
@@ -126,16 +124,30 @@ public class DeliveryDetailedService extends BaseService {
 		splitPage.compute();
 	}
 
-	public void updateState(String table, String ids) {
+	public void updateState(String table, String ids, String state) {
 		String sqlIn = sqlIn(ids);
 
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("table", table);
 		param.put("sqlIn", sqlIn);
 
-		String sql = getSqlByBeetl(BaseModel.sqlId_deleteIn, param);
+		String sql = "";
+		String no = ToolDateTime.getCurrent("yyMMddhhss");
 
-		Db.use().update(sql);
+		if (state.equals("1")) {
+			no = "R" + no;
+			sql = getSqlByBeetl("trading.deliveryDetailed.updateStateIn", param);
+		} else if (state.equals("2")) {
+			sql = getSqlByBeetl("trading.deliveryDetailed.updateStateOut", param);
+			no = "C" + no;
+		}else{
+			throw new RuntimeException("updateState: " + state + "非法输入！");
+		}
+		Db.use().update(sql, state, no);
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 
 }

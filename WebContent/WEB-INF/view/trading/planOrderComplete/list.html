@@ -14,7 +14,7 @@
 						<li class="active">贸易功能</li>
 						<span class="divider">/</span>
 					</li>
-					<li class="active">订单计划完成情况</li>
+					<li class="active">采购计划</li>
 				</ul>
 			</div>
 		</div>
@@ -74,8 +74,14 @@
 							<button type="button" class="btn btn-success" 
 									onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=PlanOrderCompleteExcel&action=/trading/planOrderComplete/saveExcelData');">
 								<i class="icon-edit"></i>
-								Excel导入
+								武钢Excel导入
 							</button> 
+							
+							<button type="button" class="btn btn-success" 
+									onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=PlanOrderCompleteExcel2&action=/trading/planOrderComplete/saveExcelData');">
+								<i class="icon-edit"></i>
+								非武钢Excel导入
+							</button>
 							<% } %>
 						</span>
 

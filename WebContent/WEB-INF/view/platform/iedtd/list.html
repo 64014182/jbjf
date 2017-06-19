@@ -87,9 +87,8 @@
 									<th style="width: 8px;">
 										<input type="checkbox" class="group-checkable" name="checkAll" onchange="common_common.checkFunc('dataTable', this.checked);" class="flat-grey selectall">
 									</th>
-									<th class="hidden-phone" onclick="common_splitPage.orderbyFun('main-content', 'splitPage', 'title')">
-										索引字 
-									</th>
+									<th>名称</th>
+									<th>索引字 </th>
 									<th class="hidden-phone">${i18nMap["admin.common.operation"]}</th>
 								</tr>
 							</thead>
@@ -98,6 +97,9 @@
 								<tr class="odd gradeX">
 									<td>
 										<input type="checkbox" class="checkboxes" name="checkIds" value="${iedtd.ids!}" class="flat-grey foocheck">
+									</td>
+									<td class="hidden-phone">
+										${escapeHtml(iedtd["name"]!)}
 									</td>
 									<td class="hidden-phone">
 										${escapeHtml(iedtd["indexkey"]!)}

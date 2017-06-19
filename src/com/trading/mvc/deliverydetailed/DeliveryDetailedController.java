@@ -35,9 +35,7 @@ public class DeliveryDetailedController extends BaseController {
 	 */
 	public void index() {
 //		setCurDateToQueryParam("contractMonth", ToolDateTime.pattern_yymm);
-		String[] tags = getParaMap().get("_query.tag");
-		deliveryDetailedService.pagin(ConstantInit.db_dataSource_main, splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom,tags);
-		//paging(ConstantInit.db_dataSource_main, splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom);
+		paging(ConstantInit.db_dataSource_main, splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom);
 		render("/trading/deliveryDetailed/list.html");
 	}
 	
@@ -108,8 +106,14 @@ public class DeliveryDetailedController extends BaseController {
 		System.out.println(b);
 	}
 
-	public void updateState() throws Exception {
-		deliveryDetailedService.updateState(DeliveryDetailed.table_name, getPara() == null ? ids : getPara());
+	public void in() throws Exception {
+		deliveryDetailedService.updateState(DeliveryDetailed.table_name, getPara() == null ? ids : getPara(), "1");
+		forwardAction("/trading/deliveryDetailed/backOff");
+	}
+	
+	public void out() throws Exception {
+		deliveryDetailedService.updateState(DeliveryDetailed.table_name, getPara() == null ? ids : getPara(), "2");
+		forwardAction("/trading/deliveryDetailed/backOff");
 	}
 	
 	/**
