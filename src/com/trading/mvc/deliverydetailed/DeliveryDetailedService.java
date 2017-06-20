@@ -33,7 +33,7 @@ public class DeliveryDetailedService extends BaseService {
 
 	public static final String serviceName = "deliveryDetailedService";
 
-	public void saveByExcel(UploadFile uploadFile, String sql, String indexKey) throws Exception {
+	public int saveByExcel(UploadFile uploadFile, String sql, String indexKey) throws Exception {
 		Iedtd iedtd = Iedtd.dao.findFirst(sql, indexKey);
 		String columnsNo = iedtd.getExcelDataColNo();
 		String insertSql = iedtd.getIntoDbSQL();
@@ -67,6 +67,7 @@ public class DeliveryDetailedService extends BaseService {
 //		}
 		// 保存数据
 		Db.batch(insertSql, excelData, 100);
+		return excelData.length;
 	}
 	
 	public String exportExcel(String ids,String tempfile,String genrFileName) throws Exception {

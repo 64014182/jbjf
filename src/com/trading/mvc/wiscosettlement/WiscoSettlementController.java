@@ -14,6 +14,7 @@ import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
+import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 import com.trading.mvc.salessettlement.SalesSettlement;
 
 /**
@@ -36,7 +37,7 @@ public class WiscoSettlementController extends BaseController {
 	private static final Log log = Log.getLog(WiscoSettlementController.class);
 	
 	private WiscoSettlementService wiscoSettlementService;
-	
+	private ExcelInHistoryService excelInHistoryService;
 	/**
 	 * 列表
 	 */
@@ -122,13 +123,14 @@ public class WiscoSettlementController extends BaseController {
 		String docNo = getPara("docNo");
 		
 		wiscoSettlementService.saveTrace(selIds,invoiceNo,traceRange,docNo);
-		redirect("/trading/wiscoSettlement");
+		redirect("/trading/deliveryDetailed/");
 	}
 	
 	public void excelIn() throws Exception{
 		UploadFile uploadFile = getFile();
 		String indexKey = getPara("indexKey");
 		int countRecords = wiscoSettlementService.saveExcelDatas(uploadFile,indexKey);
+		excelInHistoryService.save(uploadFile, String.valueOf(countRecords), "采购结算明细");
 		setAttr("countRecords", countRecords);
 		redirect("/trading/deliveryDetailed/");
 	}

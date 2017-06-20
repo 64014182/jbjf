@@ -8,6 +8,7 @@ import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
+import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 
 /**
  * XXX 管理	
@@ -29,7 +30,7 @@ public class DeliveryDetailedController extends BaseController {
 	private static final Log log = Log.getLog(DeliveryDetailedController.class);
 	
 	private DeliveryDetailedService deliveryDetailedService;
-	
+	private ExcelInHistoryService excelInHistoryService;
 	/**
 	 * 列表
 	 */
@@ -91,7 +92,8 @@ public class DeliveryDetailedController extends BaseController {
 		UploadFile uploadFile = getFile();
 		String indexKey = getPara("indexKey");
 		String sql = getSqlMy("platform.iedtd.getIedtdByIndexKey");
-		deliveryDetailedService.saveByExcel(uploadFile,sql,indexKey);
+		int countRecords = deliveryDetailedService.saveByExcel(uploadFile,sql,indexKey);
+		excelInHistoryService.save(uploadFile, String.valueOf(countRecords), "采购发货明细");
 		redirect("/trading/deliveryDetailed");
 	}
 	

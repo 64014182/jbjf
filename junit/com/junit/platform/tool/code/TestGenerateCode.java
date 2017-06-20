@@ -37,7 +37,7 @@ public class TestGenerateCode extends TestBase {
 	public static String[][] tableArr = {
 		//{"数据源名称", "表名称", "主键列名称", "生成类名称"}
 //		{"ConstantInit.db_dataSource_main", "test_blog", "ids", "Blog"}
-		{null, "b_trading_deliverydetailed", null, "DeliveryDetailed"},
+		{null, "b_trading_excelinhistory", null, "ExcelInHistory"},
 //		{null, "b_trading_orderunit", null, "OrderUnit"},
 		//{null, "pt_fun_gc_columnconf", null, "GcColumnConf"}
 //		{null, "pt_department", null, "Department"},

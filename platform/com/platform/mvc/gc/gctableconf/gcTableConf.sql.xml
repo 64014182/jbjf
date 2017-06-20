@@ -31,7 +31,7 @@
 			FROM
 				information_schema. TABLES
 			WHERE
-				table_schema = 'trading'
+				table_schema = 'trading1'
 			<% if(!isEmpty(name)){ %>
 					and table_name like #'%$name$%'#
 			<% } %>
@@ -45,7 +45,7 @@
 				information_schema. COLUMNS
 			WHERE 1 = 1
 				and table_name = #'$tablename$'#
-				and TABLE_SCHEMA = 'trading'
+				and TABLE_SCHEMA = 'trading1'
     	]]>
 	</sql>
 	

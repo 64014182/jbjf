@@ -12,6 +12,7 @@ import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
 import com.platform.tools.ToolDateTime;
+import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 
 /**
  * XXX 管理	
@@ -33,7 +34,7 @@ public class PlanOrderCompleteController extends BaseController {
 	private static final Log log = Log.getLog(PlanOrderCompleteController.class);
 	
 	private PlanOrderCompleteService planOrderCompleteService;
-	
+	private ExcelInHistoryService excelInHistoryService;
 	/**
 	 * 列表
 	 */
@@ -109,7 +110,8 @@ public class PlanOrderCompleteController extends BaseController {
 	public void saveExcelData() throws Exception {
 		UploadFile uploadFile = getFile();
 		String indexKey = getPara("indexKey");
-		planOrderCompleteService.savePlanOrders(uploadFile,indexKey);
+		int count = planOrderCompleteService.savePlanOrders(uploadFile,indexKey);
+		excelInHistoryService.save(uploadFile, String.valueOf(count), "采购计划");
 		redirect("/trading/planOrderComplete/");
 	}
 	

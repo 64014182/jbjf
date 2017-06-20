@@ -25,7 +25,7 @@ public class PlanOrderCompleteService extends BaseService {
 	
 	public static final String serviceName = "planOrderCompleteService";
 
-	public int[] savePlanOrders(UploadFile uploadFile, String indexKey) throws Exception {
+	public int savePlanOrders(UploadFile uploadFile, String indexKey) throws Exception {
 		String sql = getSqlMy("platform.iedtd.getIedtdByIndexKey");
 		Iedtd iedtd = Iedtd.dao.findFirst(sql, indexKey);
 		String columnsNo = iedtd.getExcelDataColNo();
@@ -48,8 +48,8 @@ public class PlanOrderCompleteService extends BaseService {
 		pociList.addAll(pociMap.values());
 		Db.batchSave(pociList, 100);
 		String[][] saveDatas = addIds(eDatas);
-		int[] res = Db.batch(insertSql, saveDatas, 100);
-		return res;
+		Db.batch(insertSql, saveDatas, 100);
+		return eDatas.length;
 	}
 	
 	private String[][] addIds(String[][] eDatas) {

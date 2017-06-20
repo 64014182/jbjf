@@ -435,20 +435,20 @@
    <#list entitys as entity>
    <Row ss:AutoFitHeight="0" ss:Height="15">
     <Cell ss:StyleID="s86"><Data ss:Type="Number">${entity_index+1}</Data></Cell>
-    <Cell ss:StyleID="s86"><Data ss:Type="String">${entity.invoice}</Data></Cell>
-    <Cell ss:StyleID="s86"><Data ss:Type="String">${entity.pName}</Data></Cell>
-    <Cell ss:MergeAcross="1" ss:StyleID="s86"><Data ss:Type="String">${entity.orderItemNo}</Data></Cell>
-    <Cell ss:StyleID="s86"><Data ss:Type="String">${entity.grade}</Data></Cell>
-    <Cell ss:StyleID="s86"><Data ss:Type="String">${entity.specification}</Data></Cell>
-    <Cell ss:StyleID="s86"><Data ss:Type="Number">${entity.weight}</Data></Cell>
-    <Cell ss:StyleID="s91"><Data ss:Type="Number">${entity.price}</Data></Cell>
-    <Cell ss:MergeAcross="1" ss:StyleID="s90"><Data ss:Type="Number">${entity.loan}</Data></Cell>
-    <Cell ss:MergeAcross="1" ss:StyleID="s86"><Data ss:Type="Number">${entity.tax}</Data></Cell>
-    <Cell ss:StyleID="s86"><Data ss:Type="Number">${entity.taxLoad}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">${(entity.invoice)!''}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">${(entity.pName)!''}</Data></Cell>
+    <Cell ss:MergeAcross="1" ss:StyleID="s86"><Data ss:Type="String">${(entity.orderItemNo)!''}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">${(entity.grade)!''}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="String">${(entity.specification)!''}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="Number">${(entity.weight)!''}</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="Number">${(entity.price)!''}</Data></Cell>
+    <Cell ss:MergeAcross="1" ss:StyleID="s90"><Data ss:Type="Number">${(entity.loan)!''}</Data></Cell>
+    <Cell ss:MergeAcross="1" ss:StyleID="s86"><Data ss:Type="Number">${(entity.tax)!''}</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="Number">${(entity.taxLoad)!''}</Data></Cell>
     <Cell ss:MergeAcross="1" ss:StyleID="s86"><Data ss:Type="Number">0</Data></Cell>
     <Cell ss:StyleID="s86"><Data ss:Type="Number">0</Data></Cell>
-    <Cell ss:MergeAcross="1" ss:StyleID="s86"><Data ss:Type="Number">${entity.freight}</Data></Cell>
-    <Cell ss:StyleID="s94"><Data ss:Type="Number">${entity.taxLoadFreight}</Data></Cell>
+    <Cell ss:MergeAcross="1" ss:StyleID="s86"><Data ss:Type="Number">${(entity.freight)!''}</Data></Cell>
+    <Cell ss:StyleID="s94"><Data ss:Type="Number">${(entity.taxLoadFreight)!''}</Data></Cell>
     <Cell ss:MergeAcross="1" ss:StyleID="m2275548535460"><Data ss:Type="String"></Data></Cell>
    </Row>
    </#list>

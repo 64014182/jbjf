@@ -75,10 +75,11 @@ public class WiscoSettlementService extends BaseService {
 		//String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), 3, ToolExcel.getColNo(columnsNo));
 		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), "Sheet1", 3, true,ToolExcel.getColNo(columnsNo));
 		Db.batch(insertSql, excelData, 100);
-		setHasSet(excelData);
+		//setHasSet(excelData);
 		return excelData.length;
 	}
 	
+	@SuppressWarnings("unused")
 	private void setHasSet(String[][] excelData) {
 		String hasSetIds = "";
 		String ym = null;
@@ -408,9 +409,10 @@ public class WiscoSettlementService extends BaseService {
 
 	/**
 	 * 追溯
-	 * @param selIds
-	 * @param invoiceNo
-	 * @param traceRange
+	 * @param selIds  选择的发货明细编号
+	 * @param invoiceNo  发票号
+	 * @param traceRange 追溯幅度
+	 * @param docNo  追溯文号
 	 */
 	public void saveTrace(String selIds, String invoiceNo, String traceRange,String docNo) {
 		String sqlIn = sqlIn(selIds);
@@ -457,13 +459,24 @@ public class WiscoSettlementService extends BaseService {
 			dd.update();
 		}
 		
-		WiscoSettlement ws = new WiscoSettlement();
-		ws.setSettlementNo("ZS" + timeStamp);
-		ws.setWeight(totalWeight.toString());
-		ws.setLoan(totalGapPrice.toString());
-		ws.setTax(totalPrice.toString());
-		ws.setInvoice(invoiceNo);
-		ws.save();
+		if (!list.isEmpty()) {
+			WiscoSettlement ws = new WiscoSettlement();
+			ws.setSettlementNo("ZS" + timeStamp);
+			ws.setWeight(totalWeight.toString());
+			ws.setLoan(totalGapPrice.toString());
+			ws.setTax(totalPrice.toString());
+			ws.setInvoice(invoiceNo);
+			ws.save();
+			
+			SalesSettlement ss = new SalesSettlement();
+			ss.setFlag("JZ" + timeStamp);
+			ss.setWeight(totalWeight.toString());
+			ss.setGoodsAmount(totalGapPrice.toString());
+			ss.setTaxPrice(totalPrice.toString());
+			ss.setInvoiceNo(invoiceNo);
+			ss.setTotalAmount(totalPriceTax.toString());
+			ss.save();
+		}
 	}
 	
 	public static void main(String[] args) {

@@ -1,19 +1,5 @@
 <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-table-expandable/bootstrap-table-expandable.css" />
 
-<!-- <link href="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/uniform/css/uniform.default.css" /> -->
-
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/clockface/css/clockface.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/css/datepicker.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/compiled/timepicker.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/css/colorpicker.css" /> -->
-<!-- <link rel="stylesheet" href="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.css" /> -->
-<!-- <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-table-expandable/bootstrap-table-expandable.css" /> -->
-
 <form id="splitPage" action="${cxt!}/trading/deliveryDetailed" method="POST" class="form-horizontal">
 	<div class="container-fluid">
 		<div class="row-fluid">
@@ -51,10 +37,10 @@
 						订货单位
 						<input class="medium" type="text" name="_query.orderUnit" value='${escapeHtml(splitPage.queryParam["orderUnit"])}' maxlength="50">
 						
-						销售订单号
-						<input class="medium" type="text" name="_query.salesOrderNo" value='${escapeHtml(splitPage.queryParam["salesOrderNo"])}' maxlength="50">
+<!-- 						销售订单号 -->
+<!-- 						<input class="medium" type="text" name="_query.salesOrderNo" value='${escapeHtml(splitPage.queryParam["salesOrderNo"])}' maxlength="50"> -->
 						
-						追溯结算
+						追溯
 						<select name="_query.hasSet" class="input-small m-wrap" tabindex="1">
 							<option></option>
 							<option value="1" ${splitPage.queryParam["hasSet"]! == "1" ? "selected='selected'":"" }>已结</option>
@@ -168,7 +154,7 @@
 									<th>销售加价</th>
 <!-- 									<th>追溯结算</th> -->
 <!-- 									<th>入库号</th> -->
-									<th>结算</th>
+									<th>追溯</th>
 									<th>库</th>
 								</tr>
 							</thead>
@@ -245,20 +231,6 @@
 </form>
 <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-table-expandable/bootstrap-table-expandable.js"></script>
 
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.jquery.min.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/uniform/jquery.uniform.min.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/clockface/js/clockface.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.min.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/date.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script> -->
-<!-- <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.pack.js"></script> -->
 <script src="${cxt!}/ui/metrolab/js/form-component.js"></script>
 <script type="text/javascript">
 	$(function() {

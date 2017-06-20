@@ -34,6 +34,17 @@ var platform_windows = function() {
 		
 		window.open(url);
 	};
+	
+	var downLoadFile = function(url){
+		if(url != undefined && url != null){
+			if(url.indexOf("?") == -1){
+				url = url + "?localePram=" + localePram;
+			}else{
+				url = url + "&localePram=" + localePram;
+			}
+			window.open(url);
+		}
+	}
 
 	/**
 	 * 打开新窗口url，还可以指定一个form作为参数
@@ -87,6 +98,7 @@ var platform_windows = function() {
 	return {
 		close : close,
 		open : open,
+		downLoadFile : downLoadFile,
 		openSelectTable:openSelectTable
 	};
 	

@@ -21,6 +21,19 @@ ALTER TABLE b_trading_deliverydetailed add traceRange varchar(128) COMMENT '追�
 ALTER TABLE b_trading_deliverydetailed add pricetax varchar(128) COMMENT '价税合计';
 ALTER TABLE b_trading_deliverydetailed add traceInvoceNo varchar(128) COMMENT '追溯发票号';
 
+
+DROP TABLE IF EXISTS `b_trading_excelInHistory`;
+CREATE TABLE `b_trading_excelInHistory` (
+  `ids` varchar(32) COLLATE utf8_bin NOT NULL,
+  `fileName` varchar(200) DEFAULT NULL COMMENT '原文件',
+  `recordCount` varchar(200) DEFAULT NULL COMMENT '导入条数',
+  `module` varchar(200) DEFAULT NULL COMMENT '所属模块',
+  `uploadpath` varchar(200) DEFAULT NULL COMMENT '上传文件路径',
+  `uploadname` varchar(200) DEFAULT NULL COMMENT '上传文件名',
+  `saveDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '导入时间',
+  PRIMARY KEY (`ids`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 权限添加
 添加发票 /trading/salesSettlement/add1.html
 开发票  /trading/salesSettlement/summary

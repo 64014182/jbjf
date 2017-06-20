@@ -82,7 +82,13 @@ public class SalesSettlementService extends BaseService {
 		
 		String flag = list.get(0).getStr("flag");
 		data.put("entitys", list);
-		sum.set("sumWeight", sum.get("sumWeight").toString());
+		
+		if (sum.get("sumWeight") == null) {
+			sum.set("sumWeight", "0");
+		} else {
+			sum.set("sumWeight", sum.get("sumWeight").toString());
+		}
+		
 		data.put("sum", sum);
 		data.put("orderUnit", orderUnit);
 		data.put("flag", flag);
