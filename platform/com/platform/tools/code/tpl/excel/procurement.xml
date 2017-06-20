@@ -153,16 +153,16 @@
    <#list entitys as entity>
    <Row ss:AutoFitHeight="0">
     <Cell ss:StyleID="s74"><Data ss:Type="Number">${entity_index+1}</Data></Cell>
-    <Cell ss:StyleID="s75"><Data ss:Type="String">${entity.orderItemNo}</Data></Cell>
-    <Cell ss:StyleID="s75"><Data ss:Type="String">${entity.tag}</Data></Cell>
-    <Cell ss:StyleID="s75"><Data ss:Type="String">${entity.pName}</Data></Cell>
-    <Cell ss:StyleID="s75"><Data ss:Type="String">${entity.grade}</Data></Cell>
-    <Cell ss:StyleID="s76"><Data ss:Type="String">${entity.specification}</Data></Cell>
-    <Cell ss:StyleID="s76"><Data ss:Type="Number">${entity.quantity}</Data></Cell>
-    <Cell ss:StyleID="s76"><Data ss:Type="Number">${entity.weight}</Data></Cell>
-    <Cell ss:StyleID="s76"><Data ss:Type="String">${entity.manufacturer}</Data></Cell>
-    <Cell ss:StyleID="s76"><Data ss:Type="String">${entity.orderUnit}</Data></Cell>
-    <Cell ss:StyleID="s76"><Data ss:Type="String">${entity.privateLine}</Data></Cell>
+    <Cell ss:StyleID="s75"><Data ss:Type="String">${entity.orderItemNo!}</Data></Cell>
+    <Cell ss:StyleID="s75"><Data ss:Type="String">${entity.tag!}</Data></Cell>
+    <Cell ss:StyleID="s75"><Data ss:Type="String">${entity.pName!}</Data></Cell>
+    <Cell ss:StyleID="s75"><Data ss:Type="String">${entity.grade!}</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="String">${entity.specification!}</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="Number">${entity.quantity!}</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="Number">${entity.weight!}</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="String">${entity.manufacturer!}</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="String">${entity.orderUnit!}</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="String">${entity.privateLine!}</Data></Cell>
    </Row>
    </#list>
    <Row ss:AutoFitHeight="0">
@@ -172,8 +172,8 @@
     <Cell ss:StyleID="s72"/>
     <Cell ss:StyleID="s72"/>
     <Cell ss:StyleID="s72"/>
-    <Cell ss:StyleID="s72"><Data ss:Type="Number">${sum.quantitySum}</Data></Cell>
-    <Cell ss:StyleID="s72"><Data ss:Type="Number">${sum.weightSum}</Data></Cell>
+    <Cell ss:StyleID="s72"><Data ss:Type="Number">${sum.quantitySum!}</Data></Cell>
+    <Cell ss:StyleID="s72"><Data ss:Type="Number">${sum.weightSum!}</Data></Cell>
     <Cell ss:StyleID="s72"/>
     <Cell ss:StyleID="s72"/>
     <Cell ss:StyleID="s72"/>

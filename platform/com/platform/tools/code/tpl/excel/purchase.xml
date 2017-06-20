@@ -410,7 +410,7 @@
     <Cell ss:StyleID="s70"/>
    </Row>
    <Row ss:AutoFitHeight="0" ss:Height="15">
-    <Cell ss:MergeAcross="11" ss:StyleID="s71"><Data ss:Type="String">单位：${orderUnit}</Data></Cell>
+    <Cell ss:MergeAcross="11" ss:StyleID="s71"><Data ss:Type="String">单位：${orderUnit!}</Data></Cell>
     <Cell ss:MergeAcross="5" ss:StyleID="s77"><Data ss:Type="String">编号：</Data></Cell>
     <Cell ss:MergeAcross="3" ss:StyleID="m2275548545820"><Data ss:Type="String">C-201703026</Data></Cell>
    </Row>

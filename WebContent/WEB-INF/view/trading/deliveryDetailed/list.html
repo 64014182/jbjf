@@ -171,14 +171,14 @@
 									<td>${escapeHtml(entity["quantity"]!)}</td>
 									<td>${escapeHtml(entity["writeOffDate"]!)}</td>
 									<td>${escapeHtml(entity["salesOrderNo"]!)}</td>
-									<td>${escapeHtml(entity["orderUnit"]!)}</td>
+									<td class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</td>
 									<td>${escapeHtml(entity["price"]!)}</td>
 									<td>${escapeHtml(entity["salesPrice"]!)}</td>
 									<td>
 										<% if(entity["hasSet"] == "0"){ %>
-											<span class="label label-warning">否</span>
+											<span class="label label-warning trace">否</span>
 										<% }else{ %>
-											<span class="label label-success">是</span>
+											<span class="label label-success trace">是</span>
 										<% } %>
 									</td>
 <!-- 									<td>${entity.ids!}</td> -->

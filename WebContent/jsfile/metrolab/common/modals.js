@@ -384,14 +384,21 @@ var common_modals = function() {
 			}else{
 				url = url + "&localePram=" + localePram;
 			}
+			var units = new Array();
 			var ids = "";
 			$("#" + tableId + " input[name='checkIds']").each(function(index){
 				if($(this)[0].checked == true){
 					ids += $(this).val() + ",";
+					var unit = $($(".orderUniteVali")[index]).text();
+					units.push(unit);
 				}
 		    });
 			if (ids == "") {
 				toastr.error("必须选择至少一条记录！");
+				return;
+			}
+			if(!isSam(units)){
+				toastr.error("选择的数据订货单位名称不一致！");
 				return;
 			}
 			url+="&ids=" + encodeURI(encodeURI(ids));
@@ -409,7 +416,18 @@ var common_modals = function() {
 			myDialog.showModal(document.getElementById('header'));
 		}
 	}
-	
+	function isSam(units){
+		var valUnit = "";
+		if (units.length > 1) {
+			valUnit = units[0];
+			for (var i = 1; i < units.length; i++) {
+				if( valUnit != units[i]){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	var modal = function(button){
 		var table = $(button).attr("data-table");
 		var url = $(button).attr("data-url");

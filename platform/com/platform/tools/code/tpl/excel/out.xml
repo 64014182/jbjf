@@ -6,18 +6,17 @@
  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:html="http://www.w3.org/TR/REC-html40">
  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
-  <LastPrinted>2017-05-08T06:21:50Z</LastPrinted>
-  <Created>2017-05-04T05:36:42Z</Created>
-  <LastSaved>2017-05-12T02:30:10Z</LastSaved>
-  <Company>Microsoft</Company>
+  <Created>2015-06-05T18:19:34Z</Created>
+  <LastSaved>2015-06-05T18:19:39Z</LastSaved>
   <Version>16.00</Version>
  </DocumentProperties>
  <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
   <AllowPNG/>
+  <RemovePersonalInformation/>
  </OfficeDocumentSettings>
  <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
-  <WindowHeight>9570</WindowHeight>
-  <WindowWidth>21600</WindowWidth>
+  <WindowHeight>6900</WindowHeight>
+  <WindowWidth>21570</WindowWidth>
   <WindowTopX>0</WindowTopX>
   <WindowTopY>0</WindowTopY>
   <ProtectStructure>False</ProtectStructure>
@@ -25,9 +24,9 @@
  </ExcelWorkbook>
  <Styles>
   <Style ss:ID="Default" ss:Name="Normal">
-   <Alignment ss:Vertical="Center"/>
+   <Alignment ss:Vertical="Bottom"/>
    <Borders/>
-   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Font ss:FontName="等线" x:CharSet="134" ss:Size="11" ss:Color="#000000"/>
    <Interior/>
    <NumberFormat/>
    <Protection/>
@@ -36,9 +35,10 @@
    <Alignment ss:Horizontal="Center" ss:Vertical="Center"/>
   </Style>
   <Style ss:ID="s64">
-   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Alignment ss:Vertical="Center"/>
   </Style>
   <Style ss:ID="s65">
+   <Alignment ss:Vertical="Center"/>
    <Borders>
     <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
     <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/>
@@ -47,22 +47,28 @@
    </Borders>
   </Style>
  </Styles>
- <Worksheet ss:Name="出库单">
+ <Worksheet ss:Name="Sheet1">
   <Table ss:ExpandedColumnCount="9" ss:ExpandedRowCount="${entitys?size + 6}" x:FullColumns="1"
    x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
-   <Column ss:AutoFitWidth="0" ss:Width="43.5"/>
-   <Column ss:AutoFitWidth="0" ss:Width="72.75"/>
-   <Column ss:AutoFitWidth="0" ss:Width="60.75"/>
-   <Column ss:Index="5" ss:AutoFitWidth="0" ss:Width="84.75"/>
-   <Column ss:AutoFitWidth="0" ss:Width="75.75"/>
-   <Column ss:Index="8" ss:AutoFitWidth="0" ss:Width="94.5"/>
-   <Column ss:AutoFitWidth="0" ss:Width="97.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="48"/>
+   <Column ss:AutoFitWidth="0" ss:Width="79.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="70.5" ss:Span="1"/>
+   <Column ss:Index="6" ss:AutoFitWidth="0" ss:Width="85.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="88.5"/>
+   <Column ss:AutoFitWidth="0" ss:Width="232.5"/>
    <Row ss:AutoFitHeight="0">
     <Cell ss:MergeAcross="8" ss:StyleID="s63"><Data ss:Type="String">江北贸易公司销售出库单</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:StyleID="s64"><Data ss:Type="String">出库时间</Data></Cell>
-    <Cell ss:Index="7" ss:StyleID="s64"><Data ss:Type="String">出库单号</Data></Cell>
+    <Cell ss:StyleID="s64"><Data ss:Type="String">入库时间</Data></Cell>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"><Data ss:Type="String">入库单号</Data></Cell>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
    </Row>
    <Row ss:AutoFitHeight="0">
     <Cell ss:StyleID="s65"><Data ss:Type="String">序号</Data></Cell>
@@ -73,10 +79,11 @@
     <Cell ss:StyleID="s65"><Data ss:Type="String">数量</Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String">重量</Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String">拟购货单位</Data></Cell>
+    <Cell ss:StyleID="s64"/>
    </Row>
    <#list entitys as entity>
    <Row ss:AutoFitHeight="0">
-    <Cell ss:StyleID="s65"><Data ss:Type="Number">${entity_index+1}</Data></Cell>
+	<Cell ss:StyleID="s65"><Data ss:Type="Number">${entity_index+1}</Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String">${entity.tag}</Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String">${entity.pName}</Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String">${entity.grade}</Data></Cell>
@@ -84,6 +91,7 @@
     <Cell ss:StyleID="s65"><Data ss:Type="Number">${entity.quantity}</Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="Number">${entity.weight}</Data></Cell>
     <Cell ss:StyleID="s65"><Data ss:Type="String">${entity.orderUnit}</Data></Cell>
+    <Cell ss:StyleID="s64"/>
    </Row>
    </#list>
    <Row ss:AutoFitHeight="0">
@@ -92,23 +100,46 @@
     <Cell ss:StyleID="s65"/>
     <Cell ss:StyleID="s65"/>
     <Cell ss:StyleID="s65"/>
-    <Cell ss:StyleID="s65"><Data ss:Type="Number">${sum.quantitySum}</Data></Cell>
-    <Cell ss:StyleID="s65"><Data ss:Type="Number">${sum.weightSum}</Data></Cell>
     <Cell ss:StyleID="s65"/>
+    <Cell ss:StyleID="s65"/>
+    <Cell ss:StyleID="s65"/>
+    <Cell ss:StyleID="s64"/>
    </Row>
-   <Row ss:Index="7" ss:AutoFitHeight="0">
-    <Cell><Data ss:Type="String">审核</Data></Cell>
-    <Cell ss:Index="5"><Data ss:Type="String">仓储管理</Data></Cell>
-    <Cell ss:Index="8"><Data ss:Type="String">销售员</Data></Cell>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s64"><Data ss:Type="String">审核</Data></Cell>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"><Data ss:Type="String">仓储管理</Data></Cell>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"/>
+    <Cell ss:StyleID="s64"><Data ss:Type="String">销售员</Data></Cell>
+    <Cell ss:StyleID="s64"/>
    </Row>
   </Table>
   <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
    <Unsynced/>
    <Selected/>
    <Panes>
     <Pane>
      <Number>3</Number>
-     <ActiveRow>10</ActiveRow>
+     <ActiveRow>15</ActiveRow>
      <ActiveCol>7</ActiveCol>
     </Pane>
    </Panes>

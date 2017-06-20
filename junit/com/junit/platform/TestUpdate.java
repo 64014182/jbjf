@@ -16,7 +16,7 @@ public class TestUpdate extends TestBase {
 		int updateSuccCount = 0;
 		
 		String sql = "SELECT ids,wiscoSettlementIds FROM b_trading_salessettlement";
-		String update = "UPDATE b_trading_salessettlement SET pName = ?, grade = ?, specification = ?, weight = ? WHERE ids = ?";
+		String update = "UPDATE b_trading_salessettlement SET pName = ?, grade = ?, specification = ?, weight = ?,orderItemNo=?,contractMonth=? WHERE ids = ?";
 		List<Record> tbss = Db.find(sql);
 		for (Record r : tbss) {
 			String ids = r.getStr("ids");
@@ -27,7 +27,9 @@ public class TestUpdate extends TestBase {
 				String grade = r1.getStr("grade");
 				String specification = r1.getStr("specification");
 				String weight = r1.getStr("weight");
-				int i = Db.update(update, pName, grade, specification, weight, ids);
+				String orderItemNo = r1.getStr("orderItemNo");
+				String contractMonth = r1.getStr("contractMonth");
+				int i = Db.update(update, pName, grade, specification, weight, orderItemNo, contractMonth, ids);
 				updateSuccCount = updateSuccCount + i;
 			}
 		}
