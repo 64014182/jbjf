@@ -103,13 +103,13 @@
 						<span class="tools"> 
 							
 							<% if(excelIn == true){ %>
-							<button type="button" class="btn btn-success" onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoDeliveryDetailed&action=/trading/deliveryDetailed/excelInport');">
+							<button type="button" class="btn btn-success" onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoDeliveryDetailed&action=/trading/deliveryDetailed/excelInport&dtype=1');">
 								<i class="icon-edit"></i>
 								Excel导入
 							</button> 
 							<% } %>
 							
-							<button type="button" class="btn btn-success" onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoDeliveryDetailed2&action=/trading/deliveryDetailed/excelInport');">
+							<button type="button" class="btn btn-success" onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoDeliveryDetailed2&action=/trading/deliveryDetailed/excelInport&dtype=2');">
 								<i class="icon-edit"></i>
 								非武钢Excel导入
 							</button> 
@@ -178,6 +178,7 @@
 									<th>追溯</th>
 									<th>结算</th>
 									<th>库</th>
+									<th>类型</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -219,11 +220,18 @@
 									</td>
 									<td>
 										<% if(entity["state"] == '0'){ %>
-											<span class="label label-default">未入库</span>
+											<span class="label label-default">未</span>
 										<% }else if(entity["state"] == "1"){ %>
-											<span class="label label-success">入库</span>
+											<span class="label label-success">入</span>
 										<% }else if(entity["state"] == "2"){ %>
-											<span class="label label-warning">出库</span>
+											<span class="label label-warning">出</span>
+										<% } %>
+									</td>
+									<td>
+										<% if(entity["dtype"] == "1"){ %>
+											<span class="label label-warning trace">武</span>
+										<% }else if(entity["dtype"] == "2"){ %>
+											<span class="label label-success trace">非</span>
 										<% } %>
 									</td>
 								</tr>

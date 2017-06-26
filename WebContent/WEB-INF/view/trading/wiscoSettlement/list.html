@@ -132,12 +132,12 @@
 							</button> 
 							<% if(excelIn == true){ %>
 							<button type="button" class="btn btn-success" 
-								onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoWiscoSettlement&action=/trading/wiscoSettlement/excelIn');">
+								onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoWiscoSettlement&action=/trading/wiscoSettlement/excelIn&dtype=1');">
 								<i class="icon-edit"></i>
 								Excel导入
 							</button> 
 							<button type="button" class="btn btn-success" 
-								onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoWiscoSettlement2&action=/trading/wiscoSettlement/excelIn');">
+								onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoWiscoSettlement2&action=/trading/wiscoSettlement/excelIn&dtype=2');">
 								<i class="icon-edit"></i>
 								非武钢Excel导入
 							</button> 
@@ -172,6 +172,7 @@
 									<th>结算价</th>
 									<th>货款金额</th>
 									<th>税额</th>
+									<th>类型</th>
 									<th>发票号</th>
 								</tr>
 							</thead>
@@ -200,6 +201,13 @@
 									<td>${escapeHtml(entity["price"]!)}</td>
 									<td>${escapeHtml(entity["loan"]!)}</td>
 									<td>${escapeHtml(entity["tax"]!)}</td>
+									<td>
+										<% if(entity["dtype"] == "1"){ %>
+											<span class="label label-warning trace">武</span>
+										<% }else if(entity["dtype"] == "2"){ %>
+											<span class="label label-success trace">非</span>
+										<% } %>
+									</td>
 									<td>
 										<% if(entity["settlementNo"] == null){ %>
 												${escapeHtml(entity["invoice"]!)}

@@ -26,6 +26,8 @@ import com.platform.tools.ToolExcel;
 import com.platform.tools.ToolFreemarkParse;
 import com.platform.tools.code.handler.BaseHandler;
 import com.trading.mvc.BigDecimalUtils;
+import com.trading.mvc.TableUtils;
+import com.trading.mvc.TradingConst;
 import com.trading.mvc.deliverydetailed.DeliveryDetailed;
 import com.trading.mvc.manufacturer.Manufacturer;
 import com.trading.mvc.poci.Poci;
@@ -68,13 +70,14 @@ public class WiscoSettlementService extends BaseService {
 		return ws;
 	}
 
-	public int saveExcelDatas(UploadFile uploadFile, String indexKey) throws Exception {
+	public int saveExcelDatas(UploadFile uploadFile, String indexKey, String dtype) throws Exception {
 		String sql = getSqlMy("platform.iedtd.getIedtdByIndexKey");
 		Iedtd iedtd = Iedtd.dao.findFirst(sql, indexKey);
 		String columnsNo = iedtd.getExcelDataColNo();
 		String insertSql = iedtd.getIntoDbSQL();
-		//String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), 3, ToolExcel.getColNo(columnsNo));
-		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), "Sheet1", 3, true,ToolExcel.getColNo(columnsNo));
+		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), 2, ToolExcel.getColNo(columnsNo));
+		excelData = ToolExcel.addIds(excelData);
+		excelData = ToolExcel.addOther(excelData, dtype);
 		Db.batch(insertSql, excelData, 100);
 		//setHasSet(excelData);
 		return excelData.length;
@@ -432,7 +435,6 @@ public class WiscoSettlementService extends BaseService {
 		BigDecimal totalPrice = BigDecimalUtils.getBidDecimal("0"); 
 		//总价税合计
 		BigDecimal totalPriceTax = BigDecimalUtils.getBidDecimal("0"); 
-		String timeStamp = ToolDateTime.getCurrent("yyMMddHHmmss");
 		
 		for (DeliveryDetailed dd : list) {
 			String weight = dd.getWeight();
@@ -459,10 +461,15 @@ public class WiscoSettlementService extends BaseService {
 			dd.setDocNo(docNo);
 			dd.update();
 		}
+		//结算清单号
+		String no = ToolDateTime.getCurrent("yyMMdd");
 		
+		//追溯合计
 		if (!list.isEmpty()) {
 			WiscoSettlement ws = new WiscoSettlement();
-			ws.setSettlementNo("ZS" + timeStamp);
+			String sNo = TradingConst.WiscoSettlement_cz + no;
+			String settNo = TableUtils.getNo(6, "b_trading_wiscosettlement", "settlementNo", sNo);
+			ws.setSettlementNo(settNo);
 			ws.setWeight(totalWeight.toString());
 			ws.setLoan(totalGapPrice.toString());
 			ws.setTax(totalPrice.toString());
@@ -470,7 +477,9 @@ public class WiscoSettlementService extends BaseService {
 			ws.save();
 			
 			SalesSettlement ss = new SalesSettlement();
-			ss.setFlag("JZ" + timeStamp);
+			String saNo = TradingConst.WiscoSettlement_xz + no;
+			String flagNo = TableUtils.getNo(6, "b_trading_salessettlement", "flag", saNo);
+			ss.setFlag(flagNo);
 			ss.setWeight(totalWeight.toString());
 			ss.setGoodsAmount(totalGapPrice.toString());
 			ss.setTaxPrice(totalPrice.toString());

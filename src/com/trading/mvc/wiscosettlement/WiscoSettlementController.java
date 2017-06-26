@@ -130,10 +130,14 @@ public class WiscoSettlementController extends BaseController {
 	public void excelIn() throws Exception{
 		UploadFile uploadFile = getFile();
 		String indexKey = getPara("indexKey");
-		int countRecords = wiscoSettlementService.saveExcelDatas(uploadFile,indexKey);
+		String dtype = getPara("dtype");
+		if (StringUtils.isEmpty(indexKey) || StringUtils.isEmpty(dtype)) {
+			throw new RuntimeException("indexKey或dtype不能为空！");
+		}
+		int countRecords = wiscoSettlementService.saveExcelDatas(uploadFile,indexKey,dtype);
 		excelInHistoryService.save(uploadFile, String.valueOf(countRecords), "采购结算明细");
 		setAttr("countRecords", countRecords);
-		redirect("/trading/deliveryDetailed/");
+		redirect("/trading/wiscoSettlement/");
 	}
 	
 	public void saveSalesSetl()  {

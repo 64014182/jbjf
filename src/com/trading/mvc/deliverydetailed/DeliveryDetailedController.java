@@ -93,7 +93,13 @@ public class DeliveryDetailedController extends BaseController {
 		UploadFile uploadFile = getFile();
 		String indexKey = getPara("indexKey");
 		String sql = getSqlMy("platform.iedtd.getIedtdByIndexKey");
-		int countRecords = deliveryDetailedService.saveByExcel(uploadFile,sql,indexKey);
+		String dtype = getPara("dtype");
+		
+		if (StringUtils.isEmpty(indexKey) || StringUtils.isEmpty(dtype)) {
+			throw new RuntimeException("indexKey或dtype不能为空！");
+		}
+		
+		int countRecords = deliveryDetailedService.saveByExcel(uploadFile,sql,indexKey,dtype);
 		excelInHistoryService.save(uploadFile, String.valueOf(countRecords), "采购发货明细");
 		redirect("/trading/deliveryDetailed");
 	}
@@ -162,7 +168,6 @@ public class DeliveryDetailedController extends BaseController {
 	 * @throws Exception
 	 */
 	public void settleDialog() {
-		System.out.print(splitPage);
 		setAttr("selIds", ids);
 		render("/trading/deliveryDetailed/settleDialog.html");
 	}

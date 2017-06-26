@@ -2,6 +2,21 @@ package com.trading.mvc;
 
 public class TradingConst {
 	/**
+	 * 武钢采购结算追溯前辍标识
+	 */
+	public static final String WiscoSettlement_cz = "CZ";
+	
+	/**
+	 * 武钢销售结算追溯前辍标识
+	 */
+	public static final String WiscoSettlement_xz = "XZ";
+	
+	/**
+	 * 非武钢结算前辍标识
+	 */
+	public static final String WiscoSettlement_Sett = "JS";
+	
+	/**
 	 * 入库前辍标识
 	 */
 	public static final String DeliveryDetailed_In = "RK";

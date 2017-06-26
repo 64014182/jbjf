@@ -1,10 +1,5 @@
 package com.platform.mvc.iedtd;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.List;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.jfinal.aop.Before;
@@ -97,12 +92,14 @@ public class IedtdController extends BaseController {
 		String indexKey = getPara("indexKey");
 		String action = getPara("action");
 		String redirec = getPara("redirec");
+		String dtype = getPara("dtype");
 		if (StringUtils.isEmpty(action)) {
 			action = "/platform/iedtd/saveExcelData";
 		}
 		setAttr("indexKey", indexKey);
 		setAttr("action", action);
 		setAttr("redirec", redirec);
+		setAttr("dtype", dtype);
 		render("/platform/iedtd/excelIn.html");
 	}
 	
@@ -117,7 +114,8 @@ public class IedtdController extends BaseController {
 		Iedtd iedtd = Iedtd.dao.findFirst(sql, indexKey);
 		String columnsNo = iedtd.getExcelDataColNo();
 		String insertSql = iedtd.getIntoDbSQL();
-		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), "Sheet1", 3, true,ToolExcel.getColNo(columnsNo));
+		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), 3, ToolExcel.getColNo(columnsNo));
+		excelData = ToolExcel.addIds(excelData);
 		Db.batch(insertSql, excelData, 100);
 		if (StringUtils.isNotEmpty(redirec))
 			redirect(redirec);

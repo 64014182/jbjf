@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.format.Alignment;
@@ -70,7 +72,6 @@ public class ToolExcel {
 	 * @return
 	 */
 	public static List<Map<String, String>> toList(File file, String sheet, String columns) {
-
 		List<Map<String, String>> result = new ArrayList<>();
 		Map<String, String> mapRows = null;
 		String columnsArr[] = columns.split(",");
@@ -96,55 +97,22 @@ public class ToolExcel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return result;
 	}
 
-	public static String[][] readExcelToArray(String file, String sheet) {
-		return readExcelToArray(new File(file), sheet);
-	}
-
-	/**
-	 * 读取一个EXCEL文件，默认读全部列
-	 * 
-	 * @param file
-	 *            Excel文件
-	 * @param sheet
-	 *            sheet名称
-	 * @return
-	 */
-	public static String[][] readExcelToArray(File file, String sheet) {
-		String[][] excelDatas = null;
-		try {
-			Workbook rwb = Workbook.getWorkbook(file);
-			Sheet rs = rwb.getSheet(sheet);
-			int rows = rs.getRows();
-			int clos = rs.getColumns();
-			excelDatas = new String[rows][clos];
-			for (int i = 0; i < rows; i++) {
-				for (int j = 0; j < clos; j++) {
-					do {
-						String value = rs.getCell(j, i).getContents();
-						excelDatas[i][j] = value;
-						j++;
-					} while (j < clos);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return excelDatas;
-	}
-
-	public static String[][] toArray(String file, String sheet, int readFirstLineNo, boolean addIds,
-			int[] readColumnNo) {
-		return readExcelToArray(new File(file), sheet, readFirstLineNo, addIds, readColumnNo);
-	}
-
 	public static void main(String[] args) throws Exception {
-		int[] reulst = getColNo("A=O=Q=R=T=Y=Z=AB=AH=AJ=AS=AU=AV");
-		String[][] r = ToolExcel.readExcelToArray(new File("c://1703.xls"), 3, reulst);
-		System.out.println(r);
+//		int[] reulst = getColNo("A=O=Q=R=T=Y=Z=AB=AH=AJ=AS=AU=AV");
+//		String[][] r = ToolExcel.readExcelToArray(new File("c://1703.xls"), 3, reulst);
+//		System.out.println(r);
+		
+		
+		System.out.println(getNumer("AV"));
+		
+		
+		String[][] t = {{"1","2","3"},{"4","5","6"}};
+		t = ToolExcel.addIds(t);
+		t = ToolExcel.addOther(t, "jj","jj2");
+		System.out.println(t);
 	}
 	
 	public static String[][] readExcelToArray(File file, int readFirstLineNo, int[] readColumnNo) {
@@ -169,53 +137,6 @@ public class ToolExcel {
 					System.out.println(readColumnNo[j] + " : " + value.trim());
 					excelDatas[i-readFirstLineNo][j] = value.trim();
 					//System.out.println(excelDatas[i-readFirstLineNo][j]);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return excelDatas;
-	}
-	
-	
-	/**
-	 * 读取一个EXCEL文件，读指定列
-	 * @param file Excel文件
-	 * @param sheet
-	 *            sheet名称
-	 * @param readFirstLineNo
-	 *            从第几行开始读
-	 * @param boolean 
-	 *            是否添加IDS
-	 * @param readColumnNo
-	 *            要读取指定列 
-	 * @return
-	 */
-	public static String[][] readExcelToArray(File file, String sheet, int readFirstLineNo, boolean addIds,
-			int[] readColumnNo) {
-		String[][] excelDatas = null;
-		try {
-			Workbook rwb = Workbook.getWorkbook(file);
-			Sheet rs = rwb.getSheet(sheet);
-			int rows = rs.getRows();
-			int clos = rs.getColumns();
-
-			int rRows = rows - readFirstLineNo + 1;  //计算行数
-			int rClos = readColumnNo.length;         //计算列数
-			
-			rClos = addIds == true ? rClos + 1 : rClos;
-			excelDatas = new String[rRows][rClos];
-
-			readFirstLineNo = readFirstLineNo - 1;
-			int current = addIds == true ? 1 : 0;
-			for (int i = readFirstLineNo; i < rows; i++) {
-				int currentRows = i - readFirstLineNo;
-				excelDatas[currentRows][0] = ToolUuid.get32UUID();
-				for (int j = 0; j < readColumnNo.length; j++) {
-					if (readColumnNo[j] > clos)
-						throw new RuntimeException("要读取的Excel行数超出文件总列数！");
-					String value = rs.getCell(readColumnNo[j] - 1, i).getContents();
-					excelDatas[currentRows][j + current] = value.trim();
 				}
 			}
 		} catch (Exception e) {
@@ -339,6 +260,40 @@ public class ToolExcel {
 		return result;
 	}
 	
+	public static String[][] addIds(String[][] eDatas) {
+		String[][] newDatas = new String[eDatas.length][eDatas[0].length + 1];
+		int i = 0;
+		String[] newLine = null;
+		for (String[] ed : eDatas) {
+			newLine = ed;
+			newLine = ArrayUtils.add(newLine, 0, ToolUuid.get32UUID());
+			newDatas[i] = newLine;
+			i++;
+		}
+		return newDatas;
+	}
 	
-	
+	/**
+	 * 添加到数组未尾
+	 * @param eDatas
+	 * @param other
+	 * @return
+	 */
+	public static String[][] addOther(String[][] eDatas, String... other) {
+		if (other.length < 0)
+			return eDatas;
+
+		String[][] newDatas = new String[eDatas.length][eDatas[0].length + other.length];
+		int i = 0;
+		String[] newLine = null;
+		for (String[] ed : eDatas) {
+			newLine = ed;
+			for (String value : other) {
+				newLine = ArrayUtils.add(newLine, value);
+			}
+			newDatas[i] = newLine;
+			i++;
+		}
+		return newDatas;
+	}
 }

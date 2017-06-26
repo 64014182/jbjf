@@ -11,8 +11,6 @@ import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
-import com.platform.tools.ToolDateTime;
-import com.trading.mvc.deliverydetailed.DeliveryDetailed;
 import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 
 /**
@@ -112,7 +110,12 @@ public class PlanOrderCompleteController extends BaseController {
 	public void saveExcelData() throws Exception {
 		UploadFile uploadFile = getFile();
 		String indexKey = getPara("indexKey");
-		int count = planOrderCompleteService.savePlanOrders(uploadFile,indexKey);
+		String dtype = getPara("dtype");
+		if (StringUtils.isEmpty(indexKey) || StringUtils.isEmpty(dtype)) {
+			throw new RuntimeException("indexKey或dtype不能为空！");
+		}
+		
+		int count = planOrderCompleteService.savePlanOrders(uploadFile,indexKey,dtype);
 		excelInHistoryService.save(uploadFile, String.valueOf(count), "采购计划");
 		redirect("/trading/planOrderComplete/");
 	}

@@ -72,13 +72,13 @@
 						<span class="tools"> 
 							<% if(excelIn == true){ %>
 							<button type="button" class="btn btn-success" 
-									onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=PlanOrderCompleteExcel&action=/trading/planOrderComplete/saveExcelData');">
+									onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=PlanOrderCompleteExcel&action=/trading/planOrderComplete/saveExcelData/saveExcelData&dtype=1');">
 								<i class="icon-edit"></i>
 								武钢Excel导入
 							</button> 
 							
 							<button type="button" class="btn btn-success" 
-									onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=PlanOrderCompleteExcel2&action=/trading/planOrderComplete/saveExcelData');">
+									onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=PlanOrderCompleteExcel2&action=/trading/planOrderComplete/saveExcelData&dtype=2');">
 								<i class="icon-edit"></i>
 								非武钢Excel导入
 							</button>
@@ -103,6 +103,7 @@
 									<th>宽</th>
 									<th>长</th>
 									<th>月份</th>
+									<th>类型</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -121,6 +122,13 @@
 									<td>${escapeHtml(entity["width"]!)}</td>
 									<td>${escapeHtml(entity["length"]!)}</td>
 									<td>${escapeHtml(entity["cDate"]!)}</td>
+									<td>
+										<% if(entity["dtype"] == "1"){ %>
+											<span class="label label-warning trace">武</span>
+										<% }else if(entity["dtype"] == "2"){ %>
+											<span class="label label-success trace">非</span>
+										<% } %>
+									</td>
 								</tr>
 								<% } %>
 							</tbody>

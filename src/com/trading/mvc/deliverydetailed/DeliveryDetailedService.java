@@ -39,39 +39,16 @@ public class DeliveryDetailedService extends BaseService {
 
 	public static final String serviceName = "deliveryDetailedService";
 
-	public int saveByExcel(UploadFile uploadFile, String sql, String indexKey) throws Exception {
+	public int saveByExcel(UploadFile uploadFile, String sql, String indexKey,String dtype) throws Exception {
 		Iedtd iedtd = Iedtd.dao.findFirst(sql, indexKey);
 		String columnsNo = iedtd.getExcelDataColNo();
 		String insertSql = iedtd.getIntoDbSQL();
 
 		// 读取EXCEL文件数据
-		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), "Sheet1", 3, true,ToolExcel.getColNo(columnsNo));
+		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), 2, ToolExcel.getColNo(columnsNo));
+		excelData = ToolExcel.addIds(excelData);
+		excelData = ToolExcel.addOther(excelData, dtype);
 
-//		// 添加价格 生产厂家 等数据到EXCLE行
-//		String[] lows = null;
-//		String[][] saveData = new String[excelData.length][excelData[0].length + 5];
-//		int i = 0;
-//		for (String[] ed : excelData) {
-//			String orderItemNo = ed[1];
-//			String sNo = orderItemNo.substring(0, 8);
-//			SalesOrder so = SalesOrder.dao.findFirstByColumnValue("orderItemNo", sNo);
-//			int edLength = ed.length;
-//			lows = new String[edLength + 5];
-//			System.arraycopy(ed, 0, lows, 0, ed.length);
-//
-//			if (so != null) {
-//				PlanOrderComplete poc = PlanOrderComplete.dao.findFirstByColumnValue("orderItemNo", orderItemNo);
-//				lows[edLength] = so.getManufacturer();
-//				lows[edLength + 1] = so.getOrderUnit();
-//				lows[edLength + 2] = poc.getPrice();
-//				lows[edLength + 3] = so.getSalesPrice();
-//				lows[edLength + 4] = so.getSalesOrderNo();
-//			}
-//
-//			saveData[i] = lows;
-//			i++;
-//		}
-		// 保存数据
 		Db.batch(insertSql, excelData, 100);
 		return excelData.length;
 	}
@@ -179,7 +156,6 @@ public class DeliveryDetailedService extends BaseService {
 		List<Record> list = Db.find(sql);
 		BigDecimal bd =  BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
 		BigDecimal bdz =  BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017);
-		String timeStamp = ToolDateTime.getCurrent("yyMMddHHmmss");
 		
 		for (Record dd : list) {
 			String weight = dd.getStr("weight");  	//重量
@@ -208,6 +184,11 @@ public class DeliveryDetailedService extends BaseService {
 			//税款 = 货款*0.17 
 			BigDecimal taxPirce = goodsPrice.multiply(bdz).setScale(2, BigDecimal.ROUND_HALF_UP);
 			
+			//结算清单号
+			String no = ToolDateTime.getCurrent("yyMMdd");
+			no = TradingConst.WiscoSettlement_Sett + no;
+			String settNo = TableUtils.getNo(4, "b_trading_wiscosettlement", "settlementNo", no);
+			
 			WiscoSettlement ws = new WiscoSettlement();
 			ws.setContractMonth(contractMonth);
 			ws.setWeight(weight);
@@ -215,7 +196,7 @@ public class DeliveryDetailedService extends BaseService {
 			ws.setTax(taxPirce.toString());
 			ws.setInvoice(invoiceNo);
 			ws.setOrderItemNo(orderItemNo);
-			ws.setSettlementNo("JS" + timeStamp);
+			ws.setSettlementNo(settNo);
 			ws.setSpecification(thickness + "*" + width + "*" + length);
 			ws.setPName(pName);
 			ws.setGrade(grade);
