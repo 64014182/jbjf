@@ -1,3 +1,16 @@
+<link href="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/uniform/css/uniform.default.css" />
+
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/clockface/css/clockface.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/css/datepicker.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/compiled/timepicker.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/css/colorpicker.css" />
+<link rel="stylesheet" href="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css" />
+<link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.css" />
+
 <link rel="stylesheet" type="text/css" href="${cxt!}/ui/metrolab/assets/bootstrap-table-expandable/bootstrap-table-expandable.css" />
 
 <form id="splitPage" action="${cxt!}/trading/deliveryDetailed" method="POST" class="form-horizontal">
@@ -61,6 +74,8 @@
 							onblur="platform_verify.onblurVali(this);" 
 							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})">
 						
+<!-- 						<input id="tags_1" type="text" name="_query.tags" class="tags medium" value='${escapeHtml(splitPage.queryParam["tags"])}'/> -->
+						
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
 					</div>
@@ -99,12 +114,12 @@
 								非武钢Excel导入
 							</button> 
 							
-							<button type="button" class="btn btn-info" data-table="dataTable" data-url="/trading/deliveryDetailed/in?csrfToken=${csrfToken!}" onclick="common_modals.deleteList(this)">	
+							<button type="button" class="btn btn-info" data-table="dataTable" data-url="/trading/deliveryDetailed/in?csrfToken=${csrfToken!}" onclick="inVali(this)">	
 								<i class="icon-download-alt"></i>
 								入库
 							</button>
 							
-							<button type="button" class="btn btn-info" data-table="dataTable" data-url="/trading/deliveryDetailed/out?csrfToken=${csrfToken!}" onclick="common_modals.deleteList(this)">
+							<button type="button" class="btn btn-info" data-table="dataTable" data-url="/trading/deliveryDetailed/out?csrfToken=${csrfToken!}" onclick="outVali(this)">
 								<i class="icon-external-link"></i>
 								出库
 							</button>
@@ -128,9 +143,15 @@
 							</button>
 							
 							<button type="button" class="btn btn-info"
-								onclick="common_modals.trace('${cxt!}/trading/wiscoSettlement/traceDialog','dataTable')">
+								onclick="common_modals.trace('${cxt!}/trading/wiscoSettlement/traceDialog','dataTable','追溯')">
 								<i class="icon-retweet"></i>
 								追溯
+							</button>
+							
+							<button type="button" class="btn btn-info"
+								onclick="common_modals.trace('${cxt!}/trading/deliveryDetailed/settleDialog','dataTable','结算')">
+								<i class="icon-lock"></i>
+								结算
 							</button>
 						</span>
 
@@ -155,6 +176,7 @@
 <!-- 									<th>追溯结算</th> -->
 <!-- 									<th>入库号</th> -->
 									<th>追溯</th>
+									<th>结算</th>
 									<th>库</th>
 								</tr>
 							</thead>
@@ -162,7 +184,12 @@
 								<% for(entity in splitPage.list){ %>
 								<tr class="odd gradeX">
 									<td>
-										<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck">
+										<input type="checkbox" 
+											class="checkboxes" 
+											name="checkIds" 
+											value="${entity.ids!}" 
+											state="${entity.state!}"
+											class="flat-grey foocheck">
 									</td>
 									<td>${escapeHtml(entity["orderItemNo"]!)}</td>
 									<td>${escapeHtml(entity["contractMonth"]!)}</td>
@@ -184,7 +211,14 @@
 <!-- 									<td>${entity.ids!}</td> -->
 <!-- 									<td>${escapeHtml(entity["outNo"]!)}</td> -->
 									<td>
-										<% if(entity["state"] == null){ %>
+										<% if(entity["settState"] == "0"){ %>
+											<span class="label label-warning trace">否</span>
+										<% }else{ %>
+											<span class="label label-success trace">是</span>
+										<% } %>
+									</td>
+									<td>
+										<% if(entity["state"] == '0'){ %>
 											<span class="label label-default">未入库</span>
 										<% }else if(entity["state"] == "1"){ %>
 											<span class="label label-success">入库</span>
@@ -206,7 +240,7 @@
 									入库号：${escapeHtml(entity["inNo"]!)}&nbsp&nbsp&nbsp
 									出库号：${escapeHtml(entity["outNo"]!)}&nbsp&nbsp&nbsp
 									<br>
-									
+									规格：${escapeHtml(entity["thickness"]!)}*${escapeHtml(entity["width"]!)}*${escapeHtml(entity["length"]!)}&nbsp&nbsp&nbsp
 									运费：${escapeHtml(entity["freight"]!)}&nbsp&nbsp&nbsp
 									代收铁运保险费：${escapeHtml(entity["railwayTIP"]!)}&nbsp&nbsp&nbsp
 									代收水运保险费：${escapeHtml(entity["waterTIP"]!)}&nbsp&nbsp&nbsp
@@ -217,6 +251,42 @@
 								</tr>
 								<% } %>
 							</tbody>
+							<tfoot valign="bottom">
+								<tr>
+							      <td></td>
+							      <td>合计</td>
+							      <td></td>
+							      <td></td>
+							      <td>${splitPage.paginCount.sumWeight}</td>
+							      <td>${splitPage.paginCount.sumQuantity}</td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							    </tr>
+							    <tr>
+							      <td></td>
+							      <td>总合计</td>
+							      <td></td>
+							      <td></td>
+							      <td>${splitPage.allCount.sumWeight}</td>
+							      <td>${splitPage.allCount.sumQuantity}</td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							      <td></td>
+							    </tr>
+							</tfoot>
 						</table>
 
 						<div id="splitPageDiv" class="pagination">
@@ -231,9 +301,87 @@
 </form>
 <script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-table-expandable/bootstrap-table-expandable.js"></script>
 
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/chosen-bootstrap/chosen/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/uniform/jquery.uniform.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/clockface/js/clockface.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/jquery-tags-input/jquery.tagsinput.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/date.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+<script type="text/javascript" src="${cxt!}/ui/metrolab/assets/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
 <script src="${cxt!}/ui/metrolab/js/form-component.js"></script>
 <script type="text/javascript">
+	/*
+		入库验证，状态为入库的才能进行出库操作
+	*/
+	function inVali(button){
+		var table = $(button).attr("data-table");
+		var url = $(button).attr("data-url");
+		var checks = common_common.getCheckComponetFunc(table);
+		var valiArr = new Array();
+		
+		if(checks.length==0){
+			toastr.error("必须选择至少一条记录！");
+			return ;
+		}
+		
+		for( var i=0;i<checks.length;i++){
+			if($(checks[i][0]).attr("state")== '0'){
+				valiArr.push(true);
+			}else{
+				valiArr.push(false);
+			}
+		}
+		
+		for(var i=0;i<valiArr.length;i++){
+			if(valiArr[i]==false){
+				toastr.error("所选状态必须为未入库明细才能进行入库操作！");
+				return;
+			}
+		}
+		common_modals.deleteList(button);
+	}
+
+	/*
+		出库验证，状态为入库的才能进行出库操作
+	*/
+	function outVali(button){
+		var table = $(button).attr("data-table");
+		var url = $(button).attr("data-url");
+		var checks = common_common.getCheckComponetFunc(table);
+		if(checks.length==0){
+			toastr.error("必须选择至少一条记录！");
+			return ;
+		}
+		var valiArr = new Array();
+		for( var i=0;i<checks.length;i++){
+			if($(checks[i][0]).attr("state")=="1"){
+				valiArr.push(true);
+			}else{
+				valiArr.push(false);
+			}
+		}
+		
+		for(var i=0;i<valiArr.length;i++){
+			if(valiArr[i]==false){
+				toastr.error("所选状态必须为入库明细才能进行出库操作！");
+				return;
+			}
+		}
+		
+		common_modals.deleteList(button);
+	}
+	
 	$(function() {
+　　		//$("#mon").val(new Date().format("yyMM"));
 	});
 </script>
 

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <sql-statement namespace="trading.salesSettlement">
+	<sql id="splitPageSum">
+		<![CDATA[ 
+			SELECT cast( round(SUM(goodsAmount), 2) AS CHAR ) AS sumGoodsAmount, cast( round(sum(taxPrice), 2) AS CHAR ) AS sumTaxPrice, cast( round(sum(totalAmount), 2) AS CHAR ) AS sumTotalAmount, cast(round(sum(weight), 2) AS CHAR) AS sumWeight FROM (
+    	]]>
+	</sql>
+
 	<sql id="findbyid">
 			SELECT
 				sales.*, btm.name AS manufacturer,
@@ -58,7 +64,12 @@
 			<% if(!isEmpty(orderItemNo)){ %>
 				and sales.orderItemNo like #'%$orderItemNo$%'# 
 			<% } %>
-		
+			<% if(!isEmpty(saveDateStart)){ %>
+					and sales.saveDate >= #'$saveDateStart$'#
+			<% } %>
+				<% if(!isEmpty(saveDateEnd)){ %>
+					and sales.saveDate <= #'$saveDateDateEnd$'#
+			<% } %>
     	]]>
 	</sql>
 	

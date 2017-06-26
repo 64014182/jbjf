@@ -70,7 +70,7 @@ $('.ajaxSave').click(function() {
 	}
 	
 	var that = this;
-
+	var invoiceNo = $("#adav").val(); //获取
 	$.ajax({
 		type : "POST",
 		url : "${cxt!}/trading/wiscoSettlement/saveSalesSetl?settlementNo=${settlementNo}&invoiceNo=" + invoiceNo,

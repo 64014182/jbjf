@@ -153,6 +153,12 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	public static final String column_state = "state";
 	
 	/**
+	 * 字段描述：采购结算状态
+	 * 字段类型：varchar(1)  长度：1
+	 */
+	public static final String column_settState = "settState";
+	
+	/**
 	 * 字段描述：入库号 
 	 * 字段类型：varchar(128)  长度：128
 	 */
@@ -213,7 +219,7 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	private String outNo;
 	private String traceRange;
 	private String pricetax;
-	
+	private String settState;
 	public void setIds(String ids){
 		set(column_ids, ids);
 	}
@@ -339,6 +345,12 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	}
 	public String getState() {
 		return get(column_state);
+	}
+	public void setSettState(String settState){
+		set(column_settState, settState);
+	}
+	public String getSettState() {
+		return get(column_settState);
 	}
 	public void setInNo(String inNo){
 		set(column_inNo, inNo);

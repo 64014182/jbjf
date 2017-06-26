@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <sql-statement namespace="trading.wiscoSettlement">
+	<sql id="splitPageSum">
+		<![CDATA[ 
+			SELECT cast( round(SUM(loan), 2) AS CHAR ) AS sumLoan, cast( round(sum(tax), 2) AS CHAR ) AS sumTax,  cast(round(sum(weight), 2) AS CHAR) AS sumWeight FROM (
+    	]]>
+	</sql>
 	
 	<sql id="selectPocByOrderNo">
 		SELECT

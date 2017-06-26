@@ -63,15 +63,6 @@
 						
 						订货单位
 						<input class="medium" type="text" name="_query.orderUnit" value='${escapeHtml(splitPage.queryParam["orderUnit"])}' >
-<!-- 						品名 -->
-<!-- 						<input class="medium" type="text" name="_query.pName" value='${escapeHtml(splitPage.queryParam["pName"])}' > -->
-						
-<!-- 						牌号 -->
-<!-- 						<input class="medium" type="text" name="_query.grade" value='${escapeHtml(splitPage.queryParam["grade"])}' > -->
-
-<!-- 						项次量 -->
-<!-- 						<input class="medium" type="text" name="_query.itemWeight" value='${escapeHtml(splitPage.queryParam["itemWeight"])}' > -->
-					
 					
 						是否结算
 						<select name="_query.hasConfirm" class="input-small m-wrap" tabindex="1">
@@ -239,6 +230,36 @@
 								</tr>
 								<% } %>
 							</tbody>
+							
+							<tfoot valign="bottom">
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>合计</td>
+									<td></td>
+									<td>${splitPage.paginCount.sumWeight}</td>
+									<td></td>
+									<td>${splitPage.paginCount.sumLoan}</td>
+									<td>${splitPage.paginCount.sumTax}</td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td>总合计</td>
+									<td></td>
+									<td>${splitPage.allCount.sumWeight}</td>
+									<td></td>
+									<td>${splitPage.allCount.sumLoan}</td>
+									<td>${splitPage.allCount.sumTax}</td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tfoot>
+							
 						</table>
 
 						<div id="splitPageDiv" class="pagination">

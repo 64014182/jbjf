@@ -12,6 +12,7 @@ import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
 import com.platform.tools.ToolDateTime;
+import com.trading.mvc.deliverydetailed.DeliveryDetailed;
 import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 
 /**
@@ -39,8 +40,9 @@ public class PlanOrderCompleteController extends BaseController {
 	 * 列表
 	 */
 	public void index() {
-		setCurDateToQueryParam("cDate", ToolDateTime.pattern_yymm);
-		paging(ConstantInit.db_dataSource_main, splitPage, PlanOrderComplete.sqlId_splitPageSelect, PlanOrderComplete.sqlId_splitPageFrom);
+		//setCurDateToQueryParam("cDate", ToolDateTime.pattern_yymm);
+		//paging(ConstantInit.db_dataSource_main, splitPage, PlanOrderComplete.sqlId_splitPageSelect, PlanOrderComplete.sqlId_splitPageFrom);
+		pagingSum(ConstantInit.db_dataSource_main, splitPage, PlanOrderComplete.sqlId_splitPageSelect, PlanOrderComplete.sqlId_splitPageFrom,"trading.planOrderComplete.splitPageSum");
 		render("/trading/planOrderComplete/list.html");
 	}
 	

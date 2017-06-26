@@ -42,8 +42,9 @@ public class WiscoSettlementController extends BaseController {
 	 * 列表
 	 */
 	public void index() {
-		String[] invoiceArray = getParaMap().get("_query.invoices");
-		wiscoSettlementService.pagin(ConstantInit.db_dataSource_main, splitPage, WiscoSettlement.sqlId_splitPageSelect, WiscoSettlement.sqlId_splitPageFrom,invoiceArray);
+		//String[] invoiceArray = getParaMap().get("_query.invoices");
+		//pagin(ConstantInit.db_dataSource_main, splitPage, WiscoSettlement.sqlId_splitPageSelect, WiscoSettlement.sqlId_splitPageFrom,"trading.deliveryDetailed.splitPageSum");
+		pagingSum(ConstantInit.db_dataSource_main, splitPage, WiscoSettlement.sqlId_splitPageSelect, WiscoSettlement.sqlId_splitPageFrom,"trading.wiscoSettlement.splitPageSum");
 		render("/trading/wiscoSettlement/list.html");
 	}
 	

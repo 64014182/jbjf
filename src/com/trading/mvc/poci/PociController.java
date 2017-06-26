@@ -7,7 +7,6 @@ import com.jfinal.log.Log;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
-import com.platform.tools.ToolDateTime;
 import com.trading.mvc.planordercomplete.PlanOrderComplete;
 
 /**
@@ -35,7 +34,7 @@ public class PociController extends BaseController {
 	 * 列表
 	 */
 	public void index() {
-		setCurDateToQueryParam("cDate", ToolDateTime.pattern_yymm);
+		//setCurDateToQueryParam("cDate", ToolDateTime.pattern_yymm);
 		paging(ConstantInit.db_dataSource_main, splitPage, Poci.sqlId_splitPageSelect, Poci.sqlId_splitPageFrom);
 		render("/trading/poci/list.html");
 	}

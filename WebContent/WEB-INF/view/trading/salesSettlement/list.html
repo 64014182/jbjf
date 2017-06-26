@@ -41,18 +41,6 @@
 						
 						订单项次号
 						<input class="medium" type="text" name="_query.orderItemNo" value='${escapeHtml(splitPage.queryParam["orderItemNo"])}' >
-<!-- 						结算时间 -->
-<!-- 						合同开始月份 -->
-<!-- 						<input type="text" id="saveInvoceDateStart" class="Wdate" name="_query.saveInvoceDateStart" readonly="readonly"  -->
-<!-- 							value='${escapeHtml(splitPage.queryParam["saveInvoceDateStart"])}' -->
-<!-- 							onblur="platform_verify.onblurVali(this);"  -->
-<!-- 							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', maxDate:'#F{$dp.$D(\'saveInvoceDateEnd\')}'})"> -->
-<!-- 						至 -->
-<!-- 						合同结束月份 -->
-<!-- 						<input type="text" id="saveInvoceDateEnd" class="Wdate" name="_query.saveInvoceDateEnd" readonly="readonly"  -->
-<!-- 							value='${escapeHtml(splitPage.queryParam["saveInvoceDateEnd"])}' -->
-<!-- 							onblur="platform_verify.onblurVali(this);"  -->
-<!-- 							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveInvoceDateStart\')}'})"> -->
 
 						是否开票
 						<select name="_query.hasDraw" class="input-small m-wrap" tabindex="1">
@@ -61,6 +49,21 @@
 							<option value="0" ${splitPage.queryParam["hasDraw"]! == "0" ? "selected='selected'":"" }>未结</option>
 						</select>
 						
+					
+					</div>
+					
+					<div class="widget-body form switch-form">
+						结算时间
+						<input type="text" id="saveInvoceDateStart" class="Wdate" name="_query.saveDateStart" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["saveDateStart"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', maxDate:'#F{$dp.$D(\'saveDateEnd\')}'})">
+						至
+						<input type="text" id="saveInvoceDateEnd" class="Wdate" name="_query.saveDateEnd" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["saveDateEnd"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveDateStart\')}'})">
+					
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
 					</div>
@@ -114,11 +117,11 @@
 									<th style="width: 8px;">
 										<input type="checkbox" class="group-checkable" name="checkAll" onchange="common_common.checkFunc('dataTable', this.checked);" class="flat-grey selectall">
 									</th>
-									<th>销售订单号</th>
-									<th>订单项次号</th>
-									<th>品名</th>
-									<th>牌号</th>
-									<th>规格型号</th>
+									<th>订货单位</th>
+									<th>销售合同价格</th>
+									<th>货款金额</th>
+									<th>税款金额</th>
+									<th>总金额</th>
 									<th>出货重量</th>
 									<th>发票号</th>
 									<th>编号</th>
@@ -133,11 +136,11 @@
 									<td>
 										<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck">
 									</td>
-									<td>${escapeHtml(entity["salesOrderNo"]!)}</td>
-									<td>${escapeHtml(entity["orderItemNo"]!)}</td>
-									<td>${escapeHtml(entity["pName"]!)}</td>
-									<td>${escapeHtml(entity["grade"]!)}</td>
-									<td>${escapeHtml(entity["specification"]!)}</td>
+									<td class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</td>
+									<td>${escapeHtml(entity["invoicePrice"]!)}</td>
+									<td>${escapeHtml(entity["goodsAmount"]!)}</td>
+									<td>${escapeHtml(entity["taxPrice"]!)}</td>
+									<td>${escapeHtml(entity["totalAmount"]!)}</td>
 									<td>${escapeHtml(entity["weight"]!)}</td>
 									<td>${escapeHtml(entity["invoiceNo"]!)}</td>
 									<td>${escapeHtml(entity["flag"]!)}</td>
@@ -162,18 +165,51 @@
 								</tr>
 								<tr>
 									<td colspan="13">
-<!-- 										<h4>Additional information</h4> -->
-											<li>订货单位：<span class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</span></li>
+											<li>品名：${escapeHtml(entity["pName"]!)}</li>
+											<li>牌号：${escapeHtml(entity["grade"]!)}</li>
+											<li>规格：${escapeHtml(entity["specification"]!)}</li>
+											<li>销售订单号：${escapeHtml(entity["salesOrderNo"]!)}</li>
+											<li>订单项次号：${escapeHtml(entity["orderItemNo"]!)}</li>
 											<li>生产厂家：${escapeHtml(entity["manufacturer"]!)}</li>
-											<li>销售合同价格：${escapeHtml(entity["invoicePrice"]!)}</li>
+<!-- 											<li>销售合同价格：${escapeHtml(entity["invoicePrice"]!)}</li> -->
 											<li>销售不含税价：${escapeHtml(entity["noTaxPrice"]!)}</li>
-											<li>货款金额：${escapeHtml(entity["goodsAmount"]!)}</li>
-											<li>税款金额：${escapeHtml(entity["taxPrice"]!)}</li>
-											<li>总金额：${escapeHtml(entity["totalAmount"]!)}</li>
+<!-- 											<li>总金额：${escapeHtml(entity["totalAmount"]!)}</li> -->
 									</td>
 								</tr>
 								<% } %>
 							</tbody>
+							<tfoot valign="bottom">
+								<tr>
+									<td></td>
+									<td>合计</td>
+									<td></td>
+									<td>${splitPage.paginCount.sumGoodsAmount}</td>
+									<td>${splitPage.paginCount.sumTaxPrice}</td>
+									<td>${splitPage.paginCount.sumTotalAmount}</td>
+									<td>${splitPage.paginCount.sumWeight}</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>总合计</td>
+									<td></td>
+									<td>${splitPage.allCount.sumGoodsAmount}</td>
+									<td>${splitPage.allCount.sumTaxPrice}</td>
+									<td>${splitPage.allCount.sumTotalAmount}</td>
+									<td>${splitPage.allCount.sumWeight}</td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</tfoot>
 						</table>
 
 						<div id="splitPageDiv" class="pagination">

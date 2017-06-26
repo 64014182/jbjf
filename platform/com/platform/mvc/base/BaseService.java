@@ -129,6 +129,44 @@ public class BaseService {
 	}
 	
 	/**
+	 * 分页
+	 * @param dataSource	数据源
+	 * @param splitPage		分页对象
+	 * @param selectSqlId	select之后，from之前
+	 * @param fromSqlId		from之后
+	 */
+	@SuppressWarnings("unchecked")
+	public static void pagingSum(String dataSource, SplitPage splitPage, String selectSqlId, String fromSqlId,String countSql){
+		String selectSql = getSqlByBeetl(selectSqlId, splitPage.getQueryParam());
+		
+		Map<String, Object> map = getFromSql(splitPage, fromSqlId);
+		String fromSql = (String) map.get("sql");
+		LinkedList<Object> paramValue = (LinkedList<Object>) map.get("paramValue");
+		
+		// 分页封装
+		Page<?> page = Db.use(dataSource).paginate(splitPage.getPageNumber(), splitPage.getPageSize(), selectSql, null, fromSql, paramValue.toArray());
+		splitPage.setTotalPage(page.getTotalPage());
+		splitPage.setTotalRow(page.getTotalRow());
+		splitPage.setList(page.getList());
+		splitPage.compute();
+		
+		String paginateCountsql = Db.use(dataSource).getPaginateSql(splitPage.getPageNumber(), splitPage.getPageSize(), selectSql, fromSql, paramValue.toArray());
+		String s = getSqlMy(countSql);
+		String s2 = ") t";
+		paginateCountsql = s + paginateCountsql + s2;
+		Record paginateCount = Db.findFirst(paginateCountsql,paramValue.toArray());
+		
+		StringBuilder ret = new StringBuilder();
+		ret.append(selectSql).append(" ").append(fromSql);
+		String allCountSql = ret.toString();
+		allCountSql = s + allCountSql + s2;
+		Record allCount = Db.findFirst(allCountSql,paramValue.toArray());
+		
+		splitPage.setPaginCount(paginateCount);
+		splitPage.setAllCount(allCount);
+	}
+	
+	/**
 	 * 分页获取form sql和预处理参数
 	 * @param splitPage
 	 * @param sqlId

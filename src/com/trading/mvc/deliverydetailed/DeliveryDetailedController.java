@@ -2,6 +2,8 @@ package com.trading.mvc.deliverydetailed;
 
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.jfinal.aop.Before;
 import com.jfinal.log.Log;
 import com.jfinal.upload.UploadFile;
@@ -35,8 +37,7 @@ public class DeliveryDetailedController extends BaseController {
 	 * 列表
 	 */
 	public void index() {
-//		setCurDateToQueryParam("contractMonth", ToolDateTime.pattern_yymm);
-		paging(ConstantInit.db_dataSource_main, splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom);
+		pagingSum(ConstantInit.db_dataSource_main, splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom,"trading.deliveryDetailed.splitPageSum");
 		render("/trading/deliveryDetailed/list.html");
 	}
 	
@@ -108,11 +109,19 @@ public class DeliveryDetailedController extends BaseController {
 		System.out.println(b);
 	}
 
+	/**
+	 * 发货明细入库
+	 * @throws Exception
+	 */
 	public void in() throws Exception {
 		deliveryDetailedService.updateState(DeliveryDetailed.table_name, getPara() == null ? ids : getPara(), "1");
 		forwardAction("/trading/deliveryDetailed/backOff");
 	}
 	
+	/**
+	 * 发货明细出库
+	 * @throws Exception
+	 */
 	public void out() throws Exception {
 		deliveryDetailedService.updateState(DeliveryDetailed.table_name, getPara() == null ? ids : getPara(), "2");
 		forwardAction("/trading/deliveryDetailed/backOff");
@@ -130,7 +139,7 @@ public class DeliveryDetailedController extends BaseController {
 	
 	/**
 	 * /trading/deliveryDetailed/outToExcel
-	 * 入库导出
+	 * 出库导出
 	 * @throws Exception
 	 */
 	public void outToExcel() throws Exception{
@@ -146,5 +155,39 @@ public class DeliveryDetailedController extends BaseController {
 	public void pPut() throws Exception{
 		String filePath = deliveryDetailedService.exportExcel(ids,"pOut.xml","出货单导入");
 		renderFile(new File(filePath));
+	}
+	
+	/**
+	 * 结算弹出框
+	 * @throws Exception
+	 */
+	public void settleDialog() {
+		System.out.print(splitPage);
+		setAttr("selIds", ids);
+		render("/trading/deliveryDetailed/settleDialog.html");
+	}
+	
+	/**
+	 * 结算
+	 */
+	public void settle(){
+		String selIds = getPara("selIds");				//所选结算明细
+		String invoiceNo = getPara("invoiceNo");		//发票号
+		
+		
+		String err = "";
+		try {
+			deliveryDetailedService.saveSettle(selIds,invoiceNo);
+		} catch (Exception e) {
+			err = e.getMessage();
+		}
+		
+		if (StringUtils.isNotEmpty(err)) {
+			renderJson("{\"message\":\"" + "保存失败！" +  err + "\"}");
+		}else{
+			renderJson("{\"message\":\"" + "保存成功！" + "\"}");
+		}
+		
+		//redirect("/trading/deliveryDetailed/");
 	}
 }

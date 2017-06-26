@@ -31,7 +31,9 @@ public class SplitPage implements Serializable, Cloneable {
 	private int totalPage; // 总页数
 	private int totalRow; // 总行数
 	private Object extData; // 返回扩展数据
-
+	private Object paginCount;
+	private Object allCount;
+	
 	/**
 	 * 分页显示辅助属性
 	 */
@@ -268,4 +270,19 @@ public class SplitPage implements Serializable, Cloneable {
 		this.isExport = isExport;
 	}
 
+	public Object getPaginCount() {
+		return paginCount;
+	}
+
+	public void setPaginCount(Object paginCount) {
+		this.paginCount = paginCount;
+	}
+
+	public Object getAllCount() {
+		return allCount;
+	}
+
+	public void setAllCount(Object allCount) {
+		this.allCount = allCount;
+	}
 }

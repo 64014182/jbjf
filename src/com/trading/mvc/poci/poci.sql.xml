@@ -34,6 +34,18 @@
 			<% if(!isEmpty(cDate)){ %>
 				and cDate like #'%$cDate$%'# 
 			<% } %>
+			<% if(!isEmpty(manufacturer)){ %>
+				and btm.name like #'%$manufacturer$%'# 
+			<% } %>
+			<% if(!isEmpty(orderUnit)){ %>
+				and bto.name like #'%$orderUnit$%'# 
+			<% } %>
+			<% if(!isEmpty(salesOrderNo)){ %>
+				and so.salesOrderNo like #'%$salesOrderNo$%'# 
+			<% } %>
+			<% if(!isEmpty(salesPrice)){ %>
+				and so.salesPrice like #'%$salesPrice$%'# 
+			<% } %>
     	]]>
 	</sql>
 	

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <sql-statement namespace="trading.deliveryDetailed">
-		<sql id="splitPageSelect">
+	<sql id="splitPageSum">
+		<![CDATA[ 
+			SELECT round(SUM(weight),2) as sumWeight,round(sum(quantity),2) as sumQuantity FROM(
+    	]]>
+	</sql>
+	<sql id="splitPageSelect">
 		<![CDATA[ 
 			SELECT
 			dd.*, 
@@ -112,10 +117,43 @@
     	]]>
 	</sql>
 	
-	<!-- 通用更新 -->
 	<sql id="updateStateOut">
 		<![CDATA[ 
         	update ${table} set state = ? , outNo = ? where ids in( ${sqlIn} )
+    	]]>
+	</sql>
+	
+	<sql id="updateSettState">
+		<![CDATA[ 
+        	update b_trading_deliverydetailed set settState = ? where ids in( ${sqlIn} )
+    	]]>
+	</sql>
+	
+	<sql id="selectDeliverydetailedIn">
+		<![CDATA[
+			SELECT
+				dd.*, 
+				soo.salesOrderNo,
+				soo.salesPrice,
+				bto.name as orderUnit,
+				bto.ids as orderUnitId,
+				btm.ids as manufacturerId,
+				btm.name as manufacturer,
+				poc.price,
+				poc.thickness,
+				poc.width,
+				poc.length,
+				soo.ids as solesOrderIds,
+				poc.pName,
+				poc.grade
+			FROM
+				b_trading_deliverydetailed dd
+			LEFT JOIN b_trading_salesorder soo ON left(dd.orderItemNo,8) = soo.orderItemNo
+			LEFT JOIN b_trading_planordercomplete poc on dd.orderItemNo = poc.orderItemNo
+			LEFT JOIN b_trading_manufacturer btm on soo.manufacturer = btm.ids
+			LEFT JOIN b_trading_orderunit bto on soo.orderUnit = bto.ids
+			WHERE  1 =1 
+			AND dd.ids in( ${sqlIn} )
     	]]>
 	</sql>
 </sql-statement>

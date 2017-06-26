@@ -726,7 +726,17 @@ public abstract class BaseController extends Controller {
 	protected void paging(SplitPage splitPage, String selectSqlId, String selectCountSqlId, String fromSqlId){
 		BaseService.paging(ConstantInit.db_dataSource_main, splitPage, selectSqlId, selectCountSqlId, fromSqlId);
 	}
-
+	
+	/**
+	 * 分页
+	 * @param dataSource 数据源
+	 * @param splitPage
+	 * @param sqlId
+	 */
+	protected void pagingSum(String dataSource, SplitPage splitPage, String selectSqlId, String fromSqlId,String countSql){
+		BaseService.pagingSum(dataSource, splitPage, selectSqlId, fromSqlId,countSql);
+	}
+	
 	/**
 	 * 分页，分页查询个性化count语句
 	 * @param dataSource 		数据源

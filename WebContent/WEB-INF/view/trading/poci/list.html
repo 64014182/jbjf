@@ -45,8 +45,21 @@
 							onblur="platform_verify.onblurVali(this);" 
 							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})">
 							
-						合同编号
+						编号
 						<input class="medium" type="text" name="_query.invoceNo" value='${escapeHtml(splitPage.queryParam["invoceNo"])}' maxlength="50">
+						
+						生产厂家
+						<input class="medium" type="text" name="_query.manufacturer" value='${escapeHtml(splitPage.queryParam["manufacturer"])}' maxlength="50">
+						
+						订货单位
+						<input class="medium" type="text" name="_query.orderUnit" value='${escapeHtml(splitPage.queryParam["orderUnit"])}' maxlength="50">
+
+						订单号
+						<input class="medium" type="text" name="_query.salesOrderNo" value='${escapeHtml(splitPage.queryParam["salesOrderNo"])}' maxlength="50">
+						
+						加价
+						<input class="medium" type="text" name="_query.salesPrice" value='${escapeHtml(splitPage.queryParam["salesPrice"])}' maxlength="50">
+						
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
 					</div>
@@ -143,7 +156,13 @@
 											<% } %>
 										</td>
 										
-										<td><a href="#" class="myeditable" data-type="text" data-name="salesPrice" data-original-title="加价">${entity.salesPrice!}</a></td>
+										<td>
+											<% if(entity["salesPrice"] == null){ %>
+												<a href="#" class="myeditable" data-type="text" data-name="salesPrice" data-original-title="加价">0</a>
+											<% }else{ %>
+												<a href="#" class="myeditable" data-type="text" data-name="salesPrice" data-original-title="加价">${entity.salesPrice!}</a>
+											<% } %>
+										</td>
 										
 										<td>
 											<% if(entity["freightage"] == null){ %>

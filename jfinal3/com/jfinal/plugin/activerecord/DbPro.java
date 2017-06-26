@@ -38,7 +38,7 @@ import static com.jfinal.plugin.activerecord.DbKit.NULL_PARA_ARRAY;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class DbPro {
 	
-	private final Config config;
+	public final Config config;
 	
 	static DbPro MAIN = null;
 	private static final Map<String, DbPro> map = new HashMap<String, DbPro>();
@@ -553,6 +553,28 @@ public class DbPro {
 			config.close(conn);
 		}
 	}
+	
+	/**
+	 * Paginate.
+	 * @param pageNumber the page number
+	 * @param pageSize the page size
+	 * @param select the select part of the sql statement
+	 * @param sqlExceptSelect the sql statement excluded select part
+	 * @param paras the parameters of sql
+	 * @return the Page object
+	 */
+	public String getPaginateSql(int pageNumber, int pageSize, String select, String sqlExceptSelect, Object... paras) {
+		Connection conn = null;
+		try {
+			conn = config.getConnection();
+			return config.dialect.forPaginate(pageNumber, pageSize, select, sqlExceptSelect);
+		} catch (Exception e) {
+			throw new ActiveRecordException(e);
+		} finally {
+			config.close(conn);
+		}
+	}
+	
 	
 	public Page<Record> paginate(int pageNumber, int pageSize, boolean isGroupBySql, String select, String selectCount, String sqlExceptSelect, Object... paras) {
 		Connection conn = null;

@@ -238,6 +238,8 @@ var common_ajax = function() {
 			var option = result[i];
 			var value = option['value'];
 			var text =  option['viewname'];
+			
+			console.log(value+" : "+text);
 			if( value == selectValue){
 				select.append("<option selected='selected' value='"+value+"'>"+text+"</option>");
 			}else{

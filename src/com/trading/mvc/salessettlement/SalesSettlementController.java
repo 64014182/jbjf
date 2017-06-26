@@ -44,7 +44,7 @@ public class SalesSettlementController extends BaseController {
 	 * 列表
 	 */
 	public void index() {
-		paging(ConstantInit.db_dataSource_main, splitPage, "trading.salesSettlement.splitPageSelect", SalesSettlement.sqlId_splitPageFrom);
+		pagingSum(ConstantInit.db_dataSource_main, splitPage, "trading.salesSettlement.splitPageSelect", SalesSettlement.sqlId_splitPageFrom,"trading.salesSettlement.splitPageSum");
 		render("/trading/salesSettlement/list.html");
 	}
 	

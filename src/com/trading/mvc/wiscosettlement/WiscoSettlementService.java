@@ -25,6 +25,7 @@ import com.platform.tools.ToolDateTime;
 import com.platform.tools.ToolExcel;
 import com.platform.tools.ToolFreemarkParse;
 import com.platform.tools.code.handler.BaseHandler;
+import com.trading.mvc.BigDecimalUtils;
 import com.trading.mvc.deliverydetailed.DeliveryDetailed;
 import com.trading.mvc.manufacturer.Manufacturer;
 import com.trading.mvc.poci.Poci;
@@ -87,9 +88,9 @@ public class WiscoSettlementService extends BaseService {
 		for (String[] ed : excelData) {
 			String priceStr = ed[8];
 			String weightStr = ed[9];
-
-			BigDecimal price = new BigDecimal(priceStr.replaceAll(",", ""));
-			BigDecimal weight = new BigDecimal(weightStr.replaceAll(",", ""));
+			
+			BigDecimal price = BigDecimalUtils.getBidDecimal(priceStr);
+			BigDecimal weight = BigDecimalUtils.getBidDecimal(weightStr);
 			int r = price.compareTo(BigDecimal.ZERO);
 			int r1 = weight.compareTo(BigDecimal.ZERO);
 			if (r == 0 && r1 == 0) {
@@ -146,13 +147,13 @@ public class WiscoSettlementService extends BaseService {
 		}
 
 		// 计算销售合同价
-		BigDecimal salesPrice = calcuSalesPrice(getBigDecimal(ws.getPrice()), getBigDecimal(addPirce));
+		BigDecimal salesPrice = calcuSalesPrice(BigDecimalUtils.getBidDecimal(ws.getPrice()), BigDecimalUtils.getBidDecimal(addPirce));
 
 		// 计算销售不含税价=销售合同价/1.17(4舍5入，2位数）
 		BigDecimal noTaxPrice = noTaxPrice(salesPrice);
 
 		// 总金额=销售合同价*出货重量
-		BigDecimal totalAmount = totalAmountPrice(salesPrice, getBigDecimal(ws.getWeight()));
+		BigDecimal totalAmount = totalAmountPrice(salesPrice, BigDecimalUtils.getBidDecimal(ws.getWeight()));
 
 		// 货款金额=总金额/1.17（四舍五入到二位数）
 		BigDecimal goodsAmount = goodsAmount(totalAmount);
@@ -185,7 +186,7 @@ public class WiscoSettlementService extends BaseService {
 	 * @param totalAmount
 	 */
 	private BigDecimal goodsAmount(BigDecimal totalAmount) {
-		BigDecimal bd = getBit();
+		BigDecimal bd = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
 		BigDecimal goodsAmount = totalAmount.divide(bd, 2, BigDecimal.ROUND_HALF_UP);
 		return goodsAmount;
 	}
@@ -208,7 +209,7 @@ public class WiscoSettlementService extends BaseService {
 	 * @return
 	 */
 	private BigDecimal calcuSalesPrice(BigDecimal itemPrice, BigDecimal salesAddPrice) {
-		BigDecimal bdBit = getBit();
+		BigDecimal bdBit = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
 		BigDecimal itemSalesprice = itemPrice.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP).add(salesAddPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
 		return itemSalesprice;
 	}
@@ -218,18 +219,18 @@ public class WiscoSettlementService extends BaseService {
 	 * @return
 	 */
 	private BigDecimal noTaxPrice(BigDecimal salesprice){
-		BigDecimal bd = getBit();
+		BigDecimal bd = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
 		BigDecimal noTaxPrice = salesprice.divide(bd,2, BigDecimal.ROUND_HALF_UP);
 		return noTaxPrice;
 	}
 	
-	private BigDecimal getBigDecimal(String numStr) {
-		return new BigDecimal(numStr.replaceAll(",", ""));
-	}
-	
-	private BigDecimal getBit() {
-		return new BigDecimal("1.17");
-	}
+//	private BigDecimal getBigDecimal(String numStr) {
+//		return new BigDecimal(numStr.replaceAll(",", ""));
+//	}
+//	
+//	private BigDecimal getBit() {
+//		return new BigDecimal("1.17");
+//	}
 
 	public void saveSalesSettleOther(SalesSettlement ss){
 		String soNo = ss.getSalesOrderIds();
@@ -237,9 +238,9 @@ public class WiscoSettlementService extends BaseService {
 		//总价
 		String ta = ss.getTotalAmount();
 		
-		BigDecimal totalAmount = getBigDecimal(ta);
+		BigDecimal totalAmount = BigDecimalUtils.getBidDecimal(ta);
 		//货款金额
-		BigDecimal goodsAmount = goodsAmount(getBigDecimal(ta));
+		BigDecimal goodsAmount = goodsAmount(BigDecimalUtils.getBidDecimal(ta));
 		// 税款金额=总金额-货款金额
 		BigDecimal taxPrice = totalAmount.subtract(goodsAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
 		
@@ -257,12 +258,12 @@ public class WiscoSettlementService extends BaseService {
 		List<Record> list = Db.find(sql);
 		
 		Record sum = new Record();
-		BigDecimal sumWeight = new BigDecimal(0);      //数量
-		BigDecimal sumLoad = new BigDecimal(0);			//货款金额
-		BigDecimal sumTax = new BigDecimal(0);			//税款金额
-		BigDecimal sumTaxLoad = new BigDecimal(0);    //价税合计
-		BigDecimal sumFreight = new BigDecimal(0);    //运费合计
-		BigDecimal sumTaxLoadFreight = new BigDecimal(0);    //结算表清单
+		BigDecimal sumWeight = BigDecimalUtils.getBidDecimal("0");      //数量
+		BigDecimal sumLoad = BigDecimalUtils.getBidDecimal("0");			//货款金额
+		BigDecimal sumTax = BigDecimalUtils.getBidDecimal("0");			//税款金额
+		BigDecimal sumTaxLoad = BigDecimalUtils.getBidDecimal("0");    //价税合计
+		BigDecimal sumFreight = BigDecimalUtils.getBidDecimal("0");    //运费合计
+		BigDecimal sumTaxLoadFreight = BigDecimalUtils.getBidDecimal("0");    //结算表清单
 		
 		for (Record r : list) {
 			String weight = r.getStr("weight");  //数量
@@ -270,10 +271,10 @@ public class WiscoSettlementService extends BaseService {
 			String tax = r.getStr("tax");     //税款金额
 			String freight = r.getStr("freight");
 			
-			BigDecimal bdLoad = getBigDecimal(load);
-			BigDecimal bdTax = getBigDecimal(tax);
-			BigDecimal bdFreight = getBigDecimal(freight);
-			BigDecimal bdWeight = getBigDecimal(weight);
+			BigDecimal bdLoad = BigDecimalUtils.getBidDecimal(load);
+			BigDecimal bdTax = BigDecimalUtils.getBidDecimal(tax);
+			BigDecimal bdFreight = BigDecimalUtils.getBidDecimal(freight);
+			BigDecimal bdWeight = BigDecimalUtils.getBidDecimal(weight);
 			
 			BigDecimal bdTaxLoad = bdLoad.add(bdTax);
 			BigDecimal taxLoadFreight = bdTaxLoad.add(bdFreight);
@@ -315,13 +316,13 @@ public class WiscoSettlementService extends BaseService {
 		String loanStr = ws.getStr("loan");
 		String weightStr = ws.getStr("weight");
 		
-		BigDecimal bdLoan = getBigDecimal(loanStr);// 货款金额
-		BigDecimal bdWeight = getBigDecimal(weightStr);// 重量
+		BigDecimal bdLoan = BigDecimalUtils.getBidDecimal(loanStr);// 货款金额
+		BigDecimal bdWeight = BigDecimalUtils.getBidDecimal(weightStr);// 重量
 		
 		BigDecimal price = bdLoan.divide(bdWeight,2, BigDecimal.ROUND_HALF_UP);  //单价  货款除重量
 		ws.setPrice(price.toString());
 		
-		BigDecimal bdBit = new BigDecimal(0.17d);                
+		BigDecimal bdBit = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017);                
 		BigDecimal bdTax = bdLoan.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP);
 		ws.setTax(bdTax.toString());     //税额  		货款金额 * 0.17
 		ws.setFreight("0");
@@ -421,30 +422,30 @@ public class WiscoSettlementService extends BaseService {
 		String sql = getSqlByBeetl("trading.wiscoSettlement.selectDeliverydetailedIn", param);
 		
 		List<DeliveryDetailed> list = DeliveryDetailed.dao.find(sql);
-		BigDecimal bTraceRange = getBigDecimal(traceRange);
+		BigDecimal bTraceRange = BigDecimalUtils.getBidDecimal(traceRange);
 		
 		//总重量
-		BigDecimal totalWeight = new BigDecimal(0l); 
+		BigDecimal totalWeight = BigDecimalUtils.getBidDecimal("0"); 
 		//总金额
-		BigDecimal totalGapPrice = new BigDecimal(0l);
+		BigDecimal totalGapPrice = BigDecimalUtils.getBidDecimal("0"); 
 		//总税额
-		BigDecimal totalPrice = new BigDecimal(0l);
+		BigDecimal totalPrice = BigDecimalUtils.getBidDecimal("0"); 
 		//总价税合计
-		BigDecimal totalPriceTax = new BigDecimal(0l);
+		BigDecimal totalPriceTax = BigDecimalUtils.getBidDecimal("0"); 
 		String timeStamp = ToolDateTime.getCurrent("yyMMddHHmmss");
 		
 		for (DeliveryDetailed dd : list) {
 			String weight = dd.getWeight();
-			BigDecimal bWeight = getBigDecimal(weight);
+			BigDecimal bWeight = BigDecimalUtils.getBidDecimal(weight);
 			totalWeight = totalWeight.add(bWeight);
 			
 			//追溯金额 = 追溯幅度 * 重量 / 1.17
-			BigDecimal gapPrice = bTraceRange.multiply(bWeight).divide(getBit(), 2, BigDecimal.ROUND_HALF_UP);  
+			BigDecimal gapPrice = bTraceRange.multiply(bWeight).divide(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117), 2, BigDecimal.ROUND_HALF_UP);  
 			dd.setGapPrice(gapPrice.toString());
 			totalGapPrice = totalGapPrice.add(gapPrice);
 			
 			//追溯税额 = 追溯金额 * 0.17
-			BigDecimal dvPrice = gapPrice.multiply(new BigDecimal("0.17")).setScale(2, BigDecimal.ROUND_HALF_UP);;   
+			BigDecimal dvPrice = gapPrice.multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017)).setScale(2, BigDecimal.ROUND_HALF_UP);
 			dd.setDvPrice(dvPrice.toString());
 			totalPrice = totalPrice.add(dvPrice);
 			
@@ -480,6 +481,5 @@ public class WiscoSettlementService extends BaseService {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(new BigDecimal("1.17"));
 	}
 }

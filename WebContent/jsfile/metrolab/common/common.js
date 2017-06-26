@@ -26,10 +26,24 @@ var common_common = function() {
 	    });
 		return ids;
 	};
-
+	
+	/**
+	 * 全选、反选
+	 * @param id
+	 */
+	var getCheckComponetFunc = function(id){
+		var checks = new Array();
+		$("#" + id + " input[name='checkIds']").each(function(){
+			if($(this)[0].checked == true)
+			checks.push($(this));
+	    });
+		return checks;
+	};
+	
 	return {
 		checkFunc : checkFunc,
-		getCheckFunc : getCheckFunc
+		getCheckFunc : getCheckFunc,
+		getCheckComponetFunc:getCheckComponetFunc
 	};
 	
 }();

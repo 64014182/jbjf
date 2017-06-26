@@ -20,7 +20,7 @@ ALTER TABLE b_trading_deliverydetailed add outNo varchar(128) COMMENT '出库号
 ALTER TABLE b_trading_deliverydetailed add traceRange varchar(128) COMMENT '追溯幅度';
 ALTER TABLE b_trading_deliverydetailed add pricetax varchar(128) COMMENT '价税合计';
 ALTER TABLE b_trading_deliverydetailed add traceInvoceNo varchar(128) COMMENT '追溯发票号';
-
+ALTER TABLE b_trading_deliverydetailed add settState varchar(1) COMMENT '状态0-采购结算已经结-1采购未结';
 
 DROP TABLE IF EXISTS `b_trading_excelInHistory`;
 CREATE TABLE `b_trading_excelInHistory` (
@@ -44,6 +44,6 @@ CREATE TABLE `b_trading_excelInHistory` (
 
 
 
-
-
+UPDATE b_trading_deliverydetailed set state = '0' where state is NULL
+更新STATE默认值为‘0’
 

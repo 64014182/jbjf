@@ -377,7 +377,7 @@ var common_modals = function() {
 	/**
 	 * 追溯
 	 */
-	var trace = function(url,tableId){
+	var trace = function(url,tableId,title){
 		if(tableId != undefined && tableId != null){
 			if(url.indexOf("?") == -1){
 				url = url + "?localePram=" + localePram;
@@ -404,7 +404,7 @@ var common_modals = function() {
 			url+="&ids=" + encodeURI(encodeURI(ids));
 			myDialog = dialog({
 				align: 'bottom',
-				title: "追溯",
+				title: title,
 			    icon: 'succeed',
 			});
 			$.ajax({

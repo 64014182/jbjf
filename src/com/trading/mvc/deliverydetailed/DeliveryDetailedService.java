@@ -2,6 +2,7 @@ package com.trading.mvc.deliverydetailed;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,6 +25,11 @@ import com.platform.tools.ToolDateTime;
 import com.platform.tools.ToolExcel;
 import com.platform.tools.ToolFreemarkParse;
 import com.platform.tools.code.handler.BaseHandler;
+import com.trading.mvc.BigDecimalUtils;
+import com.trading.mvc.TableUtils;
+import com.trading.mvc.TradingConst;
+import com.trading.mvc.salessettlement.SalesSettlement;
+import com.trading.mvc.wiscosettlement.WiscoSettlement;
 
 @Service(name = DeliveryDetailedService.serviceName)
 public class DeliveryDetailedService extends BaseService {
@@ -80,10 +86,10 @@ public class DeliveryDetailedService extends BaseService {
 			String price = r.getStr("price");
 			String salesPrice = r.getStr("salesPrice");
 			
-			BigDecimal bdsalesPrice = new BigDecimal(salesPrice.replaceAll(",", ""));
-			BigDecimal bdprice = new BigDecimal(price.replaceAll(",", ""));
+			BigDecimal bdsalesPrice = BigDecimalUtils.getBidDecimal(salesPrice);
+			BigDecimal bdprice = BigDecimalUtils.getBidDecimal(price);
 			
-			BigDecimal bdBit = new BigDecimal(1.17d);
+			BigDecimal bdBit = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
 			BigDecimal itemSalesprice = bdprice.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP).add(bdsalesPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
 			r.set("salesPrice", itemSalesprice.toString());
 		}
@@ -124,31 +130,135 @@ public class DeliveryDetailedService extends BaseService {
 		splitPage.setList(page.getList());
 		splitPage.compute();
 	}
-
+	
 	public void updateState(String table, String ids, String state) {
 		String sqlIn = sqlIn(ids);
 
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("table", table);
 		param.put("sqlIn", sqlIn);
-
+ 
 		String sql = "";
-		String no = ToolDateTime.getCurrent("yyMMddhhss");
-
-		if (state.equals("1")) {
-			no = "R" + no;
+		String no = ToolDateTime.getCurrent("yyMMdd");
+		String countNo = null;
+		if (state.equals(TradingConst.DeliveryDetailedState_in)) {
+			no = TradingConst.DeliveryDetailed_In + no;
+			countNo = TableUtils.getNo(4, "b_trading_deliverydetailed", "inNo", no);
 			sql = getSqlByBeetl("trading.deliveryDetailed.updateStateIn", param);
-		} else if (state.equals("2")) {
+		} else if (state.equals(TradingConst.DeliveryDetailedState_out)) {
+			no = TradingConst.DeliveryDetailed_Out + no; 
+			countNo = TableUtils.getNo(4, "b_trading_deliverydetailed", "outNo", no);
 			sql = getSqlByBeetl("trading.deliveryDetailed.updateStateOut", param);
-			no = "C" + no;
-		}else{
+		} else {
 			throw new RuntimeException("updateState: " + state + "非法输入！");
 		}
-		Db.use().update(sql, state, no);
+		Db.use().update(sql, state,countNo);
 	}
 	
-	public static void main(String[] args) {
+	/**
+	 * 更新入库出库单号
+	 */
+	public void updateStateNo(){
 		
+	}
+	
+
+	/**
+	 * 结算
+	 * @param selIds	编号
+	 * @param invoiceNo 发票号
+	 */
+	public void saveSettle(String selIds, String invoiceNo) {
+		Timestamp currentDate = ToolDateTime.getSqlTimestamp(ToolDateTime.getDate());
+		
+		String sqlIn = sqlIn(selIds);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("sqlIn", sqlIn);
+		String sql = getSqlByBeetl("trading.deliveryDetailed.selectDeliverydetailedIn", param);
+		
+		List<Record> list = Db.find(sql);
+		BigDecimal bd =  BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
+		BigDecimal bdz =  BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017);
+		String timeStamp = ToolDateTime.getCurrent("yyMMddHHmmss");
+		
+		for (Record dd : list) {
+			String weight = dd.getStr("weight");  	//重量
+			String price = dd.getStr("price");  	//订货价格
+			String salesPrice = dd.getStr("salesPrice");  	//销售加价
+			String contractMonth = dd.getStr("contractMonth");
+			String orderItemNo = dd.getStr("orderItemNo");
+			String salesOrderNo = dd.getStr("salesOrderNo");
+			String orderUnitId = dd.getStr("orderUnitId");
+			String manufacturerId = dd.getStr("manufacturerId");
+			String solesOrderIds = dd.getStr("solesOrderIds");
+			String pName = dd.getStr("pName");
+			String grade = dd.getStr("grade");
+			String thickness = dd.getStr("thickness");
+			String width = dd.getStr("width");
+			String length = dd.getStr("length");
+			
+			BigDecimal bdw = BigDecimalUtils.getBidDecimal(weight);
+			
+			//采购结算
+			//结算价  = 订货价格/1.17
+			BigDecimal bprice = BigDecimalUtils.getBidDecimal(price).divide(bd, 7, BigDecimal.ROUND_HALF_UP);
+			
+			//货款 = 订货价格/1.17 * 重量
+			BigDecimal goodsPrice = BigDecimalUtils.getBidDecimal(price).divide(bd, 7, BigDecimal.ROUND_HALF_UP).multiply(bdw).setScale(2, BigDecimal.ROUND_HALF_UP);
+			//税款 = 货款*0.17 
+			BigDecimal taxPirce = goodsPrice.multiply(bdz).setScale(2, BigDecimal.ROUND_HALF_UP);
+			
+			WiscoSettlement ws = new WiscoSettlement();
+			ws.setContractMonth(contractMonth);
+			ws.setWeight(weight);
+			ws.setLoan(goodsPrice.toString());
+			ws.setTax(taxPirce.toString());
+			ws.setInvoice(invoiceNo);
+			ws.setOrderItemNo(orderItemNo);
+			ws.setSettlementNo("JS" + timeStamp);
+			ws.setSpecification(thickness + "*" + width + "*" + length);
+			ws.setPName(pName);
+			ws.setGrade(grade);
+			ws.setPrice(bprice.toString());
+			ws.setSaveInvoceDate(currentDate);
+			ws.save();
+			
+			//销售结算
+			//销售合同价 = 订货价格 + 加价
+			BigDecimal invoicePrice = BigDecimalUtils.getBidDecimal(price).add(BigDecimalUtils.getBidDecimal(salesPrice)).setScale(2, BigDecimal.ROUND_HALF_UP);
+			//销售不含税价 = 销售合同价 / 1.17
+			BigDecimal noTaxPrice = invoicePrice.divide(bd, 2, BigDecimal.ROUND_HALF_UP);
+			//货款 = 销售合同价 / 1.17 * 重量
+			BigDecimal goodsAmount = invoicePrice.divide(bd, 7, BigDecimal.ROUND_HALF_UP).multiply(bdw);
+			//税款 = 货款 * 1.17 
+			BigDecimal taxPrice = goodsAmount.multiply(bdz).setScale(2, BigDecimal.ROUND_HALF_UP);
+			//总金额 = 货款 + 税款
+			BigDecimal totalAmount = goodsAmount.add(taxPrice);
+			
+			SalesSettlement ss = new SalesSettlement();
+			//ss.setFlag("JS" + timeStamp);
+			ss.setContractMonth(contractMonth);
+			ss.setOrderItemNo(orderItemNo);
+			ss.setWeight(weight);
+			ss.setInvoiceNo(invoiceNo);
+			ss.setInvoicePrice(invoicePrice.toString());  //销售合同价
+			ss.setNoTaxPrice(noTaxPrice.toString());//销售不含税价
+			ss.setGoodsAmount(goodsAmount.toString());//货款金额
+			ss.setTaxPrice(taxPrice.toString());  //税款金额
+			ss.setTotalAmount(totalAmount.toString());//总金额
+			ss.setOrderUnitId(orderUnitId);
+			ss.setManufacturerId(manufacturerId);
+			ss.setSpecification(thickness + "*" + width + "*" + length);
+			ss.setSalesOrderNo(salesOrderNo);
+			ss.setSalesOrderIds(solesOrderIds);
+			ss.setPName(pName);
+			ss.setGrade(grade);
+			ss.setSaveDate(currentDate);
+			ss.save();
+			
+			String updateSettStateSql = getSqlByBeetl("trading.deliveryDetailed.updateSettState", param);
+			Db.update(updateSettStateSql, "1");
+		}
 	}
 
 }

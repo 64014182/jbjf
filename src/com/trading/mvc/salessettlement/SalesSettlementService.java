@@ -22,6 +22,7 @@ import com.platform.mvc.base.BaseService;
 import com.platform.tools.ToolDateTime;
 import com.platform.tools.ToolFreemarkParse;
 import com.platform.tools.code.handler.BaseHandler;
+import com.trading.mvc.BigDecimalUtils;
 import com.trading.mvc.orderunit.OrderUnit;
 import com.trading.mvc.salesorder.SalesOrder;
 import com.trading.mvc.wiscosettlement.WiscoSettlement;
@@ -116,12 +117,12 @@ public class SalesSettlementService extends BaseService {
 		so.update();
 		
 		String sWeight = ws.get("weight");
-		BigDecimal bWeight = getBigDecimal(sWeight);
-		BigDecimal bNoTaxPrice = getBigDecimal(noTaxPrice);
+		BigDecimal bWeight = BigDecimalUtils.getBidDecimal(sWeight);
+		BigDecimal bNoTaxPrice = BigDecimalUtils.getBidDecimal(noTaxPrice);
 		BigDecimal ga = bWeight.multiply(bNoTaxPrice).setScale(2, BigDecimal.ROUND_HALF_UP);
 		ss.setGoodsAmount(ga.toString());
 		
-		BigDecimal bb = getBigDecimal("0.17");
+		BigDecimal bb = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017);
 		BigDecimal bTaxPrice = ga.multiply(bb).setScale(2, BigDecimal.ROUND_HALF_UP);
 		ss.setTaxPrice(bTaxPrice.toString());
 		ss.setNoTaxPrice(noTaxPrice);
@@ -138,10 +139,6 @@ public class SalesSettlementService extends BaseService {
 			o.save();
 		}
 		return o;
-	}
-	
-	private BigDecimal getBigDecimal(String numStr) {
-		return new BigDecimal(numStr.replaceAll(",", ""));
 	}
 
 	/**
@@ -167,6 +164,5 @@ public class SalesSettlementService extends BaseService {
 		String updateSql = getSqlByBeetl("trading.salesSettlement.updateFlagByIds", param);
 		Db.update(updateSql, flagNo, "1");
 		return exportExcel(ids, orderUnit);
-		
 	}
 }
