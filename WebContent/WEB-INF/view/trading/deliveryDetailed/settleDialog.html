@@ -1,0 +1,59 @@
+<form id="editForm" action="${cxt!}/trading/deliveryDetailed/settle" method="POST"
+	role="form" class="form-horizontal">
+	
+	<input type="hidden" name="selIds" value="${selIds}">
+	
+	<div class="control-group">
+		<label class="control-label">采购发票号</label>
+		<div class="controls">
+			<input id="invoiceNo" type="text" name="invoiceNo">
+		</div>
+	</div>
+</form>
+
+<div class="control-group">
+	<div class="controls">
+		<button type="sub" class="btn btn-success ajaxSave">
+			<i class="icon-ok icon-white"></i>提交
+		</button>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$('.ajaxSave').click(function() {
+		var errorCount = platform_verify.formVali(document.getElementById("editForm"));
+		if(errorCount != 0){
+			common_modals.alert("有" + errorCount + "处错误，请修正！");
+	 		return false;
+		}
+		var invoiceNo = $("#invoiceNo").val(); //获取
+		$.ajax({
+			type : "POST",
+			url : "${cxt!}/trading/deliveryDetailed/settle?selIds=${selIds}&invoiceNo=" + invoiceNo,
+			contentType : "application/json; charset=utf-8",
+			dataType : "json",
+			success : function(message) {
+				var message = message['message'];
+				
+				if(message.indexOf("失败")>0){
+					toastr.error(message);
+				}else{
+					toastr.success(message);
+				}
+				$('.ui-dialog-close').click();
+			},
+			error : function(message) {
+				//common_modals.closeDialog();
+				toastr.error(message['message']);
+			}
+		});
+		
+// 		common_ajax.ajaxFunc($("#" + "editForm").attr("action"));
+// 		var result = common_ajax.ajaxForm(,"html", closeDialog);
+// 		$("#main-content").html(result);
+	});
+	
+	function closeDialog(){
+		$('.ui-dialog-close').click();
+	}
+</script>
