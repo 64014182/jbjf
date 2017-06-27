@@ -67,7 +67,7 @@ var platform_verify = function() {
 	 * @returns
 	 */
 	var floatZ = function(str){
-		var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+		var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,20})?$/;
 	    if(exp.test(str)){
 	    	return {"result" : true, "message" : ""};
 	    }else{

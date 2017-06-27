@@ -29,7 +29,6 @@ import com.trading.mvc.BigDecimalUtils;
 import com.trading.mvc.TableUtils;
 import com.trading.mvc.TradingConst;
 import com.trading.mvc.deliverydetailed.DeliveryDetailed;
-import com.trading.mvc.manufacturer.Manufacturer;
 import com.trading.mvc.poci.Poci;
 import com.trading.mvc.salesorder.SalesOrder;
 import com.trading.mvc.salessettlement.SalesSettlement;
@@ -315,74 +314,168 @@ public class WiscoSettlementService extends BaseService {
 		return generalFilePath;
 	}
 
-	public void save(WiscoSettlement ws,String unitName) {
-		String loanStr = ws.getStr("loan");
+	public void save(WiscoSettlement ws, String salesAddPrice, String salesWeight) {
+		Poci poci = getPociByInvoceNo(ws.getOrderItemNo());
+		SalesOrder so = getSoByInvoceNo(ws.getOrderItemNo());
+		if (null == poci || null == so) {
+			throw new RuntimeException("订单项次号： " + ws.getOrderItemNo() + "对应的合同不存在或没设置！");
+		}
+		
+		Timestamp ts = ToolDateTime.getSqlTimestamp(ToolDateTime.getDate());
+		// 采购结算价
+		String priceStr = ws.getStr("price");
 		String weightStr = ws.getStr("weight");
 		
-		BigDecimal bdLoan = BigDecimalUtils.getBidDecimal(loanStr);// 货款金额
-		BigDecimal bdWeight = BigDecimalUtils.getBidDecimal(weightStr);// 重量
+		BigDecimal bdPirce = BigDecimalUtils.getBidDecimal(priceStr);
+		BigDecimal bdWeight = BigDecimalUtils.getBidDecimal(weightStr);
 		
-		BigDecimal price = bdLoan.divide(bdWeight,2, BigDecimal.ROUND_HALF_UP);  //单价  货款除重量
-		ws.setPrice(price.toString());
-		
-		BigDecimal bdBit = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017);                
-		BigDecimal bdTax = bdLoan.multiply(bdBit).setScale(2, BigDecimal.ROUND_HALF_UP);
-		ws.setTax(bdTax.toString());     //税额  		货款金额 * 0.17
+		//采购货款金额 = 采购结算价 * 采购实结重量
+		BigDecimal bdLoan = bdPirce.multiply(bdWeight).setScale(2, BigDecimal.ROUND_HALF_UP);
+		//采购税额 = 采购货款金额 * 0.17
+		BigDecimal bdTax = bdLoan.multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017)).setScale(2, BigDecimal.ROUND_HALF_UP);;
+
+		ws.setPrice(priceStr);
+		ws.setLoan(bdLoan.toString());
+		ws.setTax(bdTax.toString());
+		ws.setSettlementNo(poci.getInvoceNo());
 		ws.setFreight("0");
 		ws.setWaterTIP("0");
 		ws.setWaterTIP("0");
 		ws.setExtensionFreight("0");
 		ws.setHasConfirm("1");
-		ws.setSaveInvoceDate(ToolDateTime.getSqlTimestamp(ToolDateTime.getDate()));
-		
-		String orderItemNo = ws.get("orderItemNo");
-		
-		orderItemNo = getOrderItemNo(ws.getStr("contractMonth"));
-		
-		Poci poci = setPoci(orderItemNo, ws.getStr("contractMonth"));
-		
-		Manufacturer m = Manufacturer.dao.findById(unitName);
-		SalesOrder so = setSalesOrder(poci,m);
-		ws.save();
-		
-		setSalesSettlement(ws.getIds(),so.getIds(),ws.getInvoice());
-	}
-
-	private String getOrderItemNo(String orderItemNo) {
-		orderItemNo = "W" + orderItemNo;
-		String sql = "SELECT COUNT(*) as count FROM b_trading_wiscosettlement where orderItemNo = ?";
-		Record r = Db.findFirst(sql, orderItemNo);
-		String countNo = "0";
-		if (null != r) {
-			countNo = String.valueOf(r.get("count"));
+		ws.setDtype("3");
+		ws.setSaveInvoceDate(ts);
+		ws.setContractMonth(poci.getCDate());
+		if (StringUtils.isEmpty(ws.getIds())) {
+			ws.save();
+		} else {
+			ws.update();
 		}
-		if (countNo.length() <= 1) {
-			countNo += "0" + countNo;
-		}
-		orderItemNo += countNo;
-		return orderItemNo;
-	}
 
-	private void setSalesSettlement(String wiscoSettlementIds,String salesOrderIds,String invoice) {
-		SalesSettlement ss = new SalesSettlement();
-		ss.setWiscoSettlementIds(wiscoSettlementIds);
-		ss.setSalesOrderIds(salesOrderIds);
-		ss.setInvoiceNo(invoice);
-		ss.save();
+		setSalesSettlement(ws, ts, so, salesAddPrice, salesWeight);
+		setDeliveryDetailed(ws);
 	}
-
-	private Poci setPoci(String orderItemNo, String contractMonth) {
-		String invoiceNo = orderItemNo.substring(0, orderItemNo.length() - 3);
-		Poci p = Poci.dao.findFirstByColumnValue("invoceNo", invoiceNo);
-		if (p == null) {
-			p = new Poci();
-			p.setInvoceNo(invoiceNo);
-			p.setCDate(contractMonth);
-			p.save();
+	private Poci getPociByInvoceNo(String orderItemNo) {
+		int length = orderItemNo.length();
+		if (length >= 10) {
+			String pociInvoiceNo = orderItemNo.substring(0, length - 3);
+			return Poci.dao.findFirstByColumnValue("invoceNo", pociInvoiceNo);
+		} else {
+			throw new RuntimeException("订单项次号： " + orderItemNo + "位数小于10！");
 		}
-		return p;
 	}
 	
+	private void setDeliveryDetailed(WiscoSettlement ws) {
+		DeliveryDetailed dd = new DeliveryDetailed();
+		dd.setOrderItemNo(ws.getOrderItemNo());
+		dd.setContractMonth(ws.getContractMonth());
+		dd.setWeight(ws.getWeight());
+		dd.setWriteOffDate(ws.getSaveInvoceDate().toString());
+		dd.setDtype("3");
+		String specification = ws.getSpecification();
+		
+		if (StringUtils.isNotEmpty(specification) && specification.indexOf("*") > 0) {
+			String[] spec = specification.split("\\*");
+
+			for (int i = 0; i < spec.length; i++) {
+				if (i == 0) {
+					dd.setThickness(spec[0]);
+				} else if (i == 2) {
+					dd.setWidth(spec[1]);
+				} else if (i == 3) {
+					dd.setLength(spec[2]);
+				}
+			}
+		}
+		dd.save();
+	}
+	
+	private SalesOrder getSoByInvoceNo(String orderItemNo) {
+		int length = orderItemNo.length();
+		if (length >= 10) {
+			String pociInvoiceNo = orderItemNo.substring(0, length - 3);
+			return SalesOrder.dao.findFirstByColumnValue("orderItemNo", pociInvoiceNo);
+		} else {
+			throw new RuntimeException("订单项次号： " + orderItemNo + "位数小于10！");
+		}
+	}
+	
+	/**
+	 * 保存销售结算
+	 * @param ws 采购结算
+	 * @param salesAddPrice 销售加价
+	 * @param salesWeight 销售实结重量
+	 */
+	private void setSalesSettlement(WiscoSettlement ws,Timestamp ts,SalesOrder so,String salesAddPrice,String salesWeight) {
+		SalesSettlement ss = new SalesSettlement();
+		//采购合同价 = 采购结算价*1.17; 
+		BigDecimal bdPpirce = BigDecimalUtils.getBidDecimal(ws.getPrice()).multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117)).setScale(2, BigDecimal.ROUND_HALF_UP);
+		
+		//销售合同价格 = 采购合同价 + 销售加价
+		BigDecimal bdSalesInvocePirce = bdPpirce.add(BigDecimalUtils.getBidDecimal(salesAddPrice));
+				
+		//销售不含税价  =销售合同价格/1.17(保留7位小数)
+		BigDecimal bdNotax = bdSalesInvocePirce.divide(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117), 2, BigDecimal.ROUND_HALF_UP);
+		
+		//销售货款金额=销售不含税价*销售实结重量
+		BigDecimal bdGoodsAmount = bdNotax.multiply(BigDecimalUtils.getBidDecimal(salesWeight)).setScale(2, BigDecimal.ROUND_HALF_UP);
+		
+		//销售税额=销售货款金额*0.17
+		BigDecimal bdTaxPrice = bdGoodsAmount.multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017)).setScale(2, BigDecimal.ROUND_HALF_UP);
+		
+		//价税合计=销售货款金额+销售税额
+		BigDecimal totalAmount = bdGoodsAmount.add(bdTaxPrice);
+		
+		ss.setWiscoSettlementIds(ws.getIds());
+		ss.setOrderItemNo(ws.getOrderItemNo());
+		ss.setGoodsAmount(bdGoodsAmount.toString());
+		ss.setTaxPrice(bdTaxPrice.toString());
+		ss.setTotalAmount(totalAmount.toString());
+		ss.setInvoiceNo(ws.getInvoice());
+		ss.setSaveDate(ts);
+		ss.setOrderUnitId(so.getOrderUnit());
+		ss.setManufacturerId(so.getManufacturer());
+		ss.setPName(ws.getPName());
+		ss.setGrade(ws.getGrade());
+		ss.setSpecification(ws.getSpecification());
+		ss.setWeight(salesWeight);
+		ss.setContractMonth(ws.getContractMonth());
+		ss.setAddPrice(salesAddPrice);
+		ss.setSalesOrderNo(so.getSalesOrderNo());
+		ss.setSalesOrderIds(so.getIds());
+		ss.setNoTaxPrice(bdNotax.toString());
+		ss.setInvoicePrice(bdSalesInvocePirce.toString());
+		ss.save();
+		//ss.setSalesOrderIds(salesOrderIds);
+		//ss.setInvoiceNo(invoice);
+		//ss.save();
+	}
+
+//	private Poci setPoci(String orderItemNo, String contractMonth) {
+//		String invoiceNo = orderItemNo.substring(0, orderItemNo.length() - 3);
+//		Poci p = Poci.dao.findFirstByColumnValue("invoceNo", invoiceNo);
+//		if (p == null) {
+//			p = new Poci();
+//			p.setInvoceNo(invoiceNo);
+//			p.setCDate(contractMonth);
+//			p.save();
+//		}
+//		return p;
+//	}
+//	private String getOrderItemNo(String orderItemNo) {
+//		orderItemNo = "W" + orderItemNo;
+//		String sql = "SELECT COUNT(*) as count FROM b_trading_wiscosettlement where orderItemNo = ?";
+//		Record r = Db.findFirst(sql, orderItemNo);
+//		String countNo = "0";
+//		if (null != r) {
+//			countNo = String.valueOf(r.get("count"));
+//		}
+//		if (countNo.length() <= 1) {
+//			countNo += "0" + countNo;
+//		}
+//		orderItemNo += countNo;
+//		return orderItemNo;
+//	}
 //	private Manufacturer setManufacturer(String unitName) {
 //		Manufacturer m = Manufacturer.dao.findFirstByColumnValue("name", unitName);
 //		if (null == m) {
@@ -393,23 +486,23 @@ public class WiscoSettlementService extends BaseService {
 //		return m;
 //	}
 	
-	private SalesOrder setSalesOrder(Poci p, Manufacturer m) {
-		String invoceNo = p.getStr("invoceNo");
-		SalesOrder so = SalesOrder.dao.findFirstByColumnValue("orderItemNo", invoceNo);
-		if (so != null) {
-			return so;
-		}
-		so = new SalesOrder();
-		so.setSalesPrice("0");
-		so.setFreightage("0");
-		so.setStorag("0");
-		so.setPocIds(p.getIds());
-		so.setSalesPrice("0");
-		so.setOrderItemNo(invoceNo);
-		so.setManufacturer(m.getIds());
-		so.save();
-		return so;
-	}
+//	private SalesOrder setSalesOrder(Poci p, Manufacturer m) {
+//		String invoceNo = p.getStr("invoceNo");
+//		SalesOrder so = SalesOrder.dao.findFirstByColumnValue("orderItemNo", invoceNo);
+//		if (so != null) {
+//			return so;
+//		}
+//		so = new SalesOrder();
+//		so.setSalesPrice("0");
+//		so.setFreightage("0");
+//		so.setStorag("0");
+//		so.setPocIds(p.getIds());
+//		so.setSalesPrice("0");
+//		so.setOrderItemNo(invoceNo);
+//		so.setManufacturer(m.getIds());
+//		so.save();
+//		return so;
+//	}
 
 	/**
 	 * 追溯
@@ -490,5 +583,35 @@ public class WiscoSettlementService extends BaseService {
 	}
 	
 	public static void main(String[] args) {
+		String s = "5.00*1,500.00*6,000.00";
+		String[] spec = s.split("\\*");
+		System.out.println(spec);
+	}
+
+	public void update(WiscoSettlement ws, String salesAddPrice, String salesWeight) {
+		SalesSettlement ss = SalesSettlement.dao.findFirstByColumnValue("orderItemNo", ws.getOrderItemNo());
+		if (null != ss) {
+			ss.delete();
+		}
+		DeliveryDetailed dd = DeliveryDetailed.dao.findFirstByColumnValue("orderItemNo", ws.getOrderItemNo());
+		if (null != dd) {
+			dd.delete();
+		}
+		save(ws, salesAddPrice, salesWeight);
+	}
+
+	public void del(String ids) {
+		WiscoSettlement ws = WiscoSettlement.dao.findById(ids);
+		SalesSettlement ss = SalesSettlement.dao.findFirstByColumnValue("orderItemNo", ws.getOrderItemNo());
+		if (null != ss) {
+			ss.delete();
+		}
+		DeliveryDetailed dd = DeliveryDetailed.dao.findFirstByColumnValue("orderItemNo", ws.getOrderItemNo());
+		if (null != dd) {
+			dd.delete();
+		}
+		if (ws != null) {
+			ws.delete();
+		}
 	}
 }

@@ -8,17 +8,57 @@
 	</div>
 </div>
 <div class="control-group">
-	<label class="control-label">品名</label>
+	<label class="control-label">订单项次编号</label>
 	<div class="controls">
-		<input type="text" name="wiscoSettlement.pName"  value="${escapeHtml(wiscoSettlement.pName!)}" class="span8" placeholder="1-20位字母数字">
+		<input type="text" name="wiscoSettlement.orderItemNo"  value="${escapeHtml(wiscoSettlement.orderItemNo!)}"
+			class="span8" maxlength="11" vMin="10" vType="letterNumber" onblur="platform_verify.onblurVali(this);" placeholder="10-11位字母数字">
 		<span class="help-inline"></span>
 	</div>
 </div>
 <div class="control-group">
-	<label class="control-label">订单项次编号</label>
+	<label class="control-label">采购实结重量</label>
 	<div class="controls">
-		<input type="text" name="wiscoSettlement.orderItemNo"  value="${escapeHtml(wiscoSettlement.orderItemNo!)}"
-			class="span8" maxlength="11" vMin="11" placeholder="1-11位字母数字">
+		<input type="text" name="wiscoSettlement.weight"  value="${escapeHtml(wiscoSettlement.weight!)}"
+			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50母数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">采购结算价</label>
+	<div class="controls">
+		<input type="text" name="wiscoSettlement.price"  value="${escapeHtml(wiscoSettlement.price!)}"
+			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<!-- <div class="control-group"> -->
+<!-- 	<label class="control-label">采购货款金额</label> -->
+<!-- 	<div class="controls"> -->
+<!-- 		<input type="text" name="wiscoSettlement.loan"  value="${escapeHtml(wiscoSettlement.loan!)}" -->
+<!-- 			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字"> -->
+<!-- 		<span class="help-inline"></span> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<div class="control-group">
+	<label class="control-label">销售加价</label>
+	<div class="controls">
+		<input type="text" name="salesAddPrice" value="${escapeHtml(salesAddPrice!)}"
+			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">销售实结重量</label>
+	<div class="controls">
+		<input type="text" name="salesWeight"  value="${escapeHtml(salesWeight!)}"
+			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位数字">
+		<span class="help-inline"></span>
+	</div>
+</div>
+<div class="control-group">
+	<label class="control-label">品名</label>
+	<div class="controls">
+		<input type="text" name="wiscoSettlement.pName"  value="${escapeHtml(wiscoSettlement.pName!)}" class="span8" placeholder="1-20位字母数字">
 		<span class="help-inline"></span>
 	</div>
 </div>
@@ -38,47 +78,22 @@
 		<span class="help-inline"></span>
 	</div>
 </div>
-<div class="control-group">
-	<label class="control-label">实结重量</label>
-	<div class="controls">
-		<input type="text" name="wiscoSettlement.weight"  value="${escapeHtml(wiscoSettlement.weight!)}"
-			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
-		<span class="help-inline"></span>
-	</div>
-</div>
-
-<div class="control-group">
-	<label class="control-label">货款金额</label>
-	<div class="controls">
-		<input type="text" name="wiscoSettlement.loan"  value="${escapeHtml(wiscoSettlement.loan!)}"
-			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位字母数字">
-		<span class="help-inline"></span>
-	</div>
-</div>
 <!-- <div class="control-group"> -->
-<!-- 	<label class="control-label">开立日期</label> -->
+<!-- 	<label class="control-label">合同月份</label> -->
 <!-- 	<div class="controls"> -->
-<!-- 		<input type="text" id="mon" class="Wdate" name="wiscoSettlement.issuanceDate" readonly="readonly"  -->
-<!-- 				value="${escapeHtml(wiscoSettlement.issuanceDate!)}" -->
-<!-- 				onClick="WdatePicker({dateFmt: 'yyyy-MM-dd', minDate:'1900-01-01'})"> -->
+<!-- 		<input type="text" name="wiscoSettlement.contractMonth"  value="${escapeHtml(wiscoSettlement.contractMonth!)}"　readonly="readonly" -->
+<!-- 			class="span8" maxlength="4" vMin="4" vType="numberZ" onblur="platform_verify.onblurVali(this);" -->
+<!-- 			onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})" -->
+<!-- 			> -->
+<!-- 		<span class="help-inline"></span> -->
 <!-- 	</div> -->
 <!-- </div> -->
-<div class="control-group">
-	<label class="control-label">合同月份</label>
-	<div class="controls">
-		<input type="text" name="wiscoSettlement.contractMonth"  value="${escapeHtml(wiscoSettlement.contractMonth!)}"　readonly="readonly"
-			class="span8" maxlength="4" vMin="4" vType="numberZ" onblur="platform_verify.onblurVali(this);"
-			onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})"
-			>
-		<span class="help-inline"></span>
-	</div>
-</div>
-<div class="control-group">
-	<label class="control-label">订货单位</label>
-	<div class="controls">
-		<select id="paymentunit" name="unitName" class="span8 chzn-select combox sqlComponent" tabindex="1"
-			selectValue="${escapeHtml(salesSettlement.orderUnitId!)}" sqlNo="orderUnitName"/>
-	</div>
-</div>
+<!-- <div class="control-group"> -->
+<!-- 	<label class="control-label">订货单位</label> -->
+<!-- 	<div class="controls"> -->
+<!-- 		<select id="paymentunit" name="unitName" class="span8 chzn-select combox sqlComponent" tabindex="1" -->
+<!-- 			selectValue="${escapeHtml(salesSettlement.orderUnitId!)}" sqlNo="orderUnitName"/> -->
+<!-- 	</div> -->
+<!-- </div> -->
 <script src="${cxt!}/ui/metrolab/js/common-scripts.js"></script>
 <script src="${cxt!}/ui/metrolab/js/form-component.js"></script>

@@ -53,9 +53,10 @@ public class WiscoSettlementController extends BaseController {
 	 */
 	@Before(WiscoSettlementValidator.class)
 	public void save() {
-		String unitName = getPara("unitName");
+		String salesAddPrice = getPara("salesAddPrice");
+		String salesWeight = getPara("salesWeight");
 		WiscoSettlement ws = getModel(WiscoSettlement.class);
-		wiscoSettlementService.save(ws,unitName);
+		wiscoSettlementService.save(ws, salesAddPrice, salesWeight);
 		forwardAction("/trading/wiscoSettlement/backOff");
 	}
 	
@@ -64,7 +65,13 @@ public class WiscoSettlementController extends BaseController {
 	 */
 	public void edit() {
 		WiscoSettlement wiscoSettlement = WiscoSettlement.dao.findById(getPara());
+		String orderItemNo = wiscoSettlement.getOrderItemNo();
+		SalesSettlement ss = SalesSettlement.dao.findFirstByColumnValue("orderItemNo", orderItemNo);
+		String salesAddPrice = ss.getAddPrice();
+		String salesWeight = ss.getWeight();
 		setAttr("wiscoSettlement", wiscoSettlement);
+		setAttr("salesAddPrice", salesAddPrice);
+		setAttr("salesWeight", salesWeight);
 		render("/trading/wiscoSettlement/update.html");
 	}
 	
@@ -73,7 +80,10 @@ public class WiscoSettlementController extends BaseController {
 	 */
 	@Before(WiscoSettlementValidator.class)
 	public void update() {
-		getModel(WiscoSettlement.class).update();
+		String salesAddPrice = getPara("salesAddPrice");
+		String salesWeight = getPara("salesWeight");
+		WiscoSettlement ws = getModel(WiscoSettlement.class);
+		wiscoSettlementService.update(ws, salesAddPrice, salesWeight);
 		forwardAction("/trading/wiscoSettlement/backOff");
 	}
 
@@ -90,7 +100,8 @@ public class WiscoSettlementController extends BaseController {
 	 * 删除
 	 */
 	public void delete() {
-		wiscoSettlementService.baseDelete(WiscoSettlement.table_name, getPara() == null ? ids : getPara());
+	//	wiscoSettlementService.baseDelete(WiscoSettlement.table_name, getPara() == null ? ids : getPara());
+		wiscoSettlementService.del(getPara() == null ? ids : getPara());
 		forwardAction("/trading/wiscoSettlement/backOff");
 	}
 	

@@ -84,7 +84,7 @@
 							value='${escapeHtml(splitPage.queryParam["saveInvoceDateEnd"])}'
 							onblur="platform_verify.onblurVali(this);" 
 							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveInvoceDateStart\')}'})">
-                   		发票号
+<!--                    		发票号 -->
 <!--                          <select  -->
 <!--                          	id="invoceMulitSelect" -->
 <!--                          	name="_query.invoices"  -->
@@ -94,7 +94,7 @@
 <!--                          	tabindex="6" -->
 <!--                          	invoices="${escapeHtml(splitPage.queryParam['invoices'])}"> -->
 <!--                          </select> -->
-						<input id="tags_1" type="text" name="_query.invoices" class="tags" value='${escapeHtml(splitPage.queryParam["invoices"])}'/>
+<!-- 						<input id="tags_1" type="text" name="_query.invoices" class="tags" value='${escapeHtml(splitPage.queryParam["invoices"])}'/> -->
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
 					</div>
@@ -122,15 +122,10 @@
 
 					<div class="widget-body">
 						<span class="tools"> 
-							<button type="button" class="btn btn-warning" onclick="common_ajax.ajaxMainPanel('/trading/wiscoSettlement/toUrl?toUrl=/trading/wiscoSettlement/add.html');">
+							<button type="button" class="btn btn-success" onclick="common_ajax.ajaxMainPanel('/trading/wiscoSettlement/toUrl?toUrl=/trading/wiscoSettlement/add.html');">
 								<i class="icon-plus icon-white"></i>
 								添加
 							</button>
-							<button type="button" class="btn btn-primary" data-table="dataTable" data-url="/trading/wiscoSettlement/delete" onclick="common_modals.deleteList(this)">
-								<i class="icon-remove icon-white"></i>
-								删除
-							</button> 
-							<% if(excelIn == true){ %>
 							<button type="button" class="btn btn-success" 
 								onclick="common_ajax.ajaxMainPanel('/platform/iedtd/toImportPage?indexKey=intoWiscoSettlement&action=/trading/wiscoSettlement/excelIn&dtype=1');">
 								<i class="icon-edit"></i>
@@ -141,12 +136,15 @@
 								<i class="icon-edit"></i>
 								非武钢Excel导入
 							</button> 
-							<button type="button" class="btn btn-danger" 
+							<button type="button" class="btn btn-info" 
 								onclick='platform_windows.openSelectTable("${cxt!}/trading/wiscoSettlement/summary", "dataTable");'>
 								<i class="icon-share"></i>
 								Excel导出
 							</button>
-							<% } %>
+							<button type="button" class="btn btn-danger" data-table="dataTable" data-url="/trading/wiscoSettlement/delete" onclick="common_modals.deleteList(this)">
+								<i class="icon-remove icon-white"></i>
+								删除
+							</button> 
 <!-- 							<input class="medium" type="text" name="_query.settlementNo" value='${escapeHtml(splitPage.queryParam["settlementNo"])}' > -->
 <!-- 							<button type="button" class="btn btn-small btn-info" -->
 <!-- 									data-table="dataTable"  -->
@@ -206,7 +204,15 @@
 											<span class="label label-warning trace">武</span>
 										<% }else if(entity["dtype"] == "2"){ %>
 											<span class="label label-success trace">非</span>
-										<% } %>
+										<% } else if(entity["dtype"] == "3"){%>
+											<span class="label label-success trace">自</span>
+											<a href="javascript:;" class="icon-edit" title="编辑"
+											onclick="common_ajax.ajaxMainPanel('/trading/wiscoSettlement/edit/${entity.ids!}');"></a>
+										
+											<a href="javascript:;" class="icon-trash" title="删除" 
+												onclick="common_modals.deleteOne(this)" 
+												data-url="/trading/wiscoSettlement/delete/${entity.ids!}?csrfToken=${csrfToken!}"></a>
+										<% }%>
 									</td>
 									<td>
 										<% if(entity["settlementNo"] == null){ %>

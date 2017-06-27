@@ -114,41 +114,41 @@
 								非武钢Excel导入
 							</button> 
 							
-							<button type="button" class="btn btn-info" data-table="dataTable" data-url="/trading/deliveryDetailed/in?csrfToken=${csrfToken!}" onclick="inVali(this)">	
+							<button type="button" class="btn btn-warning" data-table="dataTable" data-url="/trading/deliveryDetailed/in?csrfToken=${csrfToken!}" onclick="inVali(this)">	
 								<i class="icon-download-alt"></i>
 								入库
 							</button>
 							
-							<button type="button" class="btn btn-info" data-table="dataTable" data-url="/trading/deliveryDetailed/out?csrfToken=${csrfToken!}" onclick="outVali(this)">
+							<button type="button" class="btn btn-warning" data-table="dataTable" data-url="/trading/deliveryDetailed/out?csrfToken=${csrfToken!}" onclick="outVali(this)">
 								<i class="icon-external-link"></i>
 								出库
 							</button>
 							
-							<button type="button" class="btn btn-danger" 
+							<button type="button" class="btn btn-info" 
 								onclick='platform_windows.openSelectTable("${cxt!}/trading/deliveryDetailed/procurementToExcel", "dataTable");'>
 								<i class="icon-share"></i>
 								入库导出
 							</button>
 							
-							<button type="button" class="btn btn-danger" 
+							<button type="button" class="btn btn-info" 
 								onclick='platform_windows.openSelectTable("${cxt!}/trading/deliveryDetailed/outToExcel", "dataTable");'>
 								<i class="icon-share"></i>
 								出库导出
 							</button>
 							
-							<button type="button" class="btn btn-danger" 
+							<button type="button" class="btn btn-info" 
 								onclick='platform_windows.openSelectTable("${cxt!}/trading/deliveryDetailed/pPut", "dataTable");'>
 								<i class="icon-share"></i>
 								收货单导出
 							</button>
 							
-							<button type="button" class="btn btn-info"
+							<button type="button" class="btn btn-warning"
 								onclick="common_modals.trace('${cxt!}/trading/wiscoSettlement/traceDialog','dataTable','追溯')">
 								<i class="icon-retweet"></i>
 								追溯
 							</button>
 							
-							<button type="button" class="btn btn-info"
+							<button type="button" class="btn btn-warning"
 								onclick="common_modals.trace('${cxt!}/trading/deliveryDetailed/settleDialog','dataTable','结算')">
 								<i class="icon-lock"></i>
 								结算
@@ -232,7 +232,10 @@
 											<span class="label label-warning trace">武</span>
 										<% }else if(entity["dtype"] == "2"){ %>
 											<span class="label label-success trace">非</span>
-										<% } %>
+										<% } else if(entity["dtype"] == "3"){%>
+											<span class="label label-success trace">自</span>
+										<% }%>
+									</td>
 									</td>
 								</tr>
 								<tr>

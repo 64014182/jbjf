@@ -182,7 +182,11 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	 */
 	public static final String column_pricetax = "pricetax";
 	
-	
+	/**
+	 * 字段描述：数据类型
+	 * 字段类型：varchar(1)  长度：1
+	 */
+	public static final String column_dtype = "dtype";
 	/**
 	 * sqlId : trading.deliveryDetailed.splitPageFrom
 	 * 描述：分页from
@@ -220,6 +224,8 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	private String traceRange;
 	private String pricetax;
 	private String settState;
+	private String dtype;
+	
 	public void setIds(String ids){
 		set(column_ids, ids);
 	}
@@ -376,5 +382,11 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	public String getPricetax() {
 		return get(column_pricetax);
 	}
-	
+	public void setDtype(String dtype) {
+		set(column_dtype, dtype);
+	}
+
+	public String getDtype() {
+		return get(column_dtype);
+	}
 }
