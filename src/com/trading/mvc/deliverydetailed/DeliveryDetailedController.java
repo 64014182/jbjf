@@ -10,6 +10,7 @@ import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
+import com.platform.tools.ToolDateTime;
 import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 
 /**
@@ -98,9 +99,9 @@ public class DeliveryDetailedController extends BaseController {
 		if (StringUtils.isEmpty(indexKey) || StringUtils.isEmpty(dtype)) {
 			throw new RuntimeException("indexKey或dtype不能为空！");
 		}
-		
-		int countRecords = deliveryDetailedService.saveByExcel(uploadFile,sql,indexKey,dtype);
-		excelInHistoryService.save(uploadFile, String.valueOf(countRecords), "采购发货明细");
+		String currentTime = ToolDateTime.getCurrent(ToolDateTime.pattern_yymmdd);
+		int countRecords = deliveryDetailedService.saveByExcel(uploadFile,sql,indexKey,dtype,currentTime);
+		excelInHistoryService.save(uploadFile, String.valueOf(countRecords), "采购发货明细",currentTime);
 		redirect("/trading/deliveryDetailed");
 	}
 	
@@ -178,21 +179,16 @@ public class DeliveryDetailedController extends BaseController {
 	public void settle(){
 		String selIds = getPara("selIds");				//所选结算明细
 		String invoiceNo = getPara("invoiceNo");		//发票号
-		
-		
 		String err = "";
 		try {
 			deliveryDetailedService.saveSettle(selIds,invoiceNo);
 		} catch (Exception e) {
 			err = e.getMessage();
 		}
-		
 		if (StringUtils.isNotEmpty(err)) {
 			renderJson("{\"message\":\"" + "保存失败！" +  err + "\"}");
 		}else{
 			renderJson("{\"message\":\"" + "保存成功！" + "\"}");
 		}
-		
-		//redirect("/trading/deliveryDetailed/");
 	}
 }

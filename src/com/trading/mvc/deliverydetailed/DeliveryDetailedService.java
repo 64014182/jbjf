@@ -39,7 +39,7 @@ public class DeliveryDetailedService extends BaseService {
 
 	public static final String serviceName = "deliveryDetailedService";
 
-	public int saveByExcel(UploadFile uploadFile, String sql, String indexKey,String dtype) throws Exception {
+	public int saveByExcel(UploadFile uploadFile, String sql, String indexKey,String dtype,String currentTime) throws Exception {
 		Iedtd iedtd = Iedtd.dao.findFirst(sql, indexKey);
 		String columnsNo = iedtd.getExcelDataColNo();
 		String insertSql = iedtd.getIntoDbSQL();
@@ -47,8 +47,7 @@ public class DeliveryDetailedService extends BaseService {
 		// 读取EXCEL文件数据
 		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), 2, ToolExcel.getColNo(columnsNo));
 		excelData = ToolExcel.addIds(excelData);
-		excelData = ToolExcel.addOther(excelData, dtype);
-
+		excelData = ToolExcel.addOther(excelData, dtype, currentTime);
 		Db.batch(insertSql, excelData, 100);
 		return excelData.length;
 	}
@@ -154,8 +153,8 @@ public class DeliveryDetailedService extends BaseService {
 		String sql = getSqlByBeetl("trading.deliveryDetailed.selectDeliverydetailedIn", param);
 		
 		List<Record> list = Db.find(sql);
-		BigDecimal bd =  BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
-		BigDecimal bdz =  BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017);
+		BigDecimal bd = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
+		BigDecimal bdz = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017);
 		
 		for (Record dd : list) {
 			String weight = dd.getStr("weight");  	//重量

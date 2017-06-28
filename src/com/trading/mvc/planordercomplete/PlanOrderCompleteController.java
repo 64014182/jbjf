@@ -11,6 +11,7 @@ import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
+import com.platform.tools.ToolDateTime;
 import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 
 /**
@@ -114,9 +115,9 @@ public class PlanOrderCompleteController extends BaseController {
 		if (StringUtils.isEmpty(indexKey) || StringUtils.isEmpty(dtype)) {
 			throw new RuntimeException("indexKey或dtype不能为空！");
 		}
-		
-		int count = planOrderCompleteService.savePlanOrders(uploadFile,indexKey,dtype);
-		excelInHistoryService.save(uploadFile, String.valueOf(count), "采购计划");
+		String currentTime = ToolDateTime.getCurrent(ToolDateTime.pattern_yymmdd);
+		int count = planOrderCompleteService.savePlanOrders(uploadFile,indexKey,dtype,currentTime);
+		excelInHistoryService.save(uploadFile, String.valueOf(count), "采购计划",currentTime);
 		redirect("/trading/planOrderComplete/");
 	}
 	

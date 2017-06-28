@@ -73,7 +73,12 @@
 							value='${escapeHtml(splitPage.queryParam["contractMonth"])}'
 							onblur="platform_verify.onblurVali(this);" 
 							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})">
-						
+							
+						保存时间
+						<input type="text" id="mon" class="Wdate" name="_query.saveDate" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["saveDate"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyyyMMdd', minDate:'1900-01-01'})">
 <!-- 						<input id="tags_1" type="text" name="_query.tags" class="tags medium" value='${escapeHtml(splitPage.queryParam["tags"])}'/> -->
 						
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>

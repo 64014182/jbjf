@@ -4,7 +4,6 @@ import com.jfinal.log.Log;
 import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Service;
 import com.platform.mvc.base.BaseService;
-import com.platform.tools.ToolDateTime;
 
 @Service(name = ExcelInHistoryService.serviceName)
 public class ExcelInHistoryService extends BaseService {
@@ -14,14 +13,14 @@ public class ExcelInHistoryService extends BaseService {
 
 	public static final String serviceName = "excelInHistoryService";
 
-	public void save(UploadFile uploadFile, String count, String module) {
+	public void save(UploadFile uploadFile, String count, String module,String currentTime) {
 		ExcelInHistory eih = new ExcelInHistory();
 		eih.setFileName(uploadFile.getOriginalFileName());
 		eih.setUploadpath(uploadFile.getUploadPath());
 		eih.setUploadname(uploadFile.getFileName());
 		eih.setRecordCount(count);
 		eih.setModule(module);
-		eih.setSaveDate(ToolDateTime.getSqlTimestamp());
+		eih.setSaveDate(currentTime);
 		eih.save();
 	}
 }

@@ -69,14 +69,14 @@ public class WiscoSettlementService extends BaseService {
 		return ws;
 	}
 
-	public int saveExcelDatas(UploadFile uploadFile, String indexKey, String dtype) throws Exception {
+	public int saveExcelDatas(UploadFile uploadFile, String indexKey, String dtype,String currentTime) throws Exception {
 		String sql = getSqlMy("platform.iedtd.getIedtdByIndexKey");
 		Iedtd iedtd = Iedtd.dao.findFirst(sql, indexKey);
 		String columnsNo = iedtd.getExcelDataColNo();
 		String insertSql = iedtd.getIntoDbSQL();
 		String[][] excelData = ToolExcel.readExcelToArray(uploadFile.getFile(), 2, ToolExcel.getColNo(columnsNo));
 		excelData = ToolExcel.addIds(excelData);
-		excelData = ToolExcel.addOther(excelData, dtype);
+		excelData = ToolExcel.addOther(excelData, dtype, currentTime);
 		Db.batch(insertSql, excelData, 100);
 		//setHasSet(excelData);
 		return excelData.length;
@@ -330,13 +330,13 @@ public class WiscoSettlementService extends BaseService {
 		BigDecimal bdWeight = BigDecimalUtils.getBidDecimal(weightStr);
 		
 		//采购货款金额 = 采购结算价 * 采购实结重量
-		BigDecimal bdLoan = bdPirce.multiply(bdWeight).setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal bdLoan = bdPirce.multiply(bdWeight);
 		//采购税额 = 采购货款金额 * 0.17
-		BigDecimal bdTax = bdLoan.multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017)).setScale(2, BigDecimal.ROUND_HALF_UP);;
+		BigDecimal bdTax = bdLoan.multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017));
 
 		ws.setPrice(priceStr);
-		ws.setLoan(bdLoan.toString());
-		ws.setTax(bdTax.toString());
+		ws.setLoan(bdLoan.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+		ws.setTax(bdTax.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
 		ws.setSettlementNo(poci.getInvoceNo());
 		ws.setFreight("0");
 		ws.setWaterTIP("0");
@@ -370,7 +370,7 @@ public class WiscoSettlementService extends BaseService {
 		dd.setOrderItemNo(ws.getOrderItemNo());
 		dd.setContractMonth(ws.getContractMonth());
 		dd.setWeight(ws.getWeight());
-		dd.setWriteOffDate(ws.getSaveInvoceDate().toString());
+		dd.setWriteOffDate(ToolDateTime.getDateByTimestamp(ws.getSaveInvoceDate(),ToolDateTime.pattern_yymmdd));
 		dd.setDtype("3");
 		String specification = ws.getSpecification();
 		
@@ -409,7 +409,7 @@ public class WiscoSettlementService extends BaseService {
 	private void setSalesSettlement(WiscoSettlement ws,Timestamp ts,SalesOrder so,String salesAddPrice,String salesWeight) {
 		SalesSettlement ss = new SalesSettlement();
 		//采购合同价 = 采购结算价*1.17; 
-		BigDecimal bdPpirce = BigDecimalUtils.getBidDecimal(ws.getPrice()).multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117)).setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal bdPpirce = BigDecimalUtils.getBidDecimal(ws.getPrice()).multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117));
 		
 		//销售合同价格 = 采购合同价 + 销售加价
 		BigDecimal bdSalesInvocePirce = bdPpirce.add(BigDecimalUtils.getBidDecimal(salesAddPrice));
@@ -418,19 +418,22 @@ public class WiscoSettlementService extends BaseService {
 		BigDecimal bdNotax = bdSalesInvocePirce.divide(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117), 2, BigDecimal.ROUND_HALF_UP);
 		
 		//销售货款金额=销售不含税价*销售实结重量
-		BigDecimal bdGoodsAmount = bdNotax.multiply(BigDecimalUtils.getBidDecimal(salesWeight)).setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal bdGoodsAmount = bdNotax.multiply(BigDecimalUtils.getBidDecimal(salesWeight));
 		
 		//销售税额=销售货款金额*0.17
-		BigDecimal bdTaxPrice = bdGoodsAmount.multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017)).setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal bdTaxPrice = bdGoodsAmount.multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_017));
 		
 		//价税合计=销售货款金额+销售税额
 		BigDecimal totalAmount = bdGoodsAmount.add(bdTaxPrice);
 		
 		ss.setWiscoSettlementIds(ws.getIds());
 		ss.setOrderItemNo(ws.getOrderItemNo());
-		ss.setGoodsAmount(bdGoodsAmount.toString());
-		ss.setTaxPrice(bdTaxPrice.toString());
-		ss.setTotalAmount(totalAmount.toString());
+		ss.setGoodsAmount(bdGoodsAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+		ss.setTaxPrice(bdTaxPrice.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+		ss.setInvoicePrice(bdSalesInvocePirce.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+		ss.setNoTaxPrice(bdNotax.toString());
+		ss.setTotalAmount(totalAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+		
 		ss.setInvoiceNo(ws.getInvoice());
 		ss.setSaveDate(ts);
 		ss.setOrderUnitId(so.getOrderUnit());
@@ -443,8 +446,6 @@ public class WiscoSettlementService extends BaseService {
 		ss.setAddPrice(salesAddPrice);
 		ss.setSalesOrderNo(so.getSalesOrderNo());
 		ss.setSalesOrderIds(so.getIds());
-		ss.setNoTaxPrice(bdNotax.toString());
-		ss.setInvoicePrice(bdSalesInvocePirce.toString());
 		ss.save();
 		//ss.setSalesOrderIds(salesOrderIds);
 		//ss.setInvoiceNo(invoice);

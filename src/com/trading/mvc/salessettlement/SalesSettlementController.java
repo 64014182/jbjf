@@ -37,9 +37,6 @@ public class SalesSettlementController extends BaseController {
 	private SalesSettlementService salesSettlementService;
 	private WiscoSettlementService wiscoSettlementService;
 	
-	
-	
-	
 	/**
 	 * 列表
 	 */

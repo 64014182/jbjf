@@ -50,6 +50,9 @@
 		<% if(!isEmpty(state)){ %>
 			and dd.state like #'%$state$%'#
 		<% } %>
+		<% if(!isEmpty(saveDate)){ %>
+			and dd.saveDate like #'%$saveDate$%'#
+		<% } %>
     	]]>
 	</sql>
 	

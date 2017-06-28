@@ -1,11 +1,8 @@
 package com.trading.mvc.deliverydetailed;
 
-import com.platform.annotation.Table;
-import com.platform.constant.ConstantInit;
-import com.platform.mvc.base.BaseModel;
-
-
 import com.jfinal.log.Log;
+import com.platform.annotation.Table;
+import com.platform.mvc.base.BaseModel;
 
 /**
  * 武钢采购发货明细 model
@@ -194,6 +191,12 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	public static final String sqlId_splitPageFrom = "trading.deliveryDetailed.splitPageFrom";
 
 	/**
+	 * 字段描述：保存时间
+	 * 字段类型：varchar(128)  长度：128
+	 */
+	public static final String column_saveDate = "saveDate";
+	
+	/**
 	 * sqlId : trading.deliveryDetailed.splitPageFrom
 	 * 描述：分页from
 	 */
@@ -205,6 +208,7 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	private String weight;
 	private String quantity;
 	private String writeOffDate;
+	private String saveDate;
 	private String freight;
 	private String railwayTIP;
 	private String waterTIP;
@@ -385,8 +389,13 @@ public class DeliveryDetailed extends BaseModel<DeliveryDetailed> {
 	public void setDtype(String dtype) {
 		set(column_dtype, dtype);
 	}
-
 	public String getDtype() {
 		return get(column_dtype);
+	}
+	public void setSaveDate(String saveDate){
+		set(column_saveDate, saveDate);
+	}
+	public String getSaveDate() {
+		return get(column_saveDate);
 	}
 }

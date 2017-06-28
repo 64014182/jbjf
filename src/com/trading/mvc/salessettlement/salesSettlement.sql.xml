@@ -67,8 +67,8 @@
 			<% if(!isEmpty(saveDateStart)){ %>
 					and sales.saveDate >= #'$saveDateStart$'#
 			<% } %>
-				<% if(!isEmpty(saveDateEnd)){ %>
-					and sales.saveDate <= #'$saveDateDateEnd$'#
+			<% if(!isEmpty(saveDateEnd)){ %>
+					and sales.saveDate <= #'$saveDateEnd$'#
 			<% } %>
     	]]>
 	</sql>

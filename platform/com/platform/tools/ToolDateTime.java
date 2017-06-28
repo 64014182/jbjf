@@ -29,6 +29,7 @@ public abstract class ToolDateTime {
 	public static final int pattern_ym_length = 7;
 	public static final String pattern_yymm = "yyMM"; // pattern_ym
 	public static final String pattern_ymd = "yyyy-MM-dd"; // pattern_ymd
+	public static final String pattern_yymmdd = "yyyyMMdd"; // pattern_ymd
 	public static final int pattern_ymd_length = 10;
 	
 	public static final String pattern_ymd_hm = "yyyy-MM-dd HH:mm"; // pattern_ymd hm
@@ -557,4 +558,9 @@ public abstract class ToolDateTime {
 		return listArray;
 	}
 	
+	public static String getDateByTimestamp(Timestamp timestamp, String pattern) {
+		DateFormat sdf = new SimpleDateFormat(pattern);
+		java.util.Date currTime = new java.util.Date();
+		return sdf.format(currTime);
+	}
 }

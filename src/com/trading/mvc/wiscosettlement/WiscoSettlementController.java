@@ -14,6 +14,7 @@ import com.jfinal.upload.UploadFile;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
+import com.platform.tools.ToolDateTime;
 import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 import com.trading.mvc.salessettlement.SalesSettlement;
 
@@ -145,8 +146,9 @@ public class WiscoSettlementController extends BaseController {
 		if (StringUtils.isEmpty(indexKey) || StringUtils.isEmpty(dtype)) {
 			throw new RuntimeException("indexKey或dtype不能为空！");
 		}
-		int countRecords = wiscoSettlementService.saveExcelDatas(uploadFile,indexKey,dtype);
-		excelInHistoryService.save(uploadFile, String.valueOf(countRecords), "采购结算明细");
+		String currentTime = ToolDateTime.getCurrent(ToolDateTime.pattern_yymmdd);
+		int countRecords = wiscoSettlementService.saveExcelDatas(uploadFile,indexKey,dtype,currentTime);
+		excelInHistoryService.save(uploadFile, String.valueOf(countRecords), "采购结算明细",currentTime);
 		setAttr("countRecords", countRecords);
 		redirect("/trading/wiscoSettlement/");
 	}

@@ -82,7 +82,7 @@ public class ExcelInHistory extends BaseModel<ExcelInHistory> {
 	private String module;
 	private String uploadpath;
 	private String uploadname;
-	private Timestamp saveDate;
+	private String saveDate;
 	
 	public void setIds(String ids){
 		set(column_ids, ids);
@@ -120,10 +120,10 @@ public class ExcelInHistory extends BaseModel<ExcelInHistory> {
 	public String getUploadname() {
 		return get(column_uploadname);
 	}
-	public void setSaveDate(Timestamp saveDate){
+	public void setSaveDate(String saveDate){
 		set(column_saveDate, saveDate);
 	}
-	public Timestamp getSaveDate() {
+	public String getSaveDate() {
 		return get(column_saveDate);
 	}
 	
