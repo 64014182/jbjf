@@ -10,6 +10,9 @@ public class BigDecimalUtils {
 	public static final String WIS_BIG_017 = "0.17";
 
 	public static BigDecimal getBidDecimal(String value) {
+		if (null == value) {
+			value = "0";
+		}
 		if (StringUtils.isEmpty(value))
 			throw new RuntimeException("数值【" + value + "】为空或不是合法的数字！");
 		if (value.indexOf(",") > -1) {

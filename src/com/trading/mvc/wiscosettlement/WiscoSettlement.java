@@ -147,6 +147,12 @@ public class WiscoSettlement extends BaseModel<WiscoSettlement> {
 	 */
 	public static final String column_dtype = "dtype";
 	
+	/**
+	 * 字段描述：数据类型
+	 * 字段类型：varchar(1)  长度：1
+	 */
+	public static final String column_saveDate = "saveDate";
+	
 	
 	/**
 	 * sqlId : trading.wiscoSettlement.splitPageFrom
@@ -185,8 +191,9 @@ public class WiscoSettlement extends BaseModel<WiscoSettlement> {
 	private String extensionFreight;
 	private String openCause;
 	private String hasConfirm;
-	private Timestamp saveInvoceDate;
+	private String saveInvoceDate;
 	private String dtype;
+	private String saveDate;
 	
 	public void setIds(String ids){
 		set(column_ids, ids);
@@ -304,10 +311,10 @@ public class WiscoSettlement extends BaseModel<WiscoSettlement> {
 		return get(column_hasConfirm);
 	}
 	
-	public void setSaveInvoceDate(Timestamp saveInvoceDate){
+	public void setSaveInvoceDate(String saveInvoceDate){
 		set(column_saveInvoceDate, saveInvoceDate);
 	}
-	public Timestamp getSaveInvoceDate() {
+	public String getSaveInvoceDate() {
 		return get(column_saveInvoceDate);
 	}
 	
@@ -317,5 +324,13 @@ public class WiscoSettlement extends BaseModel<WiscoSettlement> {
 
 	public String getDtype() {
 		return get(column_dtype);
+	}
+	
+	public void setSaveDate(String saveDate) {
+		set(column_saveDate, saveDate);
+	}
+	
+	public String getSaveDate() {
+		return get(column_saveDate);
 	}
 }

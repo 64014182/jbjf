@@ -195,12 +195,13 @@ public class DeliveryDetailedService extends BaseService {
 			ws.setTax(taxPirce.toString());
 			ws.setInvoice(invoiceNo);
 			ws.setOrderItemNo(orderItemNo);
+			ws.setHasConfirm(WiscoSettlement.YES);
 			ws.setSettlementNo(settNo);
 			ws.setSpecification(thickness + "*" + width + "*" + length);
 			ws.setPName(pName);
 			ws.setGrade(grade);
 			ws.setPrice(bprice.toString());
-			ws.setSaveInvoceDate(currentDate);
+			ws.setSaveInvoceDate(currentDate.toString());
 			ws.save();
 			
 			//销售结算
@@ -233,7 +234,7 @@ public class DeliveryDetailedService extends BaseService {
 			ss.setSalesOrderIds(solesOrderIds);
 			ss.setPName(pName);
 			ss.setGrade(grade);
-			ss.setSaveDate(currentDate);
+			ss.setSaveDate(currentDate.toString());
 			ss.save();
 			
 			String updateSettStateSql = getSqlByBeetl("trading.deliveryDetailed.updateSettState", param);
@@ -241,4 +242,12 @@ public class DeliveryDetailedService extends BaseService {
 		}
 	}
 
+	/**
+	 * 判断是否全部结算
+	 */
+	public void updateSelttState(List<Record> list) {
+		for (Record r : list) {
+			//r.getStr("")
+		}
+	}
 }

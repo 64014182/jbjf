@@ -60,6 +60,14 @@
 						加价
 						<input class="medium" type="text" name="_query.salesPrice" value='${escapeHtml(splitPage.queryParam["salesPrice"])}' maxlength="50">
 						
+						结算
+						<select name="_query.hasConfirm" class="input-small m-wrap" tabindex="1">
+							<option></option>
+							<option value="1" ${splitPage.queryParam["hasConfirm"]! == "1" ? "selected='selected'":"" }>已结</option>
+							<option value="0" ${splitPage.queryParam["hasConfirm"]! == "0" ? "selected='selected'":"" }>未结</option>
+						</select>
+						
+						
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
 					</div>
@@ -114,6 +122,7 @@
 									<th class="hidden-phone">代垫运输费</th>
 									<th class="hidden-phone">代垫仓储费</th>
 									<th class="hidden-phone">其他费用</th>
+									<th class="hidden-phone">结算</th>
 									<th class="hidden-phone">操作</th>
 								</tr>
 							</thead>
@@ -179,7 +188,6 @@
 												<a href="#" class="myeditable" data-type="text" data-name="storag" data-original-title="代垫仓储费">${entity.storag!}</a>
 											<% } %>
 										</td>
-										
 										<td>
 											<% if(entity["other"] == null){ %>
 												<a href="#" class="myeditable" data-type="text" data-name="other" data-original-title="其他费用">0</a>
@@ -187,7 +195,13 @@
 												<a href="#" class="myeditable" data-type="text" data-name="other" data-original-title="其他费用">${entity.other!}</a>
 											<% } %>
 										</td>						
-										
+										<td>
+											<% if(entity["hasConfirm"] == null || entity["hasConfirm"] ==0){ %>	
+												<span class="label label-warning">否</span>
+											<% }else if(entity["hasConfirm"] == 1){ %>
+												<span class="label label-success">是</span>
+											<% } %>
+										</td>
 										<td>
 											<a href="javascript:void(0)" 
 												id="${entity.ids!}" 

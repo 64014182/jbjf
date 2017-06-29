@@ -38,18 +38,31 @@ public class PlanOrderCompleteService extends BaseService {
 		for (String[] ed : eDatas) {
 			String itemOrderNo = ed[0];
 			String month = ed[1];
-			String invoiceNo = itemOrderNo.substring(0, 8);
+			String invoiceNo = itemOrderNo.substring(0, itemOrderNo.length() - 3);
 
 			if (pociMap.get(invoiceNo) == null) {
 				pociMap.put(invoiceNo, new Poci(ToolUuid.get32UUID(), invoiceNo, month));
 			}
 		}
 		pociList.addAll(pociMap.values());
-		Db.batchSave(pociList, 100);
+		addPocis(pociList);
 		String[][] saveDatas = addIds(eDatas,dtype);
 		saveDatas = ToolExcel.addOther(saveDatas, currentTime);
 		Db.batch(insertSql, saveDatas, 100);
 		return eDatas.length;
+	}
+	
+	private void addPocis(List<Poci> pocis) {
+		List<Poci> savePoci = new ArrayList<Poci>();
+		for (Poci p : pocis) {
+			String invoiceNo = p.getInvoceNo();
+			Poci tp = Poci.dao.findFirstByColumnValue("invoceNo", invoiceNo);
+			if (tp == null) {
+				savePoci.add(tp);
+			}
+
+		}
+		Db.batchSave(savePoci, 100);
 	}
 	
 	private String[][] addIds(String[][] eDatas,String dtype) {

@@ -29,6 +29,7 @@ import com.trading.mvc.BigDecimalUtils;
 import com.trading.mvc.TableUtils;
 import com.trading.mvc.TradingConst;
 import com.trading.mvc.deliverydetailed.DeliveryDetailed;
+import com.trading.mvc.planordercomplete.PlanOrderComplete;
 import com.trading.mvc.poci.Poci;
 import com.trading.mvc.salesorder.SalesOrder;
 import com.trading.mvc.salessettlement.SalesSettlement;
@@ -123,19 +124,19 @@ public class WiscoSettlementService extends BaseService {
 		Timestamp currentDate = ToolDateTime.getSqlTimestamp(ToolDateTime.getDate());
 		for (WiscoSettlement ws : wsList) {
 			if(StringUtils.isNotEmpty(ws.getInvoice())){
-				updateSalesSettlement(ws.getIds(), invoiceNo,currentDate);
+				updateSalesSettlement(ws.getIds(), invoiceNo,currentDate.toString());
 			}else{
-				saveSalesSettlement(ws, ssl, invoiceNo,currentDate);
+				saveSalesSettlement(ws, ssl, invoiceNo,currentDate.toString());
 			}
 			
 			ws.setInvoice(invoiceNo);
 			ws.setHasConfirm(WiscoSettlement.YES);
-			ws.setSaveInvoceDate(currentDate);
+			ws.setSaveInvoceDate(currentDate.toString());
 			ws.update();
 		}
 	}
 
-	private void saveSalesSettlement(WiscoSettlement ws, SalesSettlement ssl, String invoiceNo,Timestamp currentDate) throws Exception{
+	private void saveSalesSettlement(WiscoSettlement ws, SalesSettlement ssl, String invoiceNo,String saveDate) throws Exception{
 		String orderItemNo = ws.getOrderItemNo().substring(0, 8);
 		SalesOrder so = SalesOrder.dao.findFirstByColumnValue("orderItemNo", orderItemNo);
 
@@ -171,12 +172,12 @@ public class WiscoSettlementService extends BaseService {
 		ssl.setTaxPrice(taxPrice.toString());
 		ssl.setInvoiceNo(invoiceNo);
 		
-		ssl.setSaveDate(currentDate);
+		ssl.setSaveDate(saveDate);
 		ssl.save();
 
 	}
 
-	private void updateSalesSettlement(String ids, String invoce,Timestamp currentDate) {
+	private void updateSalesSettlement(String ids, String invoce,String currentDate) {
 		SalesSettlement ss = SalesSettlement.dao.findFirstByColumnValue("wiscoSettlementIds", ids);
 		ss.setInvoiceNo(invoce);
 		ss.update();
@@ -314,13 +315,13 @@ public class WiscoSettlementService extends BaseService {
 		return generalFilePath;
 	}
 
-	public void save(WiscoSettlement ws, String salesAddPrice, String salesWeight) {
+	public void save(WiscoSettlement ws, String salesAddPrice, String salesWeight, String quantity) {
 		Poci poci = getPociByInvoceNo(ws.getOrderItemNo());
 		SalesOrder so = getSoByInvoceNo(ws.getOrderItemNo());
 		if (null == poci || null == so) {
 			throw new RuntimeException("订单项次号： " + ws.getOrderItemNo() + "对应的合同不存在或没设置！");
 		}
-		
+		String saveDate = ToolDateTime.getCurrent(ToolDateTime.pattern_yymmdd);
 		Timestamp ts = ToolDateTime.getSqlTimestamp(ToolDateTime.getDate());
 		// 采购结算价
 		String priceStr = ws.getStr("price");
@@ -344,17 +345,39 @@ public class WiscoSettlementService extends BaseService {
 		ws.setExtensionFreight("0");
 		ws.setHasConfirm("1");
 		ws.setDtype("3");
-		ws.setSaveInvoceDate(ts);
+		ws.setSaveInvoceDate(ts.toString());
+		ws.setSaveDate(saveDate);
 		ws.setContractMonth(poci.getCDate());
 		if (StringUtils.isEmpty(ws.getIds())) {
 			ws.save();
 		} else {
 			ws.update();
 		}
-
-		setSalesSettlement(ws, ts, so, salesAddPrice, salesWeight);
-		setDeliveryDetailed(ws);
+		
+		setPlanOrderComplete(ws);
+		setSalesSettlement(ws, saveDate, so, salesAddPrice, salesWeight);
+		setDeliveryDetailed(ws, quantity);
 	}
+	
+	private void setPlanOrderComplete(WiscoSettlement ws) {
+		String orderItemNo = ws.getOrderItemNo();
+		orderItemNo = orderItemNo.substring(0, orderItemNo.length() - 3) + "A01";
+		PlanOrderComplete fpoc = PlanOrderComplete.dao.findFirstByColumnValue("orderItemNo", orderItemNo);
+		if (fpoc == null) {
+			throw new RuntimeException("订单项次号： 【" + orderItemNo + "】的采购计划不存在！");
+		}
+
+		PlanOrderComplete tpoc = PlanOrderComplete.dao.findFirstByColumnValue("orderItemNo", orderItemNo);
+		if (tpoc == null) {
+			PlanOrderComplete poc = new PlanOrderComplete();
+			poc.setOrderItemNo(ws.getOrderItemNo());
+			poc.setPName(ws.getPName());
+			poc.setGrade(ws.getGrade());
+			poc.setPrice(fpoc.getPrice());
+			poc.save();
+		}
+	}
+
 	private Poci getPociByInvoceNo(String orderItemNo) {
 		int length = orderItemNo.length();
 		if (length >= 10) {
@@ -365,19 +388,20 @@ public class WiscoSettlementService extends BaseService {
 		}
 	}
 	
-	private void setDeliveryDetailed(WiscoSettlement ws) {
+	private void setDeliveryDetailed(WiscoSettlement ws, String quantity) {
 		DeliveryDetailed dd = new DeliveryDetailed();
 		dd.setOrderItemNo(ws.getOrderItemNo());
 		dd.setContractMonth(ws.getContractMonth());
 		dd.setWeight(ws.getWeight());
-		dd.setWriteOffDate(ToolDateTime.getDateByTimestamp(ws.getSaveInvoceDate(),ToolDateTime.pattern_yymmdd));
+		dd.setWriteOffDate(ws.getSaveInvoceDate());
 		dd.setDtype("3");
+		dd.setQuantity(quantity);
 		String specification = ws.getSpecification();
 		
 		if (StringUtils.isNotEmpty(specification) && specification.indexOf("*") > 0) {
 			String[] spec = specification.split("\\*");
 
-			for (int i = 0; i < spec.length; i++) {
+			for (int i = 0; i <= spec.length; i++) {
 				if (i == 0) {
 					dd.setThickness(spec[0]);
 				} else if (i == 2) {
@@ -406,7 +430,7 @@ public class WiscoSettlementService extends BaseService {
 	 * @param salesAddPrice 销售加价
 	 * @param salesWeight 销售实结重量
 	 */
-	private void setSalesSettlement(WiscoSettlement ws,Timestamp ts,SalesOrder so,String salesAddPrice,String salesWeight) {
+	private void setSalesSettlement(WiscoSettlement ws,String saveDate,SalesOrder so,String salesAddPrice,String salesWeight) {
 		SalesSettlement ss = new SalesSettlement();
 		//采购合同价 = 采购结算价*1.17; 
 		BigDecimal bdPpirce = BigDecimalUtils.getBidDecimal(ws.getPrice()).multiply(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117));
@@ -415,7 +439,7 @@ public class WiscoSettlementService extends BaseService {
 		BigDecimal bdSalesInvocePirce = bdPpirce.add(BigDecimalUtils.getBidDecimal(salesAddPrice));
 				
 		//销售不含税价  =销售合同价格/1.17(保留7位小数)
-		BigDecimal bdNotax = bdSalesInvocePirce.divide(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117), 2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal bdNotax = bdSalesInvocePirce.divide(BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117), 7, BigDecimal.ROUND_HALF_UP);
 		
 		//销售货款金额=销售不含税价*销售实结重量
 		BigDecimal bdGoodsAmount = bdNotax.multiply(BigDecimalUtils.getBidDecimal(salesWeight));
@@ -435,7 +459,7 @@ public class WiscoSettlementService extends BaseService {
 		ss.setTotalAmount(totalAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toString());
 		
 		ss.setInvoiceNo(ws.getInvoice());
-		ss.setSaveDate(ts);
+		ss.setSaveDate(saveDate);
 		ss.setOrderUnitId(so.getOrderUnit());
 		ss.setManufacturerId(so.getManufacturer());
 		ss.setPName(ws.getPName());
@@ -589,7 +613,7 @@ public class WiscoSettlementService extends BaseService {
 		System.out.println(spec);
 	}
 
-	public void update(WiscoSettlement ws, String salesAddPrice, String salesWeight) {
+	public void update(WiscoSettlement ws, String salesAddPrice, String salesWeight, String quantity) {
 		SalesSettlement ss = SalesSettlement.dao.findFirstByColumnValue("orderItemNo", ws.getOrderItemNo());
 		if (null != ss) {
 			ss.delete();
@@ -598,7 +622,11 @@ public class WiscoSettlementService extends BaseService {
 		if (null != dd) {
 			dd.delete();
 		}
-		save(ws, salesAddPrice, salesWeight);
+		PlanOrderComplete poc = PlanOrderComplete.dao.findFirstByColumnValue("orderItemNo", ws.getOrderItemNo());
+		if (null != poc) {
+			poc.delete();
+		}
+		save(ws, salesAddPrice, salesWeight, quantity);
 	}
 
 	public void del(String ids) {
@@ -613,6 +641,10 @@ public class WiscoSettlementService extends BaseService {
 		}
 		if (ws != null) {
 			ws.delete();
+		}
+		PlanOrderComplete poc = PlanOrderComplete.dao.findFirstByColumnValue("orderItemNo", ws.getOrderItemNo());
+		if (null != poc) {
+			poc.delete();
 		}
 	}
 }

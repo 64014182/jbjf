@@ -15,7 +15,8 @@
 				so.storag,
 				so.other,
 				so.pocIds,
-				so.orderItemNo
+				so.orderItemNo,
+				t1.hasConfirm as hasConfirm
 		]]>
 	</sql>
 	
@@ -24,10 +25,29 @@
 		<![CDATA[ 
         	FROM
 				b_trading_poci poci
-			 LEFT JOIN b_trading_salesorder so ON poci.invoceNo = so.orderItemNo
-			 LEFT JOIN b_trading_manufacturer btm on so.manufacturer = btm.ids
-			 LEFT JOIN b_trading_orderunit bto on so.orderUnit = bto.ids
-			where 1=1 
+			LEFT JOIN b_trading_salesorder so ON poci.invoceNo = so.orderItemNo
+			LEFT JOIN b_trading_manufacturer btm ON so.manufacturer = btm.ids
+			LEFT JOIN b_trading_orderunit bto ON so.orderUnit = bto.ids
+			LEFT JOIN(
+			SELECT
+				LEFT (
+					orderItemNo,
+					length(orderItemNo) - 3
+				) as pociInvoceNo,
+				SUM(hasConfirm) as sumConfirm,
+				COUNT(*) as sum,
+				IF (SUM(hasConfirm) = COUNT(*), 1, 0) as hasConfirm
+			
+			FROM
+				b_trading_wiscosettlement
+			GROUP BY
+				LEFT (
+					orderItemNo,
+					length(orderItemNo) - 3
+				)
+			) as t1 ON poci.invoceNo = t1.pociInvoceNo
+			WHERE
+				1 = 1
 			<% if(!isEmpty(invoceNo)){ %>
 				and invoceNo like #'%$invoceNo$%'# 
 			<% } %>
@@ -45,6 +65,9 @@
 			<% } %>
 			<% if(!isEmpty(salesPrice)){ %>
 				and so.salesPrice like #'%$salesPrice$%'# 
+			<% } %>
+			<% if(!isEmpty(hasConfirm)){ %>
+				and t1.hasConfirm like #'%$hasConfirm$%'# 
 			<% } %>
     	]]>
 	</sql>

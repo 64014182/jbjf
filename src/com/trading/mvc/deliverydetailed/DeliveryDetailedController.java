@@ -182,6 +182,7 @@ public class DeliveryDetailedController extends BaseController {
 		String err = "";
 		try {
 			deliveryDetailedService.saveSettle(selIds,invoiceNo);
+			
 		} catch (Exception e) {
 			err = e.getMessage();
 		}

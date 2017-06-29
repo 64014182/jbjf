@@ -15,6 +15,7 @@ import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
 import com.platform.tools.ToolDateTime;
+import com.trading.mvc.deliverydetailed.DeliveryDetailed;
 import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 import com.trading.mvc.salessettlement.SalesSettlement;
 
@@ -56,8 +57,9 @@ public class WiscoSettlementController extends BaseController {
 	public void save() {
 		String salesAddPrice = getPara("salesAddPrice");
 		String salesWeight = getPara("salesWeight");
+		String quantity = getPara("quantity");
 		WiscoSettlement ws = getModel(WiscoSettlement.class);
-		wiscoSettlementService.save(ws, salesAddPrice, salesWeight);
+		wiscoSettlementService.save(ws, salesAddPrice, salesWeight,quantity);
 		forwardAction("/trading/wiscoSettlement/backOff");
 	}
 	
@@ -68,10 +70,13 @@ public class WiscoSettlementController extends BaseController {
 		WiscoSettlement wiscoSettlement = WiscoSettlement.dao.findById(getPara());
 		String orderItemNo = wiscoSettlement.getOrderItemNo();
 		SalesSettlement ss = SalesSettlement.dao.findFirstByColumnValue("orderItemNo", orderItemNo);
+		DeliveryDetailed dd = DeliveryDetailed.dao.findFirstByColumnValue("orderItemNo", orderItemNo);
 		String salesAddPrice = ss.getAddPrice();
 		String salesWeight = ss.getWeight();
+		String quantity = dd.getQuantity();
 		setAttr("wiscoSettlement", wiscoSettlement);
 		setAttr("salesAddPrice", salesAddPrice);
+		setAttr("quantity", quantity);
 		setAttr("salesWeight", salesWeight);
 		render("/trading/wiscoSettlement/update.html");
 	}
@@ -83,8 +88,9 @@ public class WiscoSettlementController extends BaseController {
 	public void update() {
 		String salesAddPrice = getPara("salesAddPrice");
 		String salesWeight = getPara("salesWeight");
+		String quantity = getPara("quantity");
 		WiscoSettlement ws = getModel(WiscoSettlement.class);
-		wiscoSettlementService.update(ws, salesAddPrice, salesWeight);
+		wiscoSettlementService.update(ws, salesAddPrice, salesWeight, quantity);
 		forwardAction("/trading/wiscoSettlement/backOff");
 	}
 

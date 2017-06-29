@@ -160,7 +160,7 @@ public class SalesSettlement extends BaseModel<SalesSettlement> {
 	private String hasDraw;
 	private String invoiceNo;
 	private String invoicePrice;
-	private Timestamp saveDate;
+	private String saveDate;
 	private String flag;
 	private String orderUnitId;
 	private String manufacturerId;
@@ -254,11 +254,11 @@ public class SalesSettlement extends BaseModel<SalesSettlement> {
 		return get(column_invoicePrice);
 	}
 
-	public void setSaveDate(Timestamp saveDate) {
+	public void setSaveDate(String saveDate) {
 		set(column_saveDate, saveDate);
 	}
 
-	public Timestamp getSaveDate() {
+	public String getSaveDate() {
 		return get(column_saveDate);
 	}
 
