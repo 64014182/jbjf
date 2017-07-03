@@ -134,7 +134,7 @@ public class ToolExcel {
 						throw new RuntimeException("要读取的Excel行数超出文件总列数！");
 					}
 					String value = rs.getCell(readColumnNo[j] - 1, i).getContents();
-					System.out.println(readColumnNo[j] + " : " + value.trim());
+//					System.out.println(readColumnNo[j] + " : " + value.trim());
 					excelDatas[i-readFirstLineNo][j] = value.trim();
 					//System.out.println(excelDatas[i-readFirstLineNo][j]);
 				}
