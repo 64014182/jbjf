@@ -14,7 +14,7 @@ public class TableUtils {
 	 * @param column 列名
 	 * @param expre 统计表达式
 	 */
-	public static String countNo(int digit, String table, String column, String expre) {
+	private static String countNo(int digit, String table, String column, String expre) {
 		String sql = "SELECT COUNT(*) AS count FROM " + table + " WHERE 1 = 1 AND " + column + " LIKE '%" + expre + "%'";
 		Record r = Db.findFirst(sql);
 		String count = String.valueOf(r.get("count"));

@@ -57,12 +57,12 @@
 						<input type="text" id="saveInvoceDateStart" class="Wdate" name="_query.saveDateStart" readonly="readonly" 
 							value='${escapeHtml(splitPage.queryParam["saveDateStart"])}'
 							onblur="platform_verify.onblurVali(this);" 
-							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', maxDate:'#F{$dp.$D(\'saveDateEnd\')}'})">
+							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', maxDate:'#F{$dp.$D(\'saveInvoceDateEnd\')}'})">
 						至
 						<input type="text" id="saveInvoceDateEnd" class="Wdate" name="_query.saveDateEnd" readonly="readonly" 
 							value='${escapeHtml(splitPage.queryParam["saveDateEnd"])}'
 							onblur="platform_verify.onblurVali(this);" 
-							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveDateStart\')}'})">
+							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'saveInvoceDateStart\')}'})">
 					
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>

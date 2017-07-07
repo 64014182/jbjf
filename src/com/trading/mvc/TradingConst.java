@@ -12,6 +12,11 @@ public class TradingConst {
 	public static final String WiscoSettlement_xz = "XZ";
 	
 	/**
+	 * 武钢销售结算明细前辍标识
+	 */
+	public static final String SalesSettlement_xz = "X";
+	
+	/**
 	 * 非武钢结算前辍标识
 	 */
 	public static final String WiscoSettlement_Sett = "JS";

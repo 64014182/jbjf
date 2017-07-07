@@ -45,9 +45,15 @@
 						项次量
 						<input class="medium" type="text" name="_query.itemWeight" value='${escapeHtml(splitPage.queryParam["itemWeight"])}' >
 						
-						产品形态
+						形态
 						<input class="medium" type="text" name="_query.pForm" value='${escapeHtml(splitPage.queryParam["pForm"])}' >
 						
+						导入时间
+						<input type="text" id="mon" class="Wdate" name="_query.saveDate" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["saveDate"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyyyMMdd', minDate:'1900-01-01'})">
+							
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>${i18nMap["admin.common.select"]}</button>
 						<button type="reset" class="btn btn-inverse">${i18nMap["admin.common.reset"]}</button>
 					</div>

@@ -76,7 +76,7 @@
 	<!-- 分页查询：from -->
 	<sql id="selectIn">
 		<![CDATA[
-			SELECT *
+			SELECT sales.*
 			FROM b_trading_salessettlement sales 
 			LEFT JOIN b_trading_salesorder so ON sales.salesOrderIds = so.ids
 			LEFT JOIN b_trading_wiscosettlement wl ON sales.wiscoSettlementIds = wl.ids 

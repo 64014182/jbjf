@@ -23,6 +23,8 @@ import com.platform.tools.ToolDateTime;
 import com.platform.tools.ToolFreemarkParse;
 import com.platform.tools.code.handler.BaseHandler;
 import com.trading.mvc.BigDecimalUtils;
+import com.trading.mvc.TableUtils;
+import com.trading.mvc.TradingConst;
 import com.trading.mvc.orderunit.OrderUnit;
 import com.trading.mvc.salesorder.SalesOrder;
 import com.trading.mvc.wiscosettlement.WiscoSettlement;
@@ -102,8 +104,7 @@ public class SalesSettlementService extends BaseService {
 	}
 
 	public void paging(String dbDatasourceMain, SplitPage splitPage, String sqlidSplitpageselect,
-			String sqlidSplitpagefrom, String[] invoiceArray) {
-		
+		String sqlidSplitpagefrom, String[] invoiceArray) {
 	}
 
 	public void save2(String SalesSettlementIds, String orderUnit, String noTaxPrice) {
@@ -149,14 +150,19 @@ public class SalesSettlementService extends BaseService {
 	 * @throws Exception
 	 */
 	public String updateFlag(String ids, String orderUnit) throws Exception {
-		String flagNo = "C" + ToolDateTime.getCurrent("yyyyMMdd");
-		String sql = "SELECT COUNT(*) AS count FROM b_trading_salessettlement WHERE 1 = 1 AND flag LIKE '%" + flagNo + "%'";
-		Record r = Db.findFirst(sql);
-		String countNo = "0";
-		if (null != r) {
-			countNo = String.valueOf(r.get("count"));
-		}
-		flagNo = flagNo + countNo;
+		//结算清单号
+		String no = ToolDateTime.getCurrent("yyMMdd");
+		no = TradingConst.SalesSettlement_xz + no;
+		String flagNo = TableUtils.getNo(2, "b_trading_salessettlement", "flag", no);
+		
+//		String flagNo = "C" + ToolDateTime.getCurrent("yyyyMMdd");
+//		String sql = "SELECT COUNT(*) AS count FROM b_trading_salessettlement WHERE 1 = 1 AND flag LIKE '%" + flagNo + "%'";
+//		Record r = Db.findFirst(sql);
+//		String countNo = "0";
+//		if (null != r) {
+//			countNo = String.valueOf(r.get("count"));
+//		}
+//		flagNo = flagNo + countNo;
 
 		String sqlIn = sqlIn(ids);
 		Map<String, Object> param = new HashMap<String, Object>();

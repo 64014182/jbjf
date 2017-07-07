@@ -274,7 +274,7 @@
 								//alert(value[field]);
  								salesOrder[field] = value[field];
 							});
-					console.log(JSON.stringify(salesOrder));
+// 					console.log(JSON.stringify(salesOrder));
 					$.ajax({
 						type : "POST",
 						url : "${cxt!}/trading/salesOrder/generateSalesOrder",
@@ -292,23 +292,23 @@
 				});
 	});
 
-	$(function() {
-		$.ajax({
-					type : "POST",
-					url : "${cxt!}/platform/dyComponent/ajaxDyComponent/manufacturer",
-					contentType : "application/json; charset=utf-8",
-					dataType : "json",
-					success : function(message) {
-						dataList = message;
-						$('.select2').editable({
-							source : dataList,
-							select2 : {}
-						});
-					},
-					error : function(message) {
-						toastr.error("保存失败！");
-					}
-				});
-	});
+// 	$(function() {
+// 		$.ajax({
+// 					type : "POST",
+// 					url : "${cxt!}/platform/dyComponent/ajaxDyComponent/manufacturer",
+// 					contentType : "application/json; charset=utf-8",
+// 					dataType : "json",
+// 					success : function(message) {
+// 						dataList = message;
+// 						$('.select2').editable({
+// 							source : dataList,
+// 							select2 : {}
+// 						});
+// 					},
+// 					error : function(message) {
+// 						toastr.error("保存失败！");
+// 					}
+// 				});
+// 	});
 </script>
 
