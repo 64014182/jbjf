@@ -242,12 +242,12 @@ public class DeliveryDetailedService extends BaseService {
 		}
 	}
 
-	/**
-	 * 判断是否全部结算
-	 */
-	public void updateSelttState(List<Record> list) {
-		for (Record r : list) {
-			//r.getStr("")
-		}
-	}
+//	/**
+//	 * 判断是否全部结算
+//	 */
+//	public void updateSelttState(List<Record> list) {
+//		for (Record r : list) {
+//			//r.getStr("")
+//		}
+//	}
 }

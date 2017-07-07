@@ -148,11 +148,11 @@ public class WiscoSettlementService extends BaseService {
 		if (StringUtils.isEmpty(addPirce)) {
 			throw new RuntimeException("订单项次号为： " + orderItemNo + "的采购完成计划！未设置销售合同加价！");
 		}
-
+		
 		// 计算销售合同价
 		BigDecimal salesPrice = calcuSalesPrice(BigDecimalUtils.getBidDecimal(ws.getPrice()), BigDecimalUtils.getBidDecimal(addPirce));
 
-		// 计算销售不含税价=销售合同价/1.17(4舍5入，2位数）
+		// 计算销售不含税价=销售合同价/1.17(4舍5入，7位数）
 		BigDecimal noTaxPrice = noTaxPrice(salesPrice);
 
 		// 总金额=销售合同价*出货重量
@@ -163,15 +163,24 @@ public class WiscoSettlementService extends BaseService {
 
 		// 税款金额=总金额-货款金额
 		BigDecimal taxPrice = totalAmount.subtract(goodsAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
-
+		
+		// 如果采购结算的实结重量和结算价为0，销售结算的货款金额、税款金额、总金额和采购结算的货款金额、税款金额、总金额一致，不另外计算
+		if ("0".equals(ws.getWeight()) && "0".equals(ws.getPrice())) {
+			goodsAmount = BigDecimalUtils.getBidDecimal(ws.getLoan());
+			taxPrice = BigDecimalUtils.getBidDecimal(ws.getTax());
+			totalAmount = goodsAmount.add(taxPrice);
+			noTaxPrice = BigDecimalUtils.getBidDecimal("0");
+			salesPrice = BigDecimalUtils.getBidDecimal("0");
+		}
+		
 		ssl.setWsAndSo(ws,so);
 		ssl.setInvoicePrice(salesPrice.toString());
 		ssl.setNoTaxPrice(noTaxPrice.toString());
 		ssl.setTotalAmount(totalAmount.toString());
 		ssl.setGoodsAmount(goodsAmount.toString());
 		ssl.setTaxPrice(taxPrice.toString());
-		ssl.setInvoiceNo(invoiceNo);
 		
+		ssl.setInvoiceNo(invoiceNo);
 		ssl.setSaveDate(saveDate);
 		ssl.save();
 
@@ -218,12 +227,12 @@ public class WiscoSettlementService extends BaseService {
 	}
 
 	/**
-	 *  计算销售不含税价=销售合同价/1.17(4舍5入，2位数）
+	 *  计算销售不含税价=销售合同价/1.17(4舍5入，7位数）
 	 * @return
 	 */
 	private BigDecimal noTaxPrice(BigDecimal salesprice){
 		BigDecimal bd = BigDecimalUtils.getBidDecimal(BigDecimalUtils.WIS_BIG_117);
-		BigDecimal noTaxPrice = salesprice.divide(bd,2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal noTaxPrice = salesprice.divide(bd,7, BigDecimal.ROUND_HALF_UP);
 		return noTaxPrice;
 	}
 	

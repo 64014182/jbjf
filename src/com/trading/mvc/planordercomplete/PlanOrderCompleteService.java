@@ -58,9 +58,8 @@ public class PlanOrderCompleteService extends BaseService {
 			String invoiceNo = p.getInvoceNo();
 			Poci tp = Poci.dao.findFirstByColumnValue("invoceNo", invoiceNo);
 			if (tp == null) {
-				savePoci.add(tp);
+				savePoci.add(p);
 			}
-
 		}
 		Db.batchSave(savePoci, 100);
 	}

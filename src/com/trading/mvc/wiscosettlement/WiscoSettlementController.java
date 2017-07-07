@@ -159,21 +159,21 @@ public class WiscoSettlementController extends BaseController {
 		redirect("/trading/wiscoSettlement/");
 	}
 	
-	public void saveSalesSetl()  {
+	public void saveSalesSetl() {
 		String settlementNo = getPara("settlementNo"); // 勾选的采购结算明细
 		String invoiceNo = getPara("invoiceNo");
 		SalesSettlement ssl = getModel(SalesSettlement.class);
-		
+
 		String err = "";
 		try {
 			wiscoSettlementService.saveSalesSetl(settlementNo, invoiceNo, ssl);
 		} catch (Exception e) {
 			err = e.getMessage();
 		}
-		
+
 		if (StringUtils.isNotEmpty(err)) {
-			renderJson("{\"message\":\"" + "保存失败！" +  err + "\"}");
-		}else{
+			renderJson("{\"message\":\"" + "保存失败！" + err + "\"}");
+		} else {
 			renderJson("{\"message\":\"" + "保存成功！" + "\"}");
 		}
 	}

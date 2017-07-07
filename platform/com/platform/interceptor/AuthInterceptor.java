@@ -206,14 +206,13 @@ public class AuthInterceptor implements Interceptor {
 			}
 			
 			if (!hasPrivilegeUrl(operator.getPKValue(), user.getPKValue())) {// 权限验证
-				if(log.isDebugEnabled()) log.debug("权限验证失败，没有权限!");
-				
+				if(log.isDebugEnabled()) log.debug("权限【"+operator.getUrl()+"】验证失败，没有权限!");
 				reqSysLog.set(Syslog.column_status, "0");// 失败
 				reqSysLog.set(Syslog.column_description, "没有权限!");
 				reqSysLog.set(Syslog.column_cause, "0");// 没有权限
 				
 				if(log.isDebugEnabled()) log.debug("返回失败提示页面!");
-				toView(contro, ConstantAuth.auth_no_permissions, "权限验证失败，您没有操作权限");
+				toView(contro, ConstantAuth.auth_no_permissions, "权限【"+operator.getUrl()+"】验证失败，没有权限!");
 				return;
 			}
 		}

@@ -123,5 +123,3 @@ public class MenuController extends BaseController {
 		renderSuccess(null, null, null);
 	}
 }
-
-

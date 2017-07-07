@@ -67,26 +67,26 @@ public class UserValidator extends BaseValidator {
 		validateString("user.departmentids", 32, 32, "departmentMsg", "部门不正确!");
 		validateString("user.stationids", 32, 32, "stationMsg", "岗位不正确!");
 
-		validateString("user.idcard", 15, 18, "idcardMsg", "身份证号码不正确!");
+//		validateString("user.idcard", 15, 18, "idcardMsg", "身份证号码不正确!");
 		validateString("user.names", 2, 10, "namesMsg", "姓名不正确!");
 		validateString("user.username", 5, 16, "usernameMsg", "登陆名不正确!");
 		
-		validateEmail("user.email", "emailMsg", "邮箱不正确!");
-		validateLong("user.mobile", 10000000000L, 99999999999L, "mobileMsg", "手机号码不正确!");
+//		validateEmail("user.email", "emailMsg", "邮箱不正确!");
+//		validateLong("user.mobile", 10000000000L, 99999999999L, "mobileMsg", "手机号码不正确!");
 		
-		if(StrKit.notBlank(controller.getPara("userInfo.telephone"))){
-			validateLong("userInfo.telephone", 1, 99999999999L, "telephoneMsg", "电话号码不正确!");
-		}
+//		if(StrKit.notBlank(controller.getPara("userInfo.telephone"))){
+//			validateLong("userInfo.telephone", 1, 99999999999L, "telephoneMsg", "电话号码不正确!");
+//		}
 
-		if(StrKit.notBlank(controller.getPara("userInfo.qq"))){
-			validateLong("userInfo.qq", 1, 999999999999999L, "qqMsg", "QQ号码不正确!");
-		}
+//		if(StrKit.notBlank(controller.getPara("userInfo.qq"))){
+//			validateLong("userInfo.qq", 1, 999999999999999L, "qqMsg", "QQ号码不正确!");
+//		}
 
-		if(StrKit.notBlank(controller.getPara("userInfo.birthday"))){
-			Date start = ToolDateTime.parse("1900-01-01", ToolDateTime.pattern_ymd);
-			Date end = ToolDateTime.getDate();
-			validateDate("userInfo.birthday", start, end, "birthdayMsg", "生日不正确!");
-		}
+//		if(StrKit.notBlank(controller.getPara("userInfo.birthday"))){
+//			Date start = ToolDateTime.parse("1900-01-01", ToolDateTime.pattern_ymd);
+//			Date end = ToolDateTime.getDate();
+//			validateDate("userInfo.birthday", start, end, "birthdayMsg", "生日不正确!");
+//		}
 	}
 	
 	protected void handleError(Controller controller) {

@@ -48,14 +48,14 @@
 */
 %>
 
-<div class="control-group">
-	<label class="control-label">${i18nMap["admin.user.property.idcard"]}</label>
-	<div class="controls">
-		<input type="text" class="span8" id="idcardId" name="user.idcard" value="${escapeHtml(user.idcard!)}"
-			maxlength="18" vMin="15" vType="idCard" onblur="platform_verify.onblurVali(this);" placeholder="15-18位字母数字">
-		<span class="help-inline"></span>
-	</div>
-</div>
+<!-- <div class="control-group"> -->
+<!-- 	<label class="control-label">${i18nMap["admin.user.property.idcard"]}</label> -->
+<!-- 	<div class="controls"> -->
+<!-- 		<input type="text" class="span8" id="idcardId" name="user.idcard" value="${escapeHtml(user.idcard!)}" -->
+<!-- 			 placeholder="15-18位字母数字"> -->
+<!-- 		<span class="help-inline"></span> -->
+<!-- 	</div> -->
+<!-- </div> -->
 
 <div class="control-group">
 	<label class="control-label">${i18nMap["admin.user.property.nickname"]}</label>
@@ -107,32 +107,32 @@
 	</div>
 </div>
 
-<div class="control-group">
-	<label class="control-label">${i18nMap["admin.user.property.email"]}</label>
-	<div class="controls">
-		<input type="text" class="span8" id="mailboxId" name="user.email" value="${escapeHtml(user.email!)}" 
-			maxlength="30" vMin="6" vType="email" onblur="platform_verify.onblurVali(this);" placeholder="6-30位邮箱规则">
-		<span class="help-inline"> </span>
-	</div>
-</div>
+<!-- <div class="control-group"> -->
+<!-- 	<label class="control-label">${i18nMap["admin.user.property.email"]}</label> -->
+<!-- 	<div class="controls"> -->
+<!-- 		<input type="text" class="span8" id="mailboxId" name="user.email" value="${escapeHtml(user.email!)}"  -->
+<!-- 			maxlength="30" vMin="6" vType="email" onblur="platform_verify.onblurVali(this);" placeholder="6-30位邮箱规则"> -->
+<!-- 		<span class="help-inline"> </span> -->
+<!-- 	</div> -->
+<!-- </div> -->
 
-<div class="control-group">
-	<label class="control-label">${i18nMap["admin.user.property.mobilePhone"]}</label>
-	<div class="controls">
-		<input type="text" class="span8" id="mobileId" name="user.mobile" value="${escapeHtml(user.mobile!)}" 
-			maxlength="11" vMin="11" vType="phone" onblur="platform_verify.onblurVali(this);" placeholder="11位数字">
-		<span class="help-inline"> </span>
-	</div>
-</div>
+<!-- <div class="control-group"> -->
+<!-- 	<label class="control-label">${i18nMap["admin.user.property.mobilePhone"]}</label> -->
+<!-- 	<div class="controls"> -->
+<!-- 		<input type="text" class="span8" id="mobileId" name="user.mobile" value="${escapeHtml(user.mobile!)}"  -->
+<!-- 			maxlength="11" vMin="11" vType="phone" onblur="platform_verify.onblurVali(this);" placeholder="11位数字"> -->
+<!-- 		<span class="help-inline"> </span> -->
+<!-- 	</div> -->
+<!-- </div> -->
 
-<div class="control-group">
-	<label class="control-label">${i18nMap["admin.user.property.telephone"]}</label>
-	<div class="controls">
-		<input type="text" class="span8" name="userInfo.telephone" value="${escapeHtml(userInfo.telephone!)}" 
-			maxlength="20" vMin="0" vType="tell" onblur="platform_verify.onblurVali(this);" placeholder="5-20位">
-		<span class="help-inline"> </span>
-	</div>
-</div>
+<!-- <div class="control-group"> -->
+<!-- 	<label class="control-label">${i18nMap["admin.user.property.telephone"]}</label> -->
+<!-- 	<div class="controls"> -->
+<!-- 		<input type="text" class="span8" name="userInfo.telephone" value="${escapeHtml(userInfo.telephone!)}"  -->
+<!-- 			maxlength="20" vMin="0" vType="tell" onblur="platform_verify.onblurVali(this);" placeholder="5-20位"> -->
+<!-- 		<span class="help-inline"> </span> -->
+<!-- 	</div> -->
+<!-- </div> -->
 
 <div class="control-group">
 	<label class="control-label">${i18nMap["admin.user.property.qq"]}</label>
@@ -207,60 +207,60 @@
 		
 		var dataVali = function (form, isAdd){
 			var usernameNode = $("#usernameId");
-			var mailboxNode = $("#mailboxId");
-			var idcardNode = $("#idcardId");
-			var mobileNode = $("#mobileId");
+// 			var mailboxNode = $("#mailboxId");
+// 			var idcardNode = $("#idcardId");
+// 			var mobileNode = $("#mobileId");
 			
 			var usernameId = usernameNode.val();
-			var mailboxId = mailboxNode.val();
-			var idcardId = idcardNode.val();
-			var mobileId = mobileNode.val();
+// 			var mailboxId = mailboxNode.val();
+// 			var idcardId = idcardNode.val();
+// 			var mobileId = mobileNode.val();
 			
 			if(isAdd){ // 添加
-				if(idcardId != "" && valiIdcard(idcardId) != "true"){
-					idcardNode.next().html("身份证号码不可用！");
-			 		return false;
-				}
+// 				if(idcardId != "" && valiIdcard(idcardId) != "true"){
+// 					idcardNode.next().html("身份证号码不可用！");
+// 			 		return false;
+// 				}
 			
 				if(usernameId != "" && valiUserName(usernameId) != "true"){
 					usernameNode.next().html("账号不可用！");
 			 		return false;
 				}
 			
-				if(mailboxId != "" && valiMailBox(mailboxId) != "true"){
-					mailboxNode.next().html("邮箱不可用！");
-			 		return false;
-				}
+// 				if(mailboxId != "" && valiMailBox(mailboxId) != "true"){
+// 					mailboxNode.next().html("邮箱不可用！");
+// 			 		return false;
+// 				}
 		
-				if(mobileId != "" && valiMobile(mobileId) != "true"){
-					mobileNode.next().html("手机号码不可用！");
-			 		return false;
-				}
+// 				if(mobileId != "" && valiMobile(mobileId) != "true"){
+// 					mobileNode.next().html("手机号码不可用！");
+// 			 		return false;
+// 				}
 			
 			}else{ // 更新
 				
 				var userIds = $("#userIds").val();
 				var userInfoIds = $("#userInfoIds").val();
 				
-				if(idcardId != "" && valiIdcard(idcardId, userInfoIds) != "true"){
-					idcardNode.next().html("身份证号码不可用！");
-			 		return false;
-				}
+// 				if(idcardId != "" && valiIdcard(idcardId, userInfoIds) != "true"){
+// 					idcardNode.next().html("身份证号码不可用！");
+// 			 		return false;
+// 				}
 			
 				if(usernameId != "" && valiUserName(usernameId, userIds) != "true"){
 					usernameNode.next().html("账号不可用！");
 			 		return false;
 				}
 			
-				if(mailboxId != "" && valiMailBox(mailboxId, userInfoIds) != "true"){
-					mailboxNode.next().html("邮箱不可用！");
-			 		return false;
-				}
+// 				if(mailboxId != "" && valiMailBox(mailboxId, userInfoIds) != "true"){
+// 					mailboxNode.next().html("邮箱不可用！");
+// 			 		return false;
+// 				}
 		
-				if(mobileId != "" && valiMobile(mobileId, userInfoIds) != "true"){
-					mobileNode.next().html("手机号码不可用！");
-			 		return false;
-				}
+// 				if(mobileId != "" && valiMobile(mobileId, userInfoIds) != "true"){
+// 					mobileNode.next().html("手机号码不可用！");
+// 			 		return false;
+// 				}
 			}
 	
 			var pass1Node = $("#pass1Id");
@@ -279,7 +279,7 @@
 				common_modals.alert("有" + errorCount + "处错误，请修正！");
 		 		return false;
 			}
-			
+			alert();
 			common_ajax.ajaxFormMainPanel("editForm");
 		}
 	
