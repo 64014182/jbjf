@@ -17,6 +17,7 @@ var common_modals = function() {
 	 * 删除多行数据
 	 */
 	var deleteList = function(button) {
+		alert();
 		var table = $(button).attr("data-table");
 		var url = $(button).attr("data-url");
 		var ids = common_common.getCheckFunc(table);

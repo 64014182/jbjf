@@ -121,7 +121,6 @@
 									<th class="hidden-phone">运输费</th>
 									<th class="hidden-phone">仓储费</th>
 									<th class="hidden-phone">其他</th>
-									<th class="hidden-phone">结算</th>
 									<th class="hidden-phone">操作</th>
 								</tr>
 							</thead>
@@ -196,13 +195,16 @@
 										</td>						
 										<td>
 											${escapeHtml(entity["planSumWeight"]!)}
-											|
+											
+											<td>
 											<% if(entity["salesSumWeight"] == null){ %>	
 												0
 											<% }else{ %>
 												${escapeHtml(entity["salesSumWeight"]!)}
 											<% } %>
-											|
+											</td>
+											
+											<td>
 											<% if(entity["hasSett"] == null || entity["hasSett"] =="0"){ %>	
 												<button type="button" class="btn btn-mini btn-warning" data-table="dataTable" data-url="/trading/deliveryDetailed/out?csrfToken=${csrfToken!}" onclick="common_modals.deleteList(this)">
 												结算
@@ -210,7 +212,7 @@
 											<% }else if(entity["hasSett"] == "1"){ %>
 												<span class="label label-success">结</span>
 											<% } %>
-
+											</td>
 										</td>
 										<td>
 											<a href="javascript:void(0)" 
