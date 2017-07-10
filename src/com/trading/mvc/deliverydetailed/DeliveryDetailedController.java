@@ -11,6 +11,7 @@ import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
 import com.platform.tools.ToolDateTime;
+import com.trading.mvc.TradingConst;
 import com.trading.mvc.excelinhistory.ExcelInHistoryService;
 
 /**
@@ -140,7 +141,7 @@ public class DeliveryDetailedController extends BaseController {
 	 * @throws Exception
 	 */
 	public void procurementToExcel() throws Exception{
-		String filePath = deliveryDetailedService.exportExcel(ids,"procurement.xml","采购入库单");
+		String filePath = deliveryDetailedService.exportExcel(ids,"procurement.xml","采购入库单",TradingConst.DeliveryDetailed_In_Ex);
 		renderFile(new File(filePath));
 	}
 	
@@ -150,7 +151,7 @@ public class DeliveryDetailedController extends BaseController {
 	 * @throws Exception
 	 */
 	public void outToExcel() throws Exception{
-		String filePath = deliveryDetailedService.exportExcel(ids,"out.xml","采购出库单");
+		String filePath = deliveryDetailedService.exportExcel(ids,"out.xml","采购出库单",TradingConst.DeliveryDetailed_Out_Ex);
 		renderFile(new File(filePath));
 	}
 	
@@ -160,7 +161,7 @@ public class DeliveryDetailedController extends BaseController {
 	 * @throws Exception
 	 */
 	public void pPut() throws Exception{
-		String filePath = deliveryDetailedService.exportExcel(ids,"pOut.xml","出货单导入");
+		String filePath = deliveryDetailedService.exportExcel(ids,"pOut.xml","出货单导出",null);
 		renderFile(new File(filePath));
 	}
 	

@@ -1,9 +1,33 @@
 package com.trading.mvc;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.platform.tools.ToolDateTime;
 
 public class TableUtils {
+	
+	public static Map<String, String> serialNo = new HashMap<>();
+
+	public static String getSerialNo(int digit,String preFix, String date) {
+		String key = preFix + date;
+		String value = serialNo.get(key);
+		if (StringUtils.isEmpty(value)) {
+			String no = autoGenericCode("0", digit);
+			serialNo.put(key, key + no);
+		} else {
+			String no = value.substring(value.length() - digit, value.length());
+			int noInt = Integer.valueOf(no);
+			no = autoGenericCode(String.valueOf(noInt), digit);
+			serialNo.put(key, key + no);
+		}
+		return serialNo.get(key);
+	}
+	
 	/**
 	 * 统计表指定表达式的统计数
 	 * ex: digit=4 table=user column=no expre=No170620 
@@ -48,11 +72,16 @@ public class TableUtils {
 		// num 代表长度为4
 		// d 代表参数为正数型
 		result = String.format("%0" + num + "d", Integer.parseInt(code) + 1);
-
 		return result;
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(autoGenericCode("0", 4));
+		//String value = autoGenericCode("0", 4);
+		System.out.println(getSerialNo(4, "cx", ToolDateTime.getCurrent("yyMMdd")));
+		System.out.println(getSerialNo(4, "cx", ToolDateTime.getCurrent("yyMMdd")));
+		System.out.println(getSerialNo(4, "cx", ToolDateTime.getCurrent("yyMMdd")));
+		System.out.println(getSerialNo(4, "cx", ToolDateTime.getCurrent("yyMMdd")));
+		System.out.println(getSerialNo(4, "cx", ToolDateTime.getCurrent("yyMMdd")));
+		
 	}
 }

@@ -32,6 +32,21 @@ public class TradingConst {
 	public static final String DeliveryDetailed_Out = "CK";
 	
 	/**
+	 * 入库导出前辍标识
+	 */
+	public static final String DeliveryDetailed_In_Ex = "RKE";
+
+	/**
+	 * 出库导出前辍标识
+	 */
+	public static final String DeliveryDetailed_Out_Ex = "CKE";
+	
+	/**
+	 * 采购结算明细Excel前辍标识
+	 */
+	public static final String WSettlement_Out = "C";
+	
+	/**
 	 * 发货明细状态
 	 * 未入库
 	 */

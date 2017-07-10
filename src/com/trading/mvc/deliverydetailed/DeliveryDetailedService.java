@@ -52,7 +52,7 @@ public class DeliveryDetailedService extends BaseService {
 		return excelData.length;
 	}
 	
-	public String exportExcel(String ids,String tempfile,String genrFileName) throws Exception {
+	public String exportExcel(String ids,String tempfile,String genrFileName,String exportNoFix) throws Exception {
 		String sqlIn = sqlIn(ids);
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("sqlIn", sqlIn);
@@ -84,6 +84,10 @@ public class DeliveryDetailedService extends BaseService {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("entitys", list);
 		data.put("sum", sum);
+		data.put("exportDate", ToolDateTime.getCurrent("yyyyMMdd"));
+		if (StringUtils.isNotEmpty(exportNoFix)) {
+			data.put("exportNo", TableUtils.getSerialNo(4, exportNoFix, ToolDateTime.getCurrent("yyMMdd")));
+		}
 		ToolFreemarkParse.parse(BaseHandler.class.getResource("/com/platform/tools/code/tpl/excel/").getPath(), tempfile, generalFilePath, data);
 		return generalFilePath;
 	}

@@ -24,7 +24,7 @@
 	</div>
 </div>
 <div class="control-group">
-	<label class="control-label">采购结算价</label>
+	<label class="control-label">采购结算价(不含税)</label>
 	<div class="controls">
 		<input type="text" name="wiscoSettlement.price"  value="${escapeHtml(wiscoSettlement.price!)}"
 			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50位数字">
@@ -40,7 +40,7 @@
 <!-- 	</div> -->
 <!-- </div> -->
 <div class="control-group">
-	<label class="control-label">销售加价</label>
+	<label class="control-label">销售加价(含税)</label>
 	<div class="controls">
 		<input type="text" name="salesAddPrice" value="${escapeHtml(salesAddPrice!)}"
 			class="span8" maxlength="50" vMin="1" vType="floatZ" onblur="platform_verify.onblurVali(this);" placeholder="1-50数字">

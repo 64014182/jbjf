@@ -16,7 +16,8 @@
 				so.other,
 				so.pocIds,
 				so.orderItemNo,
-				t1.hasConfirm as hasConfirm
+				t1.planSumWeight as planSumWeight,
+				t2.salesSumWeight as salesSumWeight
 		]]>
 	</sql>
 	
@@ -29,23 +30,35 @@
 			LEFT JOIN b_trading_manufacturer btm ON so.manufacturer = btm.ids
 			LEFT JOIN b_trading_orderunit bto ON so.orderUnit = bto.ids
 			LEFT JOIN(
-			SELECT
+				SELECT
 				LEFT (
 					orderItemNo,
 					length(orderItemNo) - 3
-				) as pociInvoceNo,
-				SUM(hasConfirm) as sumConfirm,
-				COUNT(*) as sum,
-				IF (SUM(hasConfirm) = COUNT(*), 1, 0) as hasConfirm
-			
+				) as invoiceNo,
+				cast(round(sum(itemWeight), 3) AS CHAR) AS planSumWeight
 			FROM
-				b_trading_wiscosettlement
+				b_trading_planordercomplete
 			GROUP BY
 				LEFT (
 					orderItemNo,
 					length(orderItemNo) - 3
 				)
-			) as t1 ON poci.invoceNo = t1.pociInvoceNo
+			) as t1 ON poci.invoceNo = t1.invoiceNo
+			LEFT JOIN(
+				SELECT
+					LEFT (
+						orderItemNo,
+						length(orderItemNo) - 3
+					) AS invoiceNo,
+					cast(round(sum(weight), 3) AS CHAR) AS salesSumWeight
+				FROM
+					b_trading_salessettlement
+				GROUP BY
+					LEFT (
+						orderItemNo,
+						length(orderItemNo) - 3
+					)
+			) as t2 ON poci.invoceNo = t2.invoiceNo
 			WHERE
 				1 = 1
 			<% if(!isEmpty(invoceNo)){ %>

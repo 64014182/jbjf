@@ -320,6 +320,7 @@ public class WiscoSettlementService extends BaseService {
 		data.put("entitys", list);
 		data.put("sum", sum);
 		data.put("orderUnit", orderUnit);
+		data.put("eNo", TableUtils.getSerialNo(2, TradingConst.WSettlement_Out, ToolDateTime.getCurrent("yyMMdd")));
 		ToolFreemarkParse.parse(BaseHandler.class.getResource("/com/platform/tools/code/tpl/excel/").getPath(), "purchase.xml", generalFilePath, data);
 		return generalFilePath;
 	}

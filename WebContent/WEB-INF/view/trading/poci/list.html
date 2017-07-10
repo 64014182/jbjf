@@ -118,9 +118,9 @@
 									<th class="hidden-phone">订货单位</th>
 									<th class="hidden-phone">销售订单号</th>
 									<th class="hidden-phone">加价</th>
-									<th class="hidden-phone">代垫运输费</th>
-									<th class="hidden-phone">代垫仓储费</th>
-									<th class="hidden-phone">其他费用</th>
+									<th class="hidden-phone">运输费</th>
+									<th class="hidden-phone">仓储费</th>
+									<th class="hidden-phone">其他</th>
 									<th class="hidden-phone">结算</th>
 									<th class="hidden-phone">操作</th>
 								</tr>
@@ -195,11 +195,22 @@
 											<% } %>
 										</td>						
 										<td>
-											<% if(entity["hasConfirm"] == null || entity["hasConfirm"] ==0){ %>	
-												<span class="label label-warning">否</span>
-											<% }else if(entity["hasConfirm"] == 1){ %>
-												<span class="label label-success">是</span>
+											${escapeHtml(entity["planSumWeight"]!)}
+											|
+											<% if(entity["salesSumWeight"] == null){ %>	
+												0
+											<% }else{ %>
+												${escapeHtml(entity["salesSumWeight"]!)}
 											<% } %>
+											|
+											<% if(entity["hasSett"] == null || entity["hasSett"] =="0"){ %>	
+												<button type="button" class="btn btn-mini btn-warning" data-table="dataTable" data-url="/trading/deliveryDetailed/out?csrfToken=${csrfToken!}" onclick="common_modals.deleteList(this)">
+												结算
+												</button>
+											<% }else if(entity["hasSett"] == "1"){ %>
+												<span class="label label-success">结</span>
+											<% } %>
+
 										</td>
 										<td>
 											<a href="javascript:void(0)" 

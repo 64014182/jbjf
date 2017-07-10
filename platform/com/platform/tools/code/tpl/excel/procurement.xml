@@ -128,14 +128,14 @@
    </Row>
    <Row ss:AutoFitHeight="0">
     <Cell ss:MergeAcross="1" ss:StyleID="s65"><Data ss:Type="String">入库时间</Data></Cell>
-    <Cell ss:StyleID="s67"/>
+    <Cell ss:StyleID="s67"><Data ss:Type="String">${exportDate!}</Data></Cell>
     <Cell ss:StyleID="s67"/>
     <Cell ss:StyleID="s67"/>
     <Cell ss:StyleID="s67"/>
     <Cell ss:StyleID="s67"/>
     <Cell ss:StyleID="s67"/>
     <Cell ss:StyleID="s67"><Data ss:Type="String">入库单号</Data></Cell>
-    <Cell ss:MergeAcross="1" ss:StyleID="s69"/>
+    <Cell ss:MergeAcross="1" ss:StyleID="s69"><Data ss:Type="String">${exportNo!}</Data></Cell>
    </Row>
    <Row ss:AutoFitHeight="0">
     <Cell ss:StyleID="s71"><Data ss:Type="String">序号</Data></Cell>
