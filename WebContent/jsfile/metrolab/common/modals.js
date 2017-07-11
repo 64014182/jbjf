@@ -17,7 +17,6 @@ var common_modals = function() {
 	 * 删除多行数据
 	 */
 	var deleteList = function(button) {
-		alert();
 		var table = $(button).attr("data-table");
 		var url = $(button).attr("data-url");
 		var ids = common_common.getCheckFunc(table);
@@ -349,6 +348,22 @@ var common_modals = function() {
 		myDialog.showModal(document.getElementById('header'));
 	}
 	
+	var passChangeDialog = function(button){
+		var url = $(button).attr("data-url");
+		myDialog = dialog({
+			align: 'bottom',
+			title: "结算清单号",
+		    icon: 'succeed',
+		});
+		$.ajax({
+		    url: url,
+		    success: function (data) {
+		        myDialog.content(data);// 填充对话框内容
+		    },
+		});
+		myDialog.showModal(document.getElementById('header'));
+	}
+	
 	/**
 	 * settlementNo,结算清单号
 	 * invoice 发票号
@@ -359,7 +374,7 @@ var common_modals = function() {
 		if(settlementNo != ""){
 			myDialog = dialog({
 				align: 'bottom',
-				title: "结算清单号",
+				title: "修改密码",
 			    icon: 'succeed',
 			});
 			$.ajax({
@@ -513,6 +528,7 @@ var common_modals = function() {
 	var getDialog = function(){
 		return myDialog;
 	}
+
 	/**************************************		功能定制函数	end	***************************************************/	
 		
 	return {
@@ -543,6 +559,7 @@ var common_modals = function() {
 		modal:modal,
 		closeDialog:closeDialog,
 		trace:trace,
+		passChangeDialog:passChangeDialog
 	};
 	
 }(); 

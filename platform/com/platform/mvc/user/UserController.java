@@ -2,6 +2,8 @@ package com.platform.mvc.user;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.jfinal.aop.Before;
 import com.jfinal.log.Log;
 import com.jfinal.upload.UploadFile;
@@ -129,8 +131,19 @@ public class UserController extends BaseController {
 		String userName = getPara("userName");
 		String passOld = getPara("passOld");
 		String passNew = getPara("passNew");
-		userService.passChange(userName, passOld, passNew);
-		renderText("");
+		
+		String err = "";
+		boolean hasSuccess = false;
+		try {
+			hasSuccess = userService.passChange(userName, passOld, passNew);
+		} catch (Exception e) {
+			err = e.getMessage();
+		}
+		if (StringUtils.isNotEmpty(err) || !hasSuccess) {
+			renderJson("{\"message\":\"" + "保存失败！旧密码不对！" + err + "\"}");
+		} else {
+			renderJson("{\"message\":\"" + "保存成功！" + "\"}");
+		}
 	}
 	
 }

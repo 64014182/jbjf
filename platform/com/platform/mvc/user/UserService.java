@@ -202,7 +202,8 @@ public class UserService extends BaseService {
 	 * @param passOld
 	 * @param passNew
 	 */
-	public void passChange(String userName, String passOld, String passNew){
+	public boolean passChange(String userName, String passOld, String passNew){
+		boolean bool = false;
 		try {
 			Map<String, Object> param = new HashMap<String, Object>();
 			param.put("column", User.column_username);
@@ -214,7 +215,6 @@ public class UserService extends BaseService {
 			byte[] salt = Base64.decodeBase64(saltStr);
 			String passStr = user.getPassword();		// 密码
 			byte[] encryptedPassword = Base64.decodeBase64(passStr);
-			boolean bool = false;
 			try {
 				bool = ToolPbkdf2.authenticate(passOld, encryptedPassword, salt);
 			} catch (NoSuchAlgorithmException e) {
@@ -235,6 +235,7 @@ public class UserService extends BaseService {
 		} catch (Exception e) {
 			if(log.isErrorEnabled()) log.error("更新用户密码异常，userName:" + userName + "，旧密码：" + passOld + "，新密码：" + passNew, e);
 		}
+		return bool;
 	}
 	
 }

@@ -121,6 +121,8 @@
 									<th class="hidden-phone">运输费</th>
 									<th class="hidden-phone">仓储费</th>
 									<th class="hidden-phone">其他</th>
+									<th class="hidden-phone">计划</th>
+									<th class="hidden-phone">结算</th>
 									<th class="hidden-phone">操作</th>
 								</tr>
 							</thead>
@@ -204,17 +206,19 @@
 											<% } %>
 											</td>
 											
-											<td>
+										</td>
+										<td>
 											<% if(entity["hasSett"] == null || entity["hasSett"] =="0"){ %>	
-												<button type="button" class="btn btn-mini btn-warning" data-table="dataTable" data-url="/trading/deliveryDetailed/out?csrfToken=${csrfToken!}" onclick="common_modals.deleteList(this)">
+												<button type="button" class="btn btn-mini btn-warning" 
+												data-table="dataTable" 
+												data-url="/trading/poci/sett/${entity.ids!}?csrfToken=${csrfToken!}"
+												onclick="common_modals.deleteOne(this)">
 												结算
 												</button>
 											<% }else if(entity["hasSett"] == "1"){ %>
 												<span class="label label-success">结</span>
 											<% } %>
-											</td>
-										</td>
-										<td>
+											
 											<a href="javascript:void(0)" 
 												id="${entity.ids!}" 
 												cNo="${entity.invoceNo!}" 

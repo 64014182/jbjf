@@ -41,7 +41,7 @@ public class PlanOrderCompleteService extends BaseService {
 			String invoiceNo = itemOrderNo.substring(0, itemOrderNo.length() - 3);
 
 			if (pociMap.get(invoiceNo) == null) {
-				pociMap.put(invoiceNo, new Poci(ToolUuid.get32UUID(), invoiceNo, month));
+				pociMap.put(invoiceNo, new Poci(ToolUuid.get32UUID(), invoiceNo, month, "0"));
 			}
 		}
 		pociList.addAll(pociMap.values());

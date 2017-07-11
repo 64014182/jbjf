@@ -13,5 +13,10 @@ public class PociService extends BaseService {
 	private static final Log log = Log.getLog(PociService.class);
 	
 	public static final String serviceName = "pociService";
-	
+
+	public void updateState(String table, String ids, String state) {
+		Poci poci = Poci.dao.findById(ids);
+		poci.setHasSett(state);
+		poci.update();
+	}
 }

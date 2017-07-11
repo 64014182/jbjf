@@ -40,6 +40,11 @@ public class Poci extends BaseModel<Poci> {
 	 * 字段描述：月份 字段类型：varchar(4) 长度：4
 	 */
 	public static final String column_cDate = "cDate";
+	
+	/**
+	 * 字段描述：月份 字段类型：varchar(1) 长度：1
+	 */
+	public static final String column_hasSett = "hasSett";
 
 	/**
 	 * sqlId : trading.poci.splitPageFrom 描述：分页from
@@ -55,7 +60,8 @@ public class Poci extends BaseModel<Poci> {
 	private String ids;
 	private String invoceNo;
 	private String cDate;
-
+	private String hasSett;
+	
 	public void setIds(String ids) {
 		set(column_ids, ids);
 	}
@@ -79,14 +85,23 @@ public class Poci extends BaseModel<Poci> {
 	public String getCDate() {
 		return get(column_cDate);
 	}
+	
+	public void setHasSett(String hasSett) {
+		set(column_hasSett, hasSett);
+	}
 
+	public String getHasSett() {
+		return get(column_hasSett);
+	}
+	
 	public Poci() {
 	}
 
-	public Poci(String ids, String invoceNo, String cDate) {
+	public Poci(String ids, String invoceNo, String cDate,String hasSett) {
 		super();
 		setIds(ids);
 		setInvoceNo(invoceNo);
 		setCDate(cDate);
+		setHasSett(hasSett);
 	}
 }

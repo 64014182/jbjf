@@ -7,6 +7,7 @@ import com.jfinal.log.Log;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
+import com.trading.mvc.deliverydetailed.DeliveryDetailed;
 import com.trading.mvc.planordercomplete.PlanOrderComplete;
 
 /**
@@ -20,6 +21,7 @@ import com.trading.mvc.planordercomplete.PlanOrderComplete;
  * /trading/poci/view
  * /trading/poci/delete
  * /common/poci/add.html
+ * /common/poci/sett
  * 
  */
 @Controller("/trading/poci")
@@ -80,6 +82,15 @@ public class PociController extends BaseController {
 	 */
 	public void delete() {
 		pociService.baseDelete(Poci.table_name, getPara() == null ? ids : getPara());
+		forwardAction("/trading/poci/backOff");
+	}
+	
+	/**
+	 * 结算
+	 * @throws Exception
+	 */
+	public void sett() throws Exception {
+		pociService.updateState(DeliveryDetailed.table_name, getPara() == null ? ids : getPara(), "1");
 		forwardAction("/trading/poci/backOff");
 	}
 	

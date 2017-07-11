@@ -1,7 +1,8 @@
 <script type="text/javascript">
-	
-	function passChange(form){
-		//var oldPass = $("#oldPass").val();
+	$('.ajaxSave').click(function() {
+		var oldPass = $("#oldPass").val();
+		var csrfToken = $("#csrfToken").val();
+		var userName = $("#userName").val();
 		
 		var newPass1 = $("#newPass1").val();
 		var newPass2 = $("#newPass2").val();
@@ -9,27 +10,48 @@
 			common_modals.alert("两次输入密码不一致，请从新输入！");
 	 		return false;
 		}
+		var passNew = newPass1;
 		
-		var errorCount = platform_verify.formVali(document.getElementById("passChangeForm"));
-		if(errorCount != 0){
-			common_modals.alert("有" + errorCount + "处错误，请修正！");
-	 		return false;
-		}
+// 		var errorCount = platform_verify.formVali(document.getElementById("passChangeForm"));
+// 		if(errorCount != 0){
+// 			common_modals.alert("有" + errorCount + "处错误，请修正！");
+// 	 		return false;
+// 		}
 		
-		common_ajax.ajaxForm("passChangeForm");
-	}
+		//common_ajax.ajaxForm("passChangeForm");
+		$.ajax({
+			type : "POST",
+			url : "${cxt!}/platform/user/passChange?userName=" + userName + "&passNew=" + passNew+ "&passOld=" + oldPass,
+			data:{ "userName" : userName,"passOld":oldPass,"passNew":passNew },
+			contentType : "application/json; charset=utf-8",
+			dataType : "json",
+			success : function(message) {
+				var message = message['message'];
+				if(message.indexOf("失败")>0){
+					toastr.error(message);
+				}else{
+					toastr.success(message);
+				}
+				$('.ui-dialog-close').click();
+			},
+			error : function(message) {
+				//common_modals.closeDialog();
+				toastr.error(message['message']);
+			}
+		});
+	});
 	
 </script>
 
-<div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	<h3>${i18nMap["admin.user.passChange"]}</h3>
-</div>
+<!-- <div class="modal-header"> -->
+<!-- 	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+<!-- 	<h3>${i18nMap["admin.user.passChange"]}</h3> -->
+<!-- </div> -->
 
 <div class="modal-body">
 	<form id="passChangeForm" action="${cxt!}/platform/user/passChange" method="POST" role="form" class="form-horizontal">
-		<input type="hidden" name="csrfToken" value="${csrfToken!}">
-		<input type="hidden" name="userName" value="${cookieMap.userName.value!}">
+		<input type="hidden" id="csrfToken" name="csrfToken" value="${csrfToken!}">
+		<input type="hidden" id="userName" name="userName" value="${cookieMap.userName.value!}">
 
 		<div class="control-group">
 			<label class="control-label">${i18nMap["admin.user.passChange.oldPass"]}</label>
@@ -58,12 +80,18 @@
 			</div>
 			<span class="help-inline">6-18位字母数字</span>
 		</div>
-		
+		<div class="control-group">
+					<div class="controls">
+						<button type="button" class="btn btn-success ajaxSave">
+							<i class="icon-ok icon-white"></i>提交
+						</button>
+					</div>
+				</div>
 	</form>
 </div>
 
-<div class="modal-footer">
-	<button type="button" data-dismiss="modal" class="btn">${i18nMap["admin.common.close"]}</button>
-	<button type="button" data-dismiss="modal" class="btn btn-primary" onclick="passChange();">${i18nMap["admin.common.determine"]}</button>
-</div>	
+<!-- <div class="modal-footer"> -->
+<!-- 	<button type="button" data-dismiss="modal" class="btn">${i18nMap["admin.common.close"]}</button> -->
+<!-- 	<button type="button" data-dismiss="modal" class="btn btn-primary" onclick="passChange();">${i18nMap["admin.common.determine"]}</button> -->
+<!-- </div>	 -->
 	

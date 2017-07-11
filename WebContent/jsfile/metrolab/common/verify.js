@@ -347,7 +347,8 @@ var platform_verify = function() {
 			if(result != true){
 				hiddenInputColor(inputNode);
 				showInputColor(inputNode, "error");
-				if(inputNode.next().html().indexOf("class") == -1){
+				var html = inputNode.next().html();
+				if(typeof(html) != "undefined" && html.indexOf("class") == -1){
 					inputNode.next().html("验证失败！");
 				}
 				return false;
