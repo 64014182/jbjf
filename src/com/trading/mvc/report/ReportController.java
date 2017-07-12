@@ -42,4 +42,9 @@ public class ReportController extends BaseController {
 		paging(splitPage, "trading.report.paymentSelect", "trading.report.paymentFrom");
 		render("/trading/report/payment.html");
 	}
+	
+	public void paymentReport(){
+		paging(splitPage, "trading.report.paymentReportSelect", "trading.report.paymentReportFrom");
+		render("/trading/report/paymentReport.html");
+	}
 }

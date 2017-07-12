@@ -2,6 +2,7 @@ package com.trading.mvc.salessettlement;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 
 import com.jfinal.aop.Before;
 import com.jfinal.log.Log;
@@ -44,7 +45,7 @@ public class SalesSettlementController extends BaseController {
 		pagingSum(ConstantInit.db_dataSource_main, splitPage, "trading.salesSettlement.splitPageSelect", SalesSettlement.sqlId_splitPageFrom,"trading.salesSettlement.splitPageSum");
 		render("/trading/salesSettlement/list.html");
 	}
-	
+
 	public void saveOther() {
 		SalesSettlement ss = getModel(SalesSettlement.class);
 		wiscoSettlementService.saveSalesSettleOther(ss);
@@ -130,5 +131,22 @@ public class SalesSettlementController extends BaseController {
 		String orderUnit = getPara("orderUnit");
 		String filePath = salesSettlementService.updateFlag(ids, orderUnit);
 		renderFile(new File(filePath));
+	}
+	
+	public void exportExcel() {
+		LinkedHashMap<String, String> lhm = new LinkedHashMap<String, String>();
+		lhm.put("name", "订货单位");
+		lhm.put("invoicePrice", "销售合同价格");
+		lhm.put("goodsAmount", "货款金额");
+		lhm.put("taxPrice", "税款金额");
+		lhm.put("totalAmount", "总金额");
+		lhm.put("weight", "出货重量");
+		lhm.put("invoiceNo", "发票号");
+		lhm.put("flag", "编号");
+		lhm.put("hasDraw", "是否开票");
+		lhm.put("contractMonth", "月份");
+		
+		String generalFile = exportToExcel(splitPage, SalesSettlement.sqlId_splitPageSelect, SalesSettlement.sqlId_splitPageFrom,lhm);
+		renderText(generalFile);
 	}
 }

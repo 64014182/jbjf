@@ -147,6 +147,12 @@
 								收货单导出
 							</button>
 							
+							<button type="button" class="btn btn-info" 
+								onclick='common_ajax.ajaxFormExcel("splitPage","dataTable");'>
+								<i class="icon-share"></i>
+								Excel导出全部
+							</button>
+							
 							<button type="button" class="btn btn-warning"
 								onclick="common_modals.trace('${cxt!}/trading/wiscoSettlement/traceDialog','dataTable','追溯')">
 								<i class="icon-retweet"></i>
@@ -173,7 +179,7 @@
 									<th>标签</th>
 									<th>重量</th>
 									<th>数量</th>
-									<th>发货日期</th>
+									<th>规格</th>
 									<th>销售订单号</th>
 									<th>订货单位</th>
 									<th>订货价格</th>
@@ -202,7 +208,7 @@
 									<td>${escapeHtml(entity["tag"]!)}</td>
 									<td>${escapeHtml(entity["weight"]!)}</td>
 									<td>${escapeHtml(entity["quantity"]!)}</td>
-									<td>${escapeHtml(entity["writeOffDate"]!)}</td>
+									<td>${escapeHtml(entity["thickness"]!)}*${escapeHtml(entity["width"]!)}*${escapeHtml(entity["length"]!)}</td>
 									<td>${escapeHtml(entity["salesOrderNo"]!)}</td>
 									<td class="orderUniteVali">${escapeHtml(entity["orderUnit"]!)}</td>
 									<td>${escapeHtml(entity["price"]!)}</td>
@@ -256,7 +262,7 @@
 									入库号：${escapeHtml(entity["inNo"]!)}&nbsp&nbsp&nbsp
 									出库号：${escapeHtml(entity["outNo"]!)}&nbsp&nbsp&nbsp
 									<br>
-									规格：${escapeHtml(entity["thickness"]!)}*${escapeHtml(entity["width"]!)}*${escapeHtml(entity["length"]!)}&nbsp&nbsp&nbsp
+									发货日期：${escapeHtml(entity["writeOffDate"]!)}&nbsp&nbsp&nbsp
 									运费：${escapeHtml(entity["freight"]!)}&nbsp&nbsp&nbsp
 									代收铁运保险费：${escapeHtml(entity["railwayTIP"]!)}&nbsp&nbsp&nbsp
 									代收水运保险费：${escapeHtml(entity["waterTIP"]!)}&nbsp&nbsp&nbsp

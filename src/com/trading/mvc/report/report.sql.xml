@@ -121,7 +121,6 @@
 				btp.*, bto. NAME
 		]]>
 	</sql>
-	<!-- 分页查询：from -->
 	<sql id="paymentFrom">
 		<![CDATA[ 
         	FROM
@@ -132,6 +131,26 @@
 				and btp.unit like #'%$unit$%'# 
 			<% } %>
 			ORDER BY sTime ASC
+    	]]>
+	</sql>
+	<sql id="paymentReportSelect">
+		<![CDATA[ 
+			select *
+    	]]>
+	</sql>
+	<sql id="paymentReportFrom">
+		<![CDATA[ 
+        	 from (
+				SELECT DATE_FORMAT(saveDate, '%Y-%m-%d') AS sdate, NULL AS pMount, totalAmount AS sMount FROM b_trading_salessettlement WHERE saveDate >= '2017-06-28' and saveDate <= '2017-07-08' 
+			UNION ALL
+				SELECT DATE_FORMAT(sTime, '%Y-%m-%d') AS sdate, amount AS pMount, NULL AS sMount FROM `b_trading_payment` where sTime >= '2017-06-28' and sTime <= '2017-07-08'
+			UNION ALL
+			SELECT t1.sdate,t1.sMount,t2.pMount FROM(
+					SELECT '合计' as sdate, NULL AS pMount, round(sum(totalAmount),2) AS sMount FROM b_trading_salessettlement WHERE saveDate >= '2017-06-28' and saveDate <= '2017-07-08' 
+				) as t1 LEFT JOIN (
+				SELECT '合计' as sdate, round(sum(amount),2) AS pMount, NULL AS sMount FROM `b_trading_payment` where sTime >= '2017-06-28' and sTime <= '2017-07-08'
+				) as t2 ON t1.sdate = t2.sdate
+			)ta ORDER BY sdate
     	]]>
 	</sql>
 </sql-statement>

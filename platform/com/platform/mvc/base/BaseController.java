@@ -1,26 +1,28 @@
 package com.platform.mvc.base;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import com.alibaba.fastjson.JSON;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HttpKit;
+import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.kit.StrKit;
 import com.jfinal.log.Log;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.render.JsonRender;
 import com.jfinal.upload.MultipartRequest;
 import com.jfinal.upload.UploadFile;
@@ -37,6 +39,7 @@ import com.platform.plugin.I18NPlugin;
 import com.platform.tools.ToolDateTime;
 import com.platform.tools.ToolString;
 import com.platform.tools.ToolWeb;
+import com.platform.tools.excel.ExcelUtil;
 
 /**
  * 公共Controller
@@ -68,22 +71,43 @@ public abstract class BaseController extends Controller {
      * @return void 返回类型 
      * @throws 
      */  
-	public void exportExcel(String fileName, HSSFWorkbook wb, HttpServletResponse response) {
+	@SuppressWarnings("unchecked")
+	protected String exportToExcel(SplitPage splitPage, String selectSqlId, String fromSqlId,LinkedHashMap<String, String> lhm) {
+		//paging(splitPage, BaseModel.sqlId_splitPageSelect, BaseModel.sqlId_splitPageFrom);
+		
+		String selectSql = getSqlByBeetl(selectSqlId, splitPage.getQueryParam());
+		Map<String, Object> map = BaseService.getFromSql(splitPage, fromSqlId);
+		String fromSql = (String) map.get("sql");
+		LinkedList<Object> paramValue = (LinkedList<Object>) map.get("paramValue");
+		List<Record> result = Db.use(ConstantInit.db_dataSource_main).find(selectSql + fromSql,paramValue.toArray());
+		
+		String webInfPath = "WEB-INF" + File.separator + "files" + File.separator + "export";
+		String projectPath = PathKit.getWebRootPath() + File.separator;
+		String fileName = ToolDateTime.format(new Date(), "_yyyy_MM_dd_HH_mm_ss_SSS")+ ".xls";
+		
+		File f = new File(projectPath + webInfPath);
+		if (!f.exists()) {
+			f.mkdir();
+		}
+		String generalFile = projectPath + webInfPath + File.separator + fileName;
 		try {
-			response.setContentType("application/ms-excel;");
-			response.setHeader("Content-disposition",
-					"attachment;filename=" + new String(fileName.getBytes("gb2312"), "ISO-8859-1") + ".xls");
-			OutputStream ouputStream = response.getOutputStream();
-			wb.write(ouputStream);
-			ouputStream.flush();
-			ouputStream.close();
-		} catch (IOException e) {
+			OutputStream os = new FileOutputStream(new File(generalFile));
+			ExcelUtil.listToExcel(result, lhm, "Sheet 1", os);
+			return webInfPath + File.separator + fileName;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return webInfPath + File.separator + fileName;
 	}  
+	
+	public void downStaticFile() {
+		String projectPath = PathKit.getWebRootPath() + File.separator;
+		renderFile(new File(projectPath + File.separator + getPara("fileName")));
+	}
+	
 	/**
 	 * 请求/WEB-INF/下的视图文件
-	 */
+	 */	
 	public void toUrl() {
 		String toUrl = getPara(ConstantWebContext.request_toUrl);
 		render(toUrl);

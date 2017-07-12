@@ -56,7 +56,6 @@ public class PaymentController extends BaseController {
 		Map<String, String> paramMap = getParamMap();
 		String offset = paramMap.get("offset");
 		String limit = paramMap.get("limit");
-		System.out.println(paramMap.get("filter"));
 		
 		int pageNumber = Integer.parseInt(offset)/ 10 + 1;
 		Page<Payment> list = Payment.dao.paginate(pageNumber, Integer.parseInt(limit), getSqlMy(BaseModel.sqlId_splitPageSelect), getSqlMy(Payment.sqlId_splitPageFrom));

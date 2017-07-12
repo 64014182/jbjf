@@ -352,7 +352,7 @@ var common_modals = function() {
 		var url = $(button).attr("data-url");
 		myDialog = dialog({
 			align: 'bottom',
-			title: "结算清单号",
+			title: "修改密码",
 		    icon: 'succeed',
 		});
 		$.ajax({
@@ -374,7 +374,7 @@ var common_modals = function() {
 		if(settlementNo != ""){
 			myDialog = dialog({
 				align: 'bottom',
-				title: "修改密码",
+				title: "结算清单号",
 			    icon: 'succeed',
 			});
 			$.ajax({

@@ -141,17 +141,11 @@
 								<i class="icon-share"></i>
 								Excel导出
 							</button>
-<!-- 							<button type="button" class="btn btn-danger" data-table="dataTable" data-url="/trading/wiscoSettlement/delete" onclick="common_modals.deleteList(this)"> -->
-<!-- 								<i class="icon-remove icon-white"></i> -->
-<!-- 								删除 -->
-<!-- 							</button>  -->
-<!-- 							<input class="medium" type="text" name="_query.settlementNo" value='${escapeHtml(splitPage.queryParam["settlementNo"])}' > -->
-<!-- 							<button type="button" class="btn btn-small btn-info" -->
-<!-- 									data-table="dataTable"  -->
-<!-- 									data-url="${cxt!}/trading/wiscoSettlement/settFromDialog?csrfToken=${csrfToken!}" -->
-<!-- 									onclick="common_modals.seltt(this,'${escapeHtml(splitPage.queryParam['settlementNo'])}')"> -->
-<!-- 								<i class="icon-lock icon-white"></i>结算 -->
-<!-- 							</button>  -->
+							<button type="button" class="btn btn-info" 
+								onclick='common_ajax.ajaxFormExcel("splitPage","dataTable");'>
+								<i class="icon-share"></i>
+								Excel导出全部
+							</button>
 						</span>
 
                        	<div class="space15"></div>
@@ -273,13 +267,11 @@
 									<td></td>
 								</tr>
 							</tfoot>
-							
 						</table>
 
 						<div id="splitPageDiv" class="pagination">
 							<%include("/platform/common/splitPage.html", {"divId" : "main-content", "formId" : "splitPage", "splitPageDiv" : "splitPageDiv"}){}%>
 						</div>
-						
 					</div>
 				</div>
 				<!-- END EXAMPLE TABLE widget-->

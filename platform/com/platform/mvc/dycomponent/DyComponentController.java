@@ -103,7 +103,6 @@ public class DyComponentController extends BaseController {
 		Record r = Db.findFirst("SELECT * FROM pt_fun_dycomponent where sqlkey = ?", sqlIndex);
 		String sql = r.getStr("sqlvalue");
 		param = URLDecoder.decode(param,"UTF-8");
-		System.out.println("===============param is a :" + param);
 		sql = "SELECT ids AS value, NAME AS text FROM b_trading_manufacturer where name LIKE '%" + param + "%'";
 		List<Record> datas = Db.find(sql);
 		renderJson(datas);

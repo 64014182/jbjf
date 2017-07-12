@@ -1,6 +1,7 @@
 package com.trading.mvc.deliverydetailed;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -106,14 +107,13 @@ public class DeliveryDetailedController extends BaseController {
 		redirect("/trading/deliveryDetailed");
 	}
 	
-	public static void main(String args[]){
+	public static void main(String args[]) {
 		int[] a = { 0, 1, 2, 3, 4, 5, 6 };
-		int[] b = new int[10] ;
+		int[] b = new int[10];
 		b[a.length] = 7;
 		b[a.length + 1] = 8;
 		b[a.length + 2] = 9;
 		System.arraycopy(a, 0, b, 0, a.length);
-		
 		System.out.println(b);
 	}
 
@@ -172,6 +172,23 @@ public class DeliveryDetailedController extends BaseController {
 	public void settleDialog() {
 		setAttr("selIds", ids);
 		render("/trading/deliveryDetailed/settleDialog.html");
+	}
+	
+	public void exportExcel() {
+		LinkedHashMap<String, String> lhm = new LinkedHashMap<String, String>();
+		lhm.put("orderItemNo", "订单项次编号");
+		lhm.put("contractMonth", "合同月份");
+		lhm.put("tag", "标签");
+		lhm.put("weight", "重量");
+		lhm.put("quantity", "数量");
+		lhm.put("writeOffDate", "发货日期");
+		lhm.put("salesOrderNo", "销售订单号");
+		lhm.put("orderUnit", "订货单位");
+		lhm.put("price", "订货价格");
+		lhm.put("salesPrice", "销售加价");
+		
+		String generalFile = exportToExcel(splitPage, DeliveryDetailed.sqlId_splitPageSelect, DeliveryDetailed.sqlId_splitPageFrom,lhm);
+		renderText(generalFile);
 	}
 	
 	/**

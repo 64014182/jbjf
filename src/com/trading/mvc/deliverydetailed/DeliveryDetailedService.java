@@ -51,7 +51,7 @@ public class DeliveryDetailedService extends BaseService {
 		Db.batch(insertSql, excelData, 100);
 		return excelData.length;
 	}
-	
+
 	public String exportExcel(String ids,String tempfile,String genrFileName,String exportNoFix) throws Exception {
 		String sqlIn = sqlIn(ids);
 		Map<String, Object> param = new HashMap<String, Object>();

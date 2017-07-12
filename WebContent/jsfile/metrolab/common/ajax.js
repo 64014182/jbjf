@@ -148,18 +148,20 @@ var common_ajax = function() {
 	 * @param formId 提交formid
 	 * @param callback 回调
 	 */
-	var ajaxFormExcel = function(formId, url,dataType, callback){
+	var ajaxExportForm = function(formId, dataType, callback){
 		if(dataType == undefined || dataType == null){
 			dataType = "html";
 		}
-		var url = $("#" + formId).attr("action") + "/exportExcel";
-		$("#" + formId).attr("action",url);
+
 		var result = "";
+		var url = $("#" + formId).attr("exportUrl");
 		$("#" + formId).ajaxSubmit({
+			url:url,
 			dataType : dataType,
 			async: false,
 			cache: false,
 			headers : {"localePram" : localePram}, // 所有请求加上当前语言标示环境
+			//data: {"localePram" : localePram}, // 所有请求加上当前语言标示环境
 		    success:  function (data) {
 				if(data.indexOf("loginForm") != -1){
 					window.location.href = cxt + "/platform/login";
@@ -171,6 +173,58 @@ var common_ajax = function() {
 				if( callback != null ){
 					callback();
 				}
+		    }
+		});
+		return result;
+	};
+	
+	/**
+	 * ajax提交form求并返回结果
+	 * @param divId 返回替换div
+	 * @param formId 提交formid
+	 * @param callback 回调
+	 */
+	var ajaxFormExcel = function(formId, tableId,dataType, callback){
+		if(dataType == undefined || dataType == null){
+			dataType = "html";
+		}
+		
+//		var tableHeads = [];
+//		$("#" + tableId + " thead tr:eq(0) th").each(
+//			function(){
+//				var headText = $(this).html();
+//				console.log(headText.indexOf("checkbox") == -1  );
+//				if( headText.indexOf("checkbox") == -1 || headText.indexOf("操作")  == -1){
+//					tableHeads.push(headText);
+//				}
+//			}
+//		);
+		//console.log(tableHeads);
+		
+		var url = $("#" + formId).attr("action") + "/exportExcel";
+		var result = "";
+		$("#" + formId).ajaxSubmit({
+			dataType : dataType,
+			url:url,
+			async: false,
+			cache: false,
+			headers : {"localePram" : localePram}, // 所有请求加上当前语言标示环境
+		    success:  function (data) {
+				if(data.indexOf("loginForm") != -1){
+					window.location.href = cxt + "/platform/login";
+					return;
+				}
+				
+				var downFileUrl = "trading/salesSettlement/downStaticFile";
+				downFileUrl = downFileUrl + "?fileName=" + encodeURI(encodeURI(data));
+				downFileUrl = cxt + "/" + downFileUrl;
+				window.open(downFileUrl);
+//		    	result = data;
+//		    	
+//				//扩展回调函数
+//				if( callback != null ){
+//					callback();
+//				}
 		    }
 		});
 		return result;
@@ -218,7 +272,7 @@ var common_ajax = function() {
 		var result = ajaxForm(formId, callback);
 		$("#main-content").html(result);
 	};
-
+	
 	/**
 	 * ajaxFormMainPanel请求，执行前进行确认
 	 */
@@ -267,7 +321,7 @@ var common_ajax = function() {
 		ajaxFormMainPanel : ajaxFormMainPanel,
 		ajaxFormMainPanelConfirm : ajaxFormMainPanelConfirm,
 		ajaxFuncSqlComponent:ajaxFuncSqlComponent,
-		ajaxFormExcel:ajaxFormExcel
+		ajaxFormExcel:ajaxFormExcel,
 	};
 	
 }();

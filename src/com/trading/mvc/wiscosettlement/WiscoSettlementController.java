@@ -2,6 +2,7 @@ package com.trading.mvc.wiscosettlement;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -190,6 +191,22 @@ public class WiscoSettlementController extends BaseController {
 		invoiceText = "%" + invoiceText + "%";
 		List<Record> list = Db.find(getSqlMy(sqlId), invoiceText);
 		renderJson(list);
+	}
+	
+	public void exportExcel() {
+		LinkedHashMap<String, String> lhm = new LinkedHashMap<String, String>();
+		lhm.put("settlementNo", "结算清单号");
+		lhm.put("orderItemNo", "订单项次编号");
+		lhm.put("orderUnit", "订货单位");
+		lhm.put("pName", "品名");
+		lhm.put("weight", "实结重量");
+		lhm.put("price", "结算价");
+		lhm.put("loan", "货款金额");
+		lhm.put("tax", "税额");
+		lhm.put("invoice", "发票号");
+		
+		String generalFile = exportToExcel(splitPage, WiscoSettlement.sqlId_splitPageSelect, WiscoSettlement.sqlId_splitPageFrom,lhm);
+		renderText(generalFile);
 	}
 	
 	public static void main(String[] args) {
