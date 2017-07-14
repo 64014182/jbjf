@@ -29,6 +29,22 @@
 						订货单位
 						<input class="medium" type="text" name="_query.orderUnit" value='${escapeHtml(splitPage.queryParam["orderUnit"])}' >
 						
+						收付款金额
+						<input class="medium" type="text" name="_query.amount" value='${escapeHtml(splitPage.queryParam["amount"])}' >
+						
+						收款方式
+						<select name="_query.method" class="input-small m-wrap" tabindex="1">
+							<option></option>
+							<option value="现金" ${splitPage.queryParam["method"]! == "现金" ? "selected='selected'":"" }>现金</option>
+							<option value="票据" ${splitPage.queryParam["method"]! == "票据" ? "selected='selected'":"" }>票据</option>
+						</select>
+						
+						录入时间
+						<input type="text" id="sTime" class="Wdate" name="_query.sTime" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["sTime"])}'
+							onblur="platform_verify.onblurVali(this);" 
+							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd', minDate:'1900-01-01'})">
+						
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
 					</div>

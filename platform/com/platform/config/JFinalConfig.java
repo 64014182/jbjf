@@ -1,5 +1,6 @@
 package com.platform.config;
 
+import java.io.File;
 import java.util.Map;
 
 import com.alibaba.druid.filter.stat.StatFilter;
@@ -82,8 +83,8 @@ public class JFinalConfig extends com.jfinal.config.JFinalConfig {
 		//constants.setLogFactory(new LogBackFactory()); // 参考Log4jLogFactory、Log4jLog实现LogBackFactory、LogBackLog
 
 		if(log.isInfoEnabled()) log.info("configConstant 设置path相关");
-		constants.setBaseUploadPath(PathKit.getWebRootPath()); // 上传公共路径 + File.separator + "files"
-		constants.setBaseDownloadPath(PathKit.getWebRootPath()); // 下载公共路径 + File.separator + "files"
+		constants.setBaseUploadPath(PathKit.getWebRootPath() + File.separator + "upload"); // 上传公共路径 + File.separator + "files"
+		constants.setBaseDownloadPath(PathKit.getWebRootPath()+ File.separator + "upload"); // 下载公共路径 + File.separator + "files"
 		
 		if(log.isInfoEnabled()) log.info("configConstant 视图Beetl设置");
 		ToolBeetl.brf.config();

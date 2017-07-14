@@ -36,8 +36,8 @@ public class PociController extends BaseController {
 	 * 列表
 	 */
 	public void index() {
-		//setCurDateToQueryParam("cDate", ToolDateTime.pattern_yymm);
-		paging(ConstantInit.db_dataSource_main, splitPage, Poci.sqlId_splitPageSelect, Poci.sqlId_splitPageFrom);
+		//paging(ConstantInit.db_dataSource_main, splitPage, Poci.sqlId_splitPageSelect, Poci.sqlId_splitPageFrom);
+		pagingSum(ConstantInit.db_dataSource_main, splitPage, Poci.sqlId_splitPageSelect, Poci.sqlId_splitPageFrom,"trading.poci.splitPageSum");
 		render("/trading/poci/list.html");
 	}
 	

@@ -1,12 +1,12 @@
 package com.trading.mvc.retrospect;
 
-import com.jfinal.aop.Before;
-import com.jfinal.log.Log;
 import com.platform.annotation.Controller;
 import com.platform.constant.ConstantInit;
 import com.platform.mvc.base.BaseController;
 import com.platform.mvc.base.BaseModel;
-import com.platform.tools.ToolDateTime;
+
+import com.jfinal.log.Log;
+import com.jfinal.aop.Before;
 
 /**
  * XXX 管理	
@@ -29,13 +29,10 @@ public class RetrospectController extends BaseController {
 	
 	private RetrospectService retrospectService;
 	
-	public static void main(String []args){
-	}
 	/**
 	 * 列表
 	 */
 	public void index() {
-		setCurDateToQueryParam("mon", ToolDateTime.pattern_yymm);
 		paging(ConstantInit.db_dataSource_main, splitPage, BaseModel.sqlId_splitPageSelect, Retrospect.sqlId_splitPageFrom);
 		render("/trading/retrospect/list.html");
 	}
@@ -45,7 +42,7 @@ public class RetrospectController extends BaseController {
 	 */
 	@Before(RetrospectValidator.class)
 	public void save() {
-		retrospectService.saveRetr(getModel(Retrospect.class));
+		getModel(Retrospect.class).save();
 		forwardAction("/trading/retrospect/backOff");
 	}
 	
@@ -63,8 +60,7 @@ public class RetrospectController extends BaseController {
 	 */
 	@Before(RetrospectValidator.class)
 	public void update() {
-		//getModel(Retrospect.class).update();
-		retrospectService.saveRetr(getModel(Retrospect.class));
+		getModel(Retrospect.class).update();
 		forwardAction("/trading/retrospect/backOff");
 	}
 

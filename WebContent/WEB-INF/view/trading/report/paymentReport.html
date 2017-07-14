@@ -25,13 +25,16 @@
 						查询时间
 						<!-- 合同开始月份 -->
 						<input type="text" id="startDate" class="Wdate" name="_query.startDate" readonly="readonly" 
-							onblur="platform_verify.onblurVali(this);" value='2017-01-01'
+							onblur="platform_verify.onblurVali(this);" value='${escapeHtml(splitPage.queryParam["startDate"])}'
 							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', maxDate:'#F{$dp.$D(\'endDate\')}'})">
 						至
 						<!-- 合同结束月份-->
 						<input type="text" id="endDate" class="Wdate" name="_query.endDate" readonly="readonly" 
-							onblur="platform_verify.onblurVali(this);" 
+							onblur="platform_verify.onblurVali(this);" value='${escapeHtml(splitPage.queryParam["endDate"])}'
 							onClick="WdatePicker({dateFmt: 'yyyy-MM-dd ', minDate:'#F{$dp.$D(\'startDate\')}'})">
+							
+						订货单位
+						<input class="medium" type="text" name="_query.orderUnit" value='${escapeHtml(splitPage.queryParam["orderUnit"])}' >
 							
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
@@ -61,13 +64,19 @@
 							<tbody>
 								<% for(entity in splitPage.list){ %>
 								<tr class="odd gradeX">
+<!-- 									<td>${escapeHtml(entity["unitName"]!)}</td> -->
 									<td>${escapeHtml(entity["sdate"]!)}</td>
 									<td>${escapeHtml(entity["pMount"]!)}</td>
 									<td>${escapeHtml(entity["sMount"]!)}</td>
 								</tr>
 								<% } %>
 							</tbody>
-								
+							<tfoot valign="bottom">
+								<tr>
+									<td>期初余额：${escapeHtml(initBalance!)}</td>
+									<td colspan="2">期未余额：${escapeHtml(endBalance!)}</td>
+								</tr>
+							</tfoot>
 						</table>
 
 						<div id="splitPageDiv" class="pagination">
@@ -79,7 +88,6 @@
 			</div>
 		</div>
 	</div>
-
 </form>
 
 <script type="text/javascript">

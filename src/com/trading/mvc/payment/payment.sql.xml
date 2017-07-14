@@ -18,6 +18,15 @@
 			<% if(!isEmpty(orderUnit)){ %>
 				and bto.name like #'%$orderUnit$%'# 
 			<% } %>
+			<% if(!isEmpty(amount)){ %>
+				and btp.amount like #'%$amount$%'# 
+			<% } %>
+			<% if(!isEmpty(method)){ %>
+				and btp.method like #'%$method$%'# 
+			<% } %>
+			<% if(!isEmpty(sTime)){ %>
+				and btp.sTime like #'%$sTime$%'# 
+			<% } %>
 				ORDER BY sTime ASC
     	]]>
 	</sql>

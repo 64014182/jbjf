@@ -141,16 +141,114 @@
 	<sql id="paymentReportFrom">
 		<![CDATA[ 
         	 from (
-				SELECT DATE_FORMAT(saveDate, '%Y-%m-%d') AS sdate, NULL AS pMount, totalAmount AS sMount FROM b_trading_salessettlement WHERE saveDate >= '2017-06-28' and saveDate <= '2017-07-08' 
+				SELECT DATE_FORMAT(saveDate, '%Y-%m-%d') AS sdate, NULL AS pMount, totalAmount AS sMount 
+				FROM b_trading_salessettlement saless 
+				LEFT JOIN b_trading_orderunit ord ON saless.orderUnitId = ord.ids
+				WHERE 1 = 1
+				<% if(!isEmpty(orderUnit)){ %>
+					and ord.name like #'%$orderUnit$%'# 
+				<% } %>
+				<% if(!isEmpty(startDate)){ %>
+					and saveDate >= #'$startDate$'#
+				<% } %>
+				<% if(!isEmpty(endDate)){ %>
+					and saveDate <= #'$endDate$'#
+				<% } %>
 			UNION ALL
-				SELECT DATE_FORMAT(sTime, '%Y-%m-%d') AS sdate, amount AS pMount, NULL AS sMount FROM `b_trading_payment` where sTime >= '2017-06-28' and sTime <= '2017-07-08'
+				SELECT DATE_FORMAT(sTime, '%Y-%m-%d') AS sdate, amount AS pMount, NULL AS sMount 
+				FROM b_trading_payment payment 
+				LEFT JOIN b_trading_orderunit ord ON payment.unit = ord.ids
+				where 1 = 1
+				<% if(!isEmpty(orderUnit)){ %>
+					and ord.name like #'%$orderUnit$%'# 
+				<% } %>
+				<% if(!isEmpty(startDate)){ %>
+					and sTime >= #'$startDate$'#
+				<% } %>
+				<% if(!isEmpty(endDate)){ %>
+					and sTime <= #'$endDate$'#
+				<% } %>
 			UNION ALL
-			SELECT t1.sdate,t1.sMount,t2.pMount FROM(
-					SELECT '合计' as sdate, NULL AS pMount, round(sum(totalAmount),2) AS sMount FROM b_trading_salessettlement WHERE saveDate >= '2017-06-28' and saveDate <= '2017-07-08' 
+				SELECT t1.sdate,t2.pMount,t1.sMount FROM(
+					SELECT '合计' as sdate, NULL AS pMount, round(sum(totalAmount),2) AS sMount 
+					FROM b_trading_salessettlement saless 
+					LEFT JOIN b_trading_orderunit ord ON saless.orderUnitId = ord.ids
+					WHERE 1 = 1
+					<% if(!isEmpty(orderUnit)){ %>
+						and ord.name like #'%$orderUnit$%'# 
+					<% } %>
+					<% if(!isEmpty(startDate)){ %>
+						and saveDate >= #'$startDate$'#
+					<% } %>
+					<% if(!isEmpty(endDate)){ %>
+						and saveDate <= #'$endDate$'#
+					<% } %>
 				) as t1 LEFT JOIN (
-				SELECT '合计' as sdate, round(sum(amount),2) AS pMount, NULL AS sMount FROM `b_trading_payment` where sTime >= '2017-06-28' and sTime <= '2017-07-08'
+					SELECT '合计' as sdate, round(sum(amount),2) AS pMount, NULL AS sMount 
+					FROM b_trading_payment payment 
+					LEFT JOIN b_trading_orderunit ord ON payment.unit = ord.ids
+					WHERE 1 = 1
+					<% if(!isEmpty(orderUnit)){ %>
+						and ord.name like #'%$orderUnit$%'# 
+					<% } %>
+					<% if(!isEmpty(startDate)){ %>
+						and sTime >= #'$startDate$'#
+					<% } %>
+					<% if(!isEmpty(endDate)){ %>
+						and sTime <= #'$endDate$'#
+					<% } %>
 				) as t2 ON t1.sdate = t2.sdate
 			)ta ORDER BY sdate
+    	]]>
+	</sql>
+	
+	<!-- 收付金额-->
+	<sql id="paymentReportPaymetSum">
+		<![CDATA[ 
+        	SELECT  
+        			cast(round(sum(amount),2) as char) AS amount
+					FROM b_trading_payment payment 
+					LEFT JOIN b_trading_orderunit ord ON payment.unit = ord.ids
+			WHERE 1 = 1 
+			AND sTime >= ?
+			AND sTime <= ?
+			AND ord.name like ?
+    	]]>
+	</sql>
+	
+	<!-- 销售结算金额-->
+	<sql id="paymentReportSalesSum">
+		<![CDATA[ 
+        	SELECT
+				cast(round(sum(totalAmount), 2) as char) AS amount
+			FROM
+				b_trading_salessettlement saless
+			LEFT JOIN b_trading_orderunit ord ON saless.orderUnitId = ord.ids
+			WHERE 1 = 1 
+				AND saveDate >= ?
+				AND saveDate <= ?
+				AND ord.name like ?
+    	]]>
+	</sql>
+	
+	<!-- 自元月1日开始到查询起始日前一天的收付金额 -->
+	<sql id="paymentReportYearAmount">
+		<![CDATA[ 
+        	SELECT cast(amount as char) AS amount FROM b_trading_retrospect where year = ?
+    	]]>
+	</sql>
+	
+	<!-- 自元月1日开始到查询起始日前一天的收付金额 -->
+	<sql id="paymentReportSum2">
+		<![CDATA[ 
+        	SELECT
+				cast(ROUND(SUM(amount),2) as char) as amount
+			FROM b_trading_payment payment 
+			LEFT JOIN b_trading_orderunit ord ON payment.unit = ord.ids
+			WHERE 1 = 1 
+				AND sTime >= ?
+				AND sTime < ?
+				AND ord.name like ?
     	]]>
 	</sql>
 </sql-statement>

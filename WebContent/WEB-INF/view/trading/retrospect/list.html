@@ -1,25 +1,19 @@
 
 <form id="splitPage" action="${cxt!}/trading/retrospect" method="POST" class="form-horizontal">
 
-	<!-- BEGIN PAGE CONTAINER-->
 	<div class="container-fluid">
-
-		<!-- BEGIN PAGE HEADER-->
 		<div class="row-fluid">
 			<div class="span12">
-				<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 				<ul class="breadcrumb">
 					<li>
 						<a href="javascript:void(0)" onclick="common_ajax.ajaxMainPanel('/platform/index/content');">主页</a>
 						<span class="divider">/</span>
 					</li>
 					<li><a href="#">贸易功能</a> <span class="divider">/</span></li>
-					<li class="active">追溯管理</li>
+					<li class="active">年期初余额</li>
 				</ul>
-				<!-- END PAGE TITLE & BREADCRUMB-->
 			</div>
 		</div>
-		<!-- END PAGE HEADER-->
 
 		<div class="row-fluid">
 			<div class="span12">
@@ -28,20 +22,14 @@
 						<h4><i class="icon-reorder"></i> 查询</h4>
 					</div>
 					<div class="widget-body form switch-form">
-						月份
-						<input type="text" id="mon" class="Wdate" name="_query.mon" readonly="readonly" 
-							value='${escapeHtml(splitPage.queryParam["mon"])}'
+						年份
+						<input type="text" id="year" class="Wdate" name="_query.year" readonly="readonly" 
+							value='${escapeHtml(splitPage.queryParam["year"])}'
 							onblur="platform_verify.onblurVali(this);" 
-							onClick="WdatePicker({dateFmt: 'yyMM', minDate:'1900-01-01'})">
+							onClick="WdatePicker({dateFmt: 'yyyy', minDate:'1900-01-01'})">
 
-						品名
-						<input class="medium" type="text" name="_query.pName" value='${escapeHtml(splitPage.queryParam["pName"])}' >
-						
-						牌号
-						<input class="medium" type="text" name="_query.grade" value='${escapeHtml(splitPage.queryParam["grade"])}' >
-						
-						追溯文号
-						<input class="medium" type="text" name="_query.docNo" value='${escapeHtml(splitPage.queryParam["docNo"])}' >
+						金额
+						<input class="medium" type="text" name="_query.amount" value='${escapeHtml(splitPage.queryParam["amount"])}' >
 						
 						<button type="button" class="btn btn-danger" onclick='common_ajax.ajaxFormMainPanel("splitPage");'>查询</button>
 						<button type="reset" class="btn btn-inverse">清空</button>
@@ -91,13 +79,8 @@
 										<input type="checkbox" class="group-checkable" name="checkAll" onchange="common_common.checkFunc('dataTable', this.checked);" class="flat-grey selectall">
 									</th>
 									
-									<th class="hidden-phone">月份</th>
-									<th class="hidden-phone">品名</th>
-									<th class="hidden-phone">牌号</th>
-									<th class="hidden-phone">规格型号</th>
-									<th class="hidden-phone">追溯单价</th>
-									<th class="hidden-phone">追溯单价差额</th>
-									<th class="hidden-phone">追溯文号</th>
+									<th class="hidden-phone">年份</th>
+									<th class="hidden-phone">金额</th>
 									<th class="hidden-phone">操作</th>
 								</tr>
 							</thead>
@@ -107,13 +90,8 @@
 									<td>
 										<input type="checkbox" class="checkboxes" name="checkIds" value="${entity.ids!}" class="flat-grey foocheck">
 									</td>
-										<td> ${escapeHtml(entity["mon"]!)}</td>
-										<td> ${escapeHtml(entity["pName"]!)}</td>
-										<td>${escapeHtml(entity["specification"]!)}</td>
-										<td> ${escapeHtml(entity["grade"]!)}</td>
-										<td> ${escapeHtml(entity["price"]!)}</td>
-										<td> ${escapeHtml(entity["gapPrice"]!)}</td>
-										<td> ${escapeHtml(entity["docNo"]!)}</td>
+										<td> ${escapeHtml(entity["year"]!)}</td>
+										<td> ${escapeHtml(entity["amount"]!)}</td>
 									<td>
 										<% if(view == true){ %>
 										<button type="button" class="btn btn-small" onclick="common_ajax.ajaxMainPanel('/trading/retrospect/view/${entity.ids!}');">

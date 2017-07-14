@@ -37,7 +37,7 @@ public class TestGenerateCode extends TestBase {
 	public static String[][] tableArr = {
 		//{"数据源名称", "表名称", "主键列名称", "生成类名称"}
 //		{"ConstantInit.db_dataSource_main", "test_blog", "ids", "Blog"}
-		{null, "b_trading_excelinhistory", null, "ExcelInHistory"},
+		{null, "b_trading_retrospect", null, "Retrospect"},
 //		{null, "b_trading_orderunit", null, "OrderUnit"},
 		//{null, "pt_fun_gc_columnconf", null, "GcColumnConf"}
 //		{null, "pt_department", null, "Department"},
@@ -146,19 +146,19 @@ public class TestGenerateCode extends TestBase {
 			List<ColumnDto> colunmList = handler.getColunm(tableName);
 			
 			// 1.生成sql文件
-			//handler.sql(classNameSmall, tableName); 
+			handler.sql(classNameSmall, tableName); 
 			
 			// 2.生成model
 			handler.model(className, classNameSmall, dataSource, tableName, pkName, colunmList); 
 			
 			// 3.生成validator
-			//handler.validator(className, classNameSmall); 
+			handler.validator(className, classNameSmall); 
 			
 			// 4.生成controller
-			//handler.controller(className, classNameSmall, tableName); 
+			handler.controller(className, classNameSmall, tableName); 
 			
 			// 5.生成service
-			//handler.service(className, classNameSmall); 
+			handler.service(className, classNameSmall); 
 
 			// 6.生成DTO，还没有处理数据库字段类型到java数据类型的对应转换
 			//handler.dto(className, classNameSmall, dataSource, tableName, colunmList); 

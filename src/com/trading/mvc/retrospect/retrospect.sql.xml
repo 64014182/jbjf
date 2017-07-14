@@ -7,19 +7,9 @@
 		<![CDATA[ 
         	from 
         		b_trading_retrospect
+			
 			where 1=1 
-			<% if(!isEmpty(mon)){ %>
-				and mon like #'%$mon$%'#
-			<% } %>
-			<% if(!isEmpty(pName)){ %>
-				and mon like #'%$pName$%'#
-			<% } %>
-			<% if(!isEmpty(grade)){ %>
-				and mon like #'%$grade$%'#
-			<% } %>
-			<% if(!isEmpty(docNo)){ %>
-				and mon like #'%$docNo$%'#
-			<% } %>
+				
     	]]>
 	</sql>
 	

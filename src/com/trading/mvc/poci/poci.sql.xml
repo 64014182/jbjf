@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <sql-statement namespace="trading.poci">
+	<sql id="splitPageSum">
+		<![CDATA[ 
+			SELECT round(SUM(planSumWeight),2) as planSum,round(SUM(salesSumWeight),2) as salesSum FROM(
+    	]]>
+	</sql>
+	
 	<sql id="splitPageSelect">
 		<![CDATA[ 
 			SELECT

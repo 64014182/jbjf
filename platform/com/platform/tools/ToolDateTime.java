@@ -558,9 +558,72 @@ public abstract class ToolDateTime {
 		return listArray;
 	}
 	
+	/**
+	 * 计算时间和前几天或后几天
+	 * 
+	 * @param dateStr 时间基准
+	 * @param pattern 时间格式
+	 * @param gap 时间间隔，1是后一天，-1前一天
+	 * @throws ParseException
+	 */
+	public static String getDateByStr(String dateStr, String pattern) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		Date date = sdf.parse(dateStr);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		date = calendar.getTime();
+		return sdf.format(date);
+	}
+	
+	/**
+	 * 计算时间和前几天或后几天
+	 * 
+	 * @param dateStr 时间基准
+	 * @param pattern 时间格式
+	 * @param gap 时间间隔，1是后一天，-1前一天
+	 * @throws ParseException
+	 */
+	public static String getCalDate(String dateStr, String pattern, int gap) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		Date date = sdf.parse(dateStr);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, gap);
+		date = calendar.getTime();
+		return sdf.format(date);
+	}
+	
+	/**
+	 * 获取输出日期的元月一号
+	 * 
+	 * @param dateStr 时间基准
+	 * @param pattern 时间格式
+	 * @param gap 时间间隔，1是后一天，-1前一天
+	 * @throws ParseException
+	 */
+	public static String getJanuaryFirst (String dateStr, String pattern) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+		Date date = sdf.parse(dateStr);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.MONTH, 1);
+		calendar.set(Calendar.DATE, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 1);
+		calendar.set(Calendar.MINUTE, 1);
+		calendar.set(Calendar.SECOND, 1);
+		calendar.set(Calendar.MILLISECOND, 1);
+		date = calendar.getTime();
+		return sdf.format(date);
+	}
+	
 	public static String getDateByTimestamp(Timestamp timestamp, String pattern) {
 		DateFormat sdf = new SimpleDateFormat(pattern);
 		java.util.Date currTime = new java.util.Date();
 		return sdf.format(currTime);
+	}
+	
+	public static void main(String[] args) throws ParseException {
+		//System.out.println(getJanuaryFirst("2017-07-13","yyyy-mm-dd"));
+		System.out.println(getDateByStr("2017-07-13","yyyy"));
 	}
 }

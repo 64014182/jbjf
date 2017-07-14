@@ -214,19 +214,19 @@
 									<td>${escapeHtml(entity["price"]!)}</td>
 									<td>${escapeHtml(entity["salesPrice"]!)}</td>
 									<td>
-										<% if(entity["hasSet"] == "0"){ %>
-											<span class="label label-warning trace">否</span>
-										<% }else{ %>
+										<% if(entity["hasSet"] == "1"){ %>
 											<span class="label label-success trace">是</span>
+										<% }else{ %>
+											<span class="label label-warning trace">否</span>
 										<% } %>
 									</td>
 <!-- 									<td>${entity.ids!}</td> -->
 <!-- 									<td>${escapeHtml(entity["outNo"]!)}</td> -->
 									<td>
-										<% if(entity["settState"] == "0"){ %>
-											<span class="label label-warning trace">否</span>
-										<% }else{ %>
+										<% if(entity["settState"] == "1"){ %>
 											<span class="label label-success trace">是</span>
+										<% }else{ %>
+											<span class="label label-warning trace">否</span>
 										<% } %>
 									</td>
 									<td>
